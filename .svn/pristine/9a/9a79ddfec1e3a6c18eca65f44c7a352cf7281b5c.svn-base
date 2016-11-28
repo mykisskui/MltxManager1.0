@@ -1,0 +1,214 @@
+﻿var template = {
+
+/*
+    幻灯片模块
+*/
+index_slide : [
+    '<li><span  onclick="javascript:location.href=\'#href\'" style="background:url(#url) center top no-repeat"></span></li>'
+].join("/n"),
+    /*
+        首页菜单
+    */
+index_menu: [
+    '<li onclick="javascript:location.href=\'#href\'">'+
+    '<div>'+
+    '<img src="#src">'+
+    '<div>'+
+    '#value'+
+    '</div>'+
+    '</div>'+
+    '</li>'
+].join('/n'),
+    /*
+        页脚菜单
+    */
+FooterMenu: [
+     '<li onclick="javascript:location.href=\'#href\'">'+
+     '<div>'+
+     '<img src="#src" />' +
+     '</div>' +
+     '<span>#value</span>' +
+     '</li>'
+].join('/n'),
+IndexModule1: [
+'<div onclick="javascript:location.href=\'#href0\'" class="index_0_Module_1 index_0_ModuleMargin" style="background-image:url(#src0);background-size:100% 100%;">' +
+'</div>'
+].join('/n'),
+IndexModule3: [
+ '<div class="index_0_Module_3 index_0_ModuleMargin">'+
+ '<ul>' +
+ '<li onclick="javascript:location.href=\'#href0\'" >' +
+ '<img style="width:100%;height:100%;" src="#src0" />'+
+ '</li>'+
+ '<li onclick="javascript:location.href=\'#href1\'">' +
+ '<img style="width:100%;height:100%;" src="#src1" />'+
+ '</li>'+
+ '<li onclick="javascript:location.href=\'#href2\'">' +
+ '<img style="width:100%;height:100%;" src="#src2" />'+
+ '</li>'+
+ '</ul>'+
+ '</div>'
+].join('/n'),
+IndexModule4: [
+  '<div class="index_0_Module_4 index_0_ModuleMargin">' +
+  '<ul>'+
+  '<li onclick="javascript:location.href=\'#href0\'">' +
+  '<img style="width:100%;height:100%;" src="#src0" />'+
+  '</li>'+
+  '<li onclick="javascript:location.href=\'#href1\'">' +
+  '<img style="width:100%;height:100%;" src="#src1" />' +
+  '</li>'+
+  '<li onclick="javascript:location.href=\'#href2\'">' +
+  '<img style="width:100%;height:100%;" src="#src2" />' +
+  '</li>'+
+  '<li onclick="javascript:location.href=\'#href3\'">' +
+  '<img style="width:100%;height:100%;" src="#src3" />' +
+  '</li>'+
+  '</ul>'+
+  '</div>'
+].join('/n')
+}
+
+
+/*
+    模块输出
+*/
+var outputmain = {
+    dom: document,
+    /*
+        页脚信息
+        @param a json数据
+        @param b 页脚编号
+    */
+    footerMenu: function (a,b) {
+        var mainmenu, result = '', a0 = 0;
+        footermenu = outputmain.dom.getElementById(b);
+        a = JSON.parse(a);
+        for (var i = 0; i < a.length; i++) {
+            if (a[i].Location == 0 && a0 < 5) {
+               
+                 result += template.FooterMenu.replace('#href', a[i].URL).replace('#src', a[i].Img).replace('#value', a[i].Name);
+             
+                 a0++;
+
+
+            } 
+        }
+        footermenu.innerHTML = result;
+
+        var li = footermenu.getElementsByTagName('li');
+        for (var i = 0; i < a0; i++) {
+            li[i].style.width = '' + (100 / a0) + '%';
+        }
+
+    },
+
+    /*
+        @param a json数据
+        @param b 商城编号
+        @param c 鲜果编号
+    */
+    indexSlide: function (a,b,c) {
+        /*
+            分割数据为s
+            main_slide0商城
+            main_slide1鲜果
+        */
+        var mainslide,mainslide1,result = '',result1 = '';
+        try {
+            mainslide = outputmain.dom.getElementById(b);
+            mainslide1 = outputmain.dom.getElementById(c);
+            a = JSON.parse(a);
+            for (var i = 0; i < a.length; i++) {
+                if (a[i].Location == 0) {
+                    result += template.index_slide.replace('#href', a[i].URL).replace('#url',a[i].Img);
+                } else if (a[i].Location == 1) {
+                    result1 += template.index_slide.replace('#href', a[i].URL).replace('#url', a[i].Img);
+                }
+            }
+          mainslide.innerHTML = result;
+          mainslide1.innerHTML = result1;
+        }
+        catch (e) {
+                
+        }
+
+    },
+    /*
+        @param a json数据 
+        @param b 商城编号
+        @param c 鲜果编号
+        不包含页脚菜单
+    */
+    indexMenu: function (a,b,c) {
+        var mainmenu, mainmenu1,result = '',result1 = '',a0=0,a1=0;
+        mainmenu = outputmain.dom.getElementById(b);
+        mainmenu1 = outputmain.dom.getElementById(c);
+        a = JSON.parse(a);
+        for (var i = 0; i < a.length; i++) {
+            if (a[i].Location == 1 && a0 < 8) {
+                result += template.index_menu.replace('#href', a[i].URL).replace('#src', a[i].Img).replace('#value', a[i].Name);
+                a0++;
+            } else if (a[i].Location == 2 && a1 < 4) {
+                result1 += template.index_menu.replace('#href', a[i].URL).replace('#src', a[i].Img).replace('#value', a[i].Name);
+                a1++;
+            } else {
+
+            }
+        }
+      mainmenu.innerHTML = result;
+       mainmenu1.innerHTML = result1;
+
+    },
+    /*
+        首页模块
+        @param a json数据
+        @param b 商城编号
+        @param c 鲜果编号
+    */
+    indexModule: function (a,b,c) {
+        var mainmodule = outputmain.dom.getElementById(b), mainmodule1 = outputmain.dom.getElementById(c), result = '', result1 = '',_value;
+        var ss = JSON.parse(a);
+        for (var i = 0; i < ss.length; i++) {
+           _value = decodeURIComponent(ss[i].Value);
+            switch (Number(ss[i].IndexCls)) {
+                case 0:
+                    //商城
+                    result += IndexModuleAction(_value, ss[i].Type, ss[i].IndexCls);
+                    break;
+                case 1:
+                    //鲜果
+                    result1 += IndexModuleAction(_value, ss[i].Type, ss[i].IndexCls);
+                    break;
+                default:
+                    //false
+                    break;
+
+            }
+        }
+            
+        mainmodule.innerHTML = result;
+        mainmodule1.innerHTML = result1;
+        
+    }
+
+}
+
+/*
+    @param s 数据
+    @param b 模块类型
+    @param c 所属类型
+*/
+function IndexModuleAction(s, b, c) {
+    var result = '', a = '';
+     a = JSON.parse(s);
+    var indexmoduleobj;
+    indexmoduleobj = b == 0 ? template.IndexModule1 : b == 1 ? template.IndexModule3 : b == 2 ? template.IndexModule4 : '';
+    if (indexmoduleobj == '') { return ''; }
+    for (var i = 0; i < a.length; i++) {
+            console.log(indexmoduleobj);
+            indexmoduleobj = indexmoduleobj.replace('#href' + i, a[i].URL).replace('#src' + i, a[i].Image);
+    }
+
+    return indexmoduleobj;
+}

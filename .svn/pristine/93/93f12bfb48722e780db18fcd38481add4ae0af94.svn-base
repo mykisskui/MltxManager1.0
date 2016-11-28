@@ -1,0 +1,83 @@
+﻿@using MltxManager.Models.DBModel
+@using Webdiyer.WebControls.Mvc
+@model PagedList<MltxManager.Models.DBModel.Mltx_GoodsInfo_shop>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<html>
+<head>
+    <script>
+        function Search() {
+            var kword = $("#condition").val();
+            location.href = "/MallRecommend/Createiframe?kword=" + kword;
+        }
+    </script>
+</head>
+<body>
+    <input type="hidden" id="goodinfo" name="goodinfo" />
+    <!-- /.商品信息 -->
+    <div class="row">
+        <div class="col-md-7">
+        </div>
+        <div class="col-md-4" style="padding-bottom: 1%;">
+            <div class="from-group">
+                @using (Html.BeginForm("CreateiForetaste", "Mltx_Foretaste", new RouteValueDictionary { { "id", "" } }, FormMethod.Get))
+                {
+                    <div class="col-md-12" style="margin-left: 26%;">
+                        <input type="text" name="kword" value="@Request.QueryString["kword"]" id="nav-search-input" style="width: 300px;" class="form-control" placeholder="商品名称搜索">
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <!--视频资源嵌入信息开始-->
+    <ul id="dataul" style="list-style: none; width: 100%; display: inline-block; margin-top: 15px;">
+        @{
+            int id = 0;
+        }
+        @foreach (var item in Model)
+        {
+            string li = "Li" + id;
+            string name = item.GoodsName;
+            name = name.Length > 10 ? name.Substring(0, 10) + "..." : name;
+                                              
+            <li id="@li" onclick="LiClick('@li','@item.GoodsName','@item.GoodsId','','','')" style="cursor:pointer; margin-right:10px;margin-bottom:10px;float:left;border:1px solid #e7e7eb;width: 30%;">
+                <img src="@item.GoodsListPic" style="width:100%;height:117px;" />
+                <span style="display: block; height: 32px; line-height: 32px; text-align: left; overflow: hidden; padding: 0 10px;">
+                    @name</span>
+            </li>
+            id++;
+        }
+    </ul>
+    <footer style="text-align: center">
+        @Html.Pager(Model, new Webdiyer.WebControls.Mvc.PagerOptions { PageIndexParameterName = "id" })
+    </footer>
+
+
+    <!--嵌入结束-->
+    <script>
+        var ename = "";
+        var eurl = "";
+        function LiClick(e, name, id, m, r, v) {
+
+            if (ename != "") {
+                var enamedom = document.getElementById(ename);
+                enamedom.getElementsByTagName("span")[0].style.background = "";
+                enamedom.getElementsByTagName("span")[0].style.color = "";
+            }
+            //e下级元素span变色
+            var li = document.getElementById(e);
+            li.getElementsByTagName("span")[0].style.background = "#44b549";
+            li.getElementsByTagName("span")[0].style.color = "#fff";
+            ename = e;
+
+            $('#goodname', parent.document).val(name);
+            $('#gid', parent.document).val(id);
+
+        }
+    </script>
+
+    <!-- /.modal-content -->
+
+</body>
+</html>

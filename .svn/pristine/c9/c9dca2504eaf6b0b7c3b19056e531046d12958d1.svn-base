@@ -1,0 +1,72 @@
+﻿var template = {
+
+/*
+    幻灯片模块
+*/
+index_slide : [
+    '<li><span  onclick="javascript:location.href=\'#href\'" style="background:url(#url) center top no-repeat"></span></li>'
+].join("/n"),
+    /*
+        首页菜单
+    */
+index_menu: [
+    '<li onclick="javascript:location.href=\'#href\'">'+
+    '<div>'+
+    '<img src="#src">'+
+    '<div>'+
+    '免费试吃'+
+    '</div>'+
+    '</div>'+
+    '</li>'
+].join('/n')
+}
+
+
+/*
+    模块输出
+*/
+var outputmain = {
+    dom:document,    
+    /*
+        @param a json数据
+        @param b 商城编号
+        @param c 鲜果编号
+    */
+    indexSlide: function (a,b,c) {
+        /*
+            分割数据为s
+            main_slide0商城
+            main_slide1鲜果
+        */
+        var mainslide,mainslide1,result = '',result1 = '';
+        try {
+            mainslide = outputmain.dom.getElementById(b);
+            mainslide1 = outputmain.dom.getElementById(c);
+            a = JSON.parse(a);
+            for (var i = 0; i < a.length; i++) {
+                if (a[i].Location == 0) {
+                    result += template.index_slide.replace('#href', a[i].URL).replace('#url',a[i].Img);
+                } else if (a[i].Location == 1) {
+                    result1 += template.index_slide.replace('#href', a[i].URL).replace('#url', a[i].Img);
+                }
+            }
+          mainslide.innerHTML = result;
+          mainslide1.innerHTML = result1;
+        }
+        catch (e) {
+                
+        }
+
+    },
+    /*
+        @param a json数据 
+        @param b 商城编号
+        @param c 鲜果编号
+    */
+    indexMenu: function (a,b,c) {
+        var mainmenu, mainmenu1;
+        mainmenu = outputmain.dom.getElementById(a);
+
+    }
+
+}

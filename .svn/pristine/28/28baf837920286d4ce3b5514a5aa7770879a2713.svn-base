@@ -1,0 +1,196 @@
+﻿@model MltxManager.Models.DBModel.Mltx_GoodsInfo_shop
+@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>@Model.GoodsName</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/css/Index.css" rel="stylesheet" type="text/css" @*media="screen and (max-width:539px )"*@ />
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/assets/plugins/jquery-1.10.2.min.js"></script>
+    <link href="~/css/malldetails.css" rel="stylesheet" />
+    <link href="~/css/malllist.css" rel="stylesheet" />
+    <script src="~/Scripts/iScroll-4.2.5.js"></script>
+
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/loading.js"></script>
+
+    <link href="~/css/style.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.event.drag-1.5.min.js"></script>
+    <script src="~/Scripts/jquery.touchSlider.js"></script>
+    <script src="~/Scripts/banner.js"></script>
+
+    <script>
+        var myscroll_0, myscroll;
+        function load() {
+            var _height = window.innerHeight;
+            var headerHeight = document.getElementsByClassName('index_0_header').item(0).clientHeight;
+            var FloatHeight = document.getElementsByClassName('index_0_FloatMenu').item(0).clientHeight;
+            page_scroll_0.style.height = _height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2)) + 'px';
+      
+            myscroll_0 = new iScroll("page_scroll_0", {
+                vScroll: true,
+                vScrollbar: false,
+                hScrollbar: false,
+                hScroll: false,
+                snap: true,
+                bounce: false,
+                momentum: true,
+                onBeforeScrollStart: function () {
+                }
+            }),
+          
+            document.body.ontouchmove = function (event) {
+                event.preventDefault();
+            }
+        }
+        window.addEventListener('load', load, false);
+    </script>
+</head>
+<body>
+    <script>
+        var userid = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.userid))';
+        var details = '@Html.Raw(HttpUtility.HtmlDecode(Model.GoodsInfo))';
+        var goodid = @Model.GoodsId;
+    </script>
+
+    <div class="body">
+        <!-- 头部start  search-->
+        <div class="index_0_header">
+            <div class="index_0_header_top">
+                <ul>
+                    <li ontouchstart="history.go(-1)">
+                        <i class="icon-angle-left" ></i>
+                    </li>
+                    <li>
+                        <div style="background-color: #fff; color: #64a786; font-size: 16px">
+                            @Model.GoodsName
+                        </div>
+                    </li>
+                    <li>
+                        <i class="icon-heart-empty" ontouchstart="guanzhu(this)"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 头部end -->
+        
+<!-- 详情start -->  
+        <div  id="page_scroll_0">
+            <div style="overflow: hidden">
+
+                <!-- 幻灯片start -->
+                <div class="index_0_slide" id="index_0_slide">                                        
+                        <!--效果html开始-->
+                        <div class="main_vasual_details" >
+	                        <div class="main_image">
+		                        <ul>
+                                    @{
+                                        var arr = Model.GoodsPic.Substring(0,Model.GoodsPic.Length-1).Split('|');
+                                    }
+                                    @foreach(var item in arr)
+                                    {
+			                            <li><span style="background:url(@item) center top no-repeat"></span></li>
+                                    }
+		                        </ul>
+		                        <a href="javascript:;" id="btn_prev"></a>
+		                        <a href="javascript:;" id="btn_next"></a>
+	                        </div>
+                        </div>
+			            <!--效果html结束-->
+                </div>
+                <!-- 幻灯片end -->
+              
+                <!--基本信息start-->
+                <div class="div_baseinfo_details">
+                    <div class="div_name_details">@Model.GoodsName</div>
+                    <div class="div_price_details">
+                        <div class="div_p_details">￥ @Model.Rprice</div>
+                        <div class="divshoping_details">
+                            @{
+                                var span_jian = "jian" + Model.GoodsId;
+                                var span = "span" + Model.GoodsId;
+                                }
+                           <span class="span_jian" style="visibility:visible" id="@span_jian" data-id="@Model.GoodsId" ontouchstart="shop_jian_details(this)">-</span>
+                           <span class="span_value" style="visibility:visible" id="@span">1</span>
+                           <span class="span_jia" data-id="@Model.GoodsId" ontouchstart="shop_jia_details(this)">+</span>
+                        </div>
+                    </div>
+                </div>
+                <!--基本信息end-->
+
+                <!--规格信息start-->
+                <div class="div_guige">
+                    <div>规格</div>                    
+                    <div>
+                        <div>@Model.GoodsGuige</div>
+                    </div>
+                </div>
+                <!--规格信息end-->
+                
+                <!--商品评价start-->
+                <div class="div_guige">
+                    <div>商品评价</div>     
+                    <div onclick="go_comment()">
+                        <i class="icon-angle-right c_css"></i>
+                    </div>
+                </div>
+                <!--商品评价end-->
+
+                <div id="div_maininfo">
+                </div>
+            </div>
+        </div>
+<!--详情end -->
+
+
+        <!-- 商城页脚 start -->
+        <div class="index_0_FloatMenu" style="display:-webkit-box">
+           <div class="div_shopcart_icon" >
+               <a href="@Url.Content("/Mltx_MallClass/MallShopCar")" style="color: #fff; text-decoration: none">
+               <span class="span_count" id="span_count">0</span>
+                <i class="icon-shopping-cart"> </i>
+                   </a>
+           </div>
+            <div class="div_shopcart_text" ontouchstart="addShopcar()">加入购物车</div>
+        </div>
+        <!-- 商城页脚 end -->
+
+
+
+    </div>
+
+    <script src="~/Scripts/cookiedata.js"></script>
+    <script>
+        $(document).ready(function () {
+            document.getElementById("div_maininfo").innerHTML = details;
+            initShopcar();
+        });
+
+        //关注商品
+        function guanzhu(e) {
+            var cls = $(e).attr('class');
+            if (cls == 'icon-heart-empty') {
+                $(e).removeClass().addClass("icon-heart");
+            }
+            else {
+                $(e).removeClass().addClass("icon-heart-empty");
+            }
+
+            //关注 取消关注的相关后台操作
+        }
+       
+    </script>
+
+</body>
+
+</html>
+

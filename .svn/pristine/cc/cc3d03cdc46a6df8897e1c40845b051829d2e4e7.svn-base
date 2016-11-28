@@ -1,0 +1,112 @@
+﻿body {
+}
+
+.listclassy {
+    overflow: hidden;
+    height: 55px;
+    border-top: 2px solid #eee;
+    border-bottom: 3px solid #eee;
+}
+    .listclassy div {
+        margin-top: 9px;
+        float: left;
+        width: 20%;
+        height: 35px;
+        line-height: 35px;
+        display: block;
+        border: 1px solid #507D38;
+        background-color:#6CA94B;
+        color:#fff;
+        text-align: center;
+    }
+        .listclassy div:nth-child(1) {
+            margin-left: 20%;
+            background-color:#fff;
+            border-radius: 5px 0 0 5px;
+            color: #6CA94B;
+        }
+        
+        .listclassy div:nth-child(3) {
+             border-radius:0 5px 5px 0;
+        }
+#divlist {
+    overflow:hidden;
+}
+    #divlist ul {
+        list-style-type:none;
+        margin:0;
+        padding:0;
+    }
+ #divlist ul li{
+    display: -webkit-box;
+    border-bottom: 2px solid #eee;
+}
+.divimg {
+    width: 30%;
+}
+    .divimg img {
+        margin: 5%;
+        width: 90%;
+    }
+.divend {
+    width:30%;
+    position:relative;
+}
+.divcontent {
+    width: 40%;
+    padding:5px;
+    position:relative;
+}
+.divname {
+    font-size: 1em;
+    color:#333
+}
+.divguige {
+    color: #aaa;
+    margin-top: 5px;
+    font-size: 0.9em;
+}
+.divprice {
+    color: #83B99C;
+    position: absolute;
+    bottom: 0px;
+    font-size: 1.2em;
+}
+.divshoping {
+    position:absolute;
+    bottom:5px;
+}
+.span_jian {
+    width: 20px;
+    visibility:hidden;
+    display:inline-block;
+    text-align: center;
+    height: 20px;
+    line-height: 20px;
+    border: 2px solid #6CA94B;
+    color:#6CA94B;
+    font-size:1.2em;
+    border-radius: 50%;
+}
+.span_value {
+    width: 25px;
+    visibility:hidden;
+    display:inline-block;
+    text-align: center;
+    height: 20px;
+    font-size:1em;
+    color:#6CA94B;
+    line-height: 20px;
+}
+ .span_jia{
+    width: 20px;
+    display: inline-block;
+    text-align: center;
+    height: 20px;
+    line-height: 20px;
+    border: 2px solid #6CA94B;
+    font-size:1.2em;
+    color:#6CA94B;
+    border-radius: 50%;
+}
+

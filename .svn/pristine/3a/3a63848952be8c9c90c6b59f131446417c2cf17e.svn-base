@@ -1,0 +1,188 @@
+﻿@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>我的主页</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/css/Index.css" rel="stylesheet" type="text/css" @*media="screen and (max-width:539px )"*@ />
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/weixin/example.css" rel="stylesheet" />
+    <link href="~/css/mallmyhome.css" rel="stylesheet" />
+    <link href="~/css/weixin/weui.css" rel="stylesheet" />
+    <script src="~/assets/plugins/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/iScroll-4.2.5.js"></script>
+    <script src="~/Scripts/loading.js"></script>
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/cookiedata.js"></script>
+    <script src="~/Scripts/weixin/zepto.min.js"></script>
+    <script src="~/Scripts/weixin/example.js"></script>
+    <script>
+        var myscroll
+        function load() {
+            var _height = window.innerHeight;
+           // var headerHeight = document.getElementsByClassName('index_0_header').item(0).clientHeight;
+            var FloatHeight = document.getElementsByClassName('index_0_FloatMenu').item(0).clientHeight;
+            page_scroll_0.style.height = _height  - (FloatHeight == 0 ? 50 : (FloatHeight + 2)) + 'px';
+
+            myscroll = new iScroll("page_scroll_0", {
+                vScroll: true,
+                vScrollbar: false,
+                vScrollbar: false,
+                bounce: true,
+                momentum: true,
+                onBeforeScrollStart: function () {
+                }
+            });
+
+            document.body.ontouchmove = function (event) {
+                event.preventDefault();
+            }
+        }
+        window.addEventListener('load', load, false);
+    </script>
+</head>
+<body>
+    <script>
+        var userid = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.userid))';
+    </script>
+
+    <div class="body">
+        
+<!-- 内容start -->
+<div  id="page_scroll_0">
+    <div style="overflow: hidden">
+        
+        <!-- 头部start  search-->
+        <div class="index_0_header">
+            <div class="index_0_header_top"  style="background-color:#ececec">
+                <ul style="border:0">
+                    <li >
+                    </li>
+                    <li>
+                        <div style="background-color: #fff; color: #64a786; font-size: 16px">
+                            
+                        </div>
+                    </li>
+                    <li ontouchstart="">
+                        <i class="icon-cog"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 头部end -->
+
+        <div id="div_basic" class="div_basic">
+            <div>
+                <div class="div_img"><img src="~/Images/logo.jpg" /></div>
+                <span>185****62558376</span>
+            </div>
+            <div class="div_info">
+                <div><span>积分</span><span>10</span></div>
+                <div><span>余额</span><span>￥0.00</span></div>
+                <div><span>优惠券</span><span>0</span></div>
+            </div>
+        </div>
+
+        <div id="div_bottom" >
+            <div class="div_bootom_row">
+                <div>
+                    <span><img src="~/Images/logo.jpg"/></span>
+                    <span>我的订单</span>
+                </div>
+                <div>
+                    <span><img src="~/Images/logo.jpg"/></span>
+                    <span>我的订单</span>
+
+                </div>
+                <div>
+                    <span><img src="~/Images/logo.jpg"/></span>
+                    <span>我的订单</span>
+                </div>
+            </div>
+
+            <div class="div_bootom_row">
+                <div>
+                    <span><img src="~/Images/logo.jpg"/></span>
+                    <span>我的订单</span>
+                </div>
+                <div>
+                    <span><img src="~/Images/logo.jpg"/></span>
+                    <span>我的订单</span>
+                </div>
+                <div>
+                    <span><img src="~/Images/logo.jpg"/></span>
+                    <span>我的订单</span>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+        <!-- 内容end -->
+
+
+        <!-- 商城页脚 start -->
+        <div class="index_0_FloatMenu">
+            <ul>
+                <li>
+                    <div>
+                        <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                    </div>
+                    <span>主页</span>
+                </li>
+                <li>
+                    <div>
+                        <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                    </div>
+                    <span>品类</span>
+                </li>
+                <li>
+                    <div>
+                        <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                    </div>
+                    <span style="color:#6CA94B">购物车</span>
+                </li>
+                <li>
+                    <div>
+                        <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                    </div>
+                    <span>这是菜单</span>
+                </li>
+                <li>
+                    <div>
+                        <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                    </div>
+                    <span>这是菜单</span>
+                </li>
+
+            </ul>
+        </div>
+        <!-- 商城页脚 end -->
+
+
+
+    </div>
+
+    <script src="~/Scripts/weixin/confirm_self.js"></script>
+    <script>
+       
+        window.onload = function () {
+            //InitData();
+        }
+
+       
+    </script>
+
+</body>
+
+</html>
+

@@ -1,0 +1,5 @@
+﻿@{
+    ViewBag.Title = "sreach";
+}
+
+<h2>sreach</h2>

@@ -1,0 +1,374 @@
+﻿@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>@ViewBag.listtitle</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/css/Index.css" rel="stylesheet" type="text/css" @*media="screen and (max-width:539px )"*@ />
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/assets/plugins/jquery-1.10.2.min.js"></script>
+    <link href="~/css/mallList.css" rel="stylesheet" />
+    <script src="~/Scripts/iScroll-4.2.5.js"></script>
+    <script>
+        var myscroll;
+        function load() {
+            var _height = window.innerHeight;
+            var headerHeight = document.getElementsByClassName('index_0_header').item(0).clientHeight + document.getElementsByClassName("listclassy").item(0).clientHeight + 5;
+            
+            var FloatHeight = 0;
+            page_scroll_0.style.height = _height - headerHeight - (FloatHeight == 0 ? 0 : (FloatHeight + 2)) + 'px';
+            myscroll = new iScroll("page_scroll_0", {
+                vScroll: true,
+                vScrollbar: false,
+                vScrollbar: false,
+                bounce: true,
+                lockDirection: true,
+                checkDOMChanges: true,
+                onBeforeScrollStart: function () {
+                }
+            });
+            document.body.ontouchmove = function (event) {
+                event.preventDefault();
+            }
+        }
+        window.addEventListener('load', load, false);
+    </script>
+
+    
+</head>
+<body>
+    <script>
+        var groupid = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.groupid))';
+        var userid = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.userid))';
+        var goodsData = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.goodsData))';
+        var listtitle = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.listtitle))';
+    </script>
+    <div class="body">
+        <!-- 头部start  search-->
+        <div class="index_0_header">
+            <div class="index_0_header_top">
+                <ul>
+                    <li>
+                        <i class="icon-angle-left"></i>
+                    </li>
+                    <li>
+                        <div style="background-color: #fff; color: #64a786; font-size: 16px">
+                             @ViewBag.listtitle
+                        </div>
+                    </li>
+                    <li>
+                        <i class="icon-shopping-cart">
+                        </i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 头部end -->
+        
+        <!--列表分类排序 start-->
+        <div class="listclassy">
+                <div ontouchstart="sortList(this,1)">新品</div>
+                <div ontouchstart="sortList(this,2)">热卖</div>
+                <div ontouchstart="sortList(this,3)">价格</div>
+        </div>        
+        <!--列表分类排序 end-->
+
+        <!-- 列表start -->
+        <div  id="page_scroll_0">
+            <div id="divlist" style="overflow: hidden">
+               <ul>
+                    加载中...
+               </ul>
+             
+            </div>
+        </div>
+        <!-- 列表end -->
+
+    </div>
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/list/jquery.lazyload.js"></script>
+    <script>
+
+        var detailsdata = ''; var d_gt = '', listdetailsb = false;
+        window.onload = function () {
+            initList(goodsData);//初始化页面,
+            cookieInit();//带入cookie
+        }
+        
+
+        $(document).ready(function () {
+            //图片延迟加载
+            $("img.lazy").lazyload();
+        });
+
+        function sortList(e, flag) {
+            //修改样式
+            var divlist = document.getElementsByClassName("listclassy")[0].children;
+            var group_id = '';
+            for (var i = 0; i < divlist.length; i++) {
+                if (divlist[i] == e) {
+                    $(e).css("background-color", "#fff");
+                    $(e).css("color", "#6CA94B");
+                }
+                else {
+                    $(divlist[i]).css("background-color", "#6CA94B");
+                    $(divlist[i]).css("color", "#fff");
+                }
+            }
+            if (groupid == "alllist") {
+                group_id = '';
+            }
+            else {
+                group_id = groupid;
+            }
+
+            $.ajax({
+                url: "/Mltx_MallClass/Sort",
+                type: "post",
+                data: { userid: userid, title: listtitle, groupid: group_id, tag: flag },
+                beforeSend: function () {
+                },
+                success: function (data) {
+                    if (data === 'error') {
+                        //数据错误了
+                    } else {
+                        initList(data);
+                        cookieInit();
+                    }
+                }
+            });
+         
+        }
+
+        function initList(gData)
+        {
+            ///数据初始化
+            var json = eval("(" + gData + ")");
+            var ul = divlist.getElementsByTagName("ul")[0];
+            var url_details = '';
+            var str = '';
+
+            for (var i = 0; i < json.length; i++) {
+                url_details = '';
+                str += '<li><div class="divimg"><a href="' + url_details + '"><img src="' + json[i].gpic + '" data-original ="' + json[i].gpic + '"/></a></div>' +
+                    '<div class="divcontent">' +
+                           '<div class="divname">' + json[i].gname + '</div><div class="divguige">' + json[i].guige + '</div><div class="divprice">￥' + json[i].rprice + '</div>' +
+                '</div>' +
+                 '<div class="divend">' +
+                     '<div class="divshoping">' +
+                        '<span class="span_jian" id="jian' + json[i].gid + '"  data-id="' + json[i].gid + '" ontouchstart="shop_jian(this)">-</span>' +
+                         '<span class="span_value" id="span' + json[i].gid + '">0</span>' +
+                         '<span class="span_jia" data-id="' + json[i].gid + '" ontouchstart="shop_jia(this)">+</span>' +
+                    '</div></div></li>';
+            }
+
+            ul.innerHTML = str;
+        }
+
+        function cookieInit()
+        {
+            //cookie数据初始
+            var shopcarData = getCookie(userid);
+            if (shopcarData == '') {
+                return false;
+            }
+            else {
+                shopcarData = new (Function("", "return" + shopcarData))();//解析json
+                for (var i = 0; i < shopcarData.length; i++) {
+                    var span_id = "span" + shopcarData[i].gid;
+                    var jian_id = "jian" + shopcarData[i].gid;
+                    var count = shopcarData[i].count;
+
+                    $("#" + jian_id).css("visibility", "visible");
+                    $("#" + span_id).css("visibility", "visible");
+                    $("#" + span_id).text(count);
+                }
+            }
+        }
+
+        function shop_jia(e) {
+            var cookie = getCookie(userid);
+
+            var gid = e.getAttribute("data-id");
+            var span_id = "span" + gid;
+            var jian_id = "jian" + gid;
+
+            $("#" + jian_id).css("visibility", "visible");
+            $("#" + span_id).css("visibility", "visible");
+
+            var count = $("#" + span_id).text();
+            var c = parseInt(count) + 1;
+
+            $("#" + span_id).text(c);
+            
+            addData(gid);
+            
+        }
+
+        function shop_jian(e) {
+            var gid = e.getAttribute("data-id");
+            var span_id = "span" + gid;
+
+            var count = $("#" + span_id).text();
+            var c = parseInt(count) - 1;
+            $("#" + span_id).text(c);
+            if (c == 0)
+            {
+                $(e).css("visibility", "hidden");
+                $("#" + span_id).css("visibility", "hidden");
+            }
+            removeData(gid);
+        }
+
+        function newjson(array)
+        {
+            var jsonresult = '';
+            jsonresult += '[{"gid":'+array["gid"]+',"count":'+array["count"]+'}]';
+
+            return jsonresult;
+        }
+
+        function newjson1(array)
+        {
+            var jsonresult = '';
+            jsonresult += '{"gid":' + array["gid"] + ',"count":' + array["count"] + '}';
+
+            return jsonresult;
+        }
+
+        //添加数据到购物车cookie
+        function addData(gid)
+        {
+            var flag = true;//存在与否标志
+            var array = new Array();
+            var old_data = getCookie(userid);
+            console.log("old_data:" + old_data);
+            if (old_data == '')//购物车没有数据
+            {
+                array["gid"] = gid;
+                array["count"] = 1;
+                return setCookie(userid, newjson(array));
+            }
+            else//购物车有数据
+            {
+                old_data = new (Function("", "return" + old_data))();//解析json
+
+                for (var i = 0; i < old_data.length; i++)
+                {
+                    if (old_data[i].gid == gid)//存在
+                    {
+                        old_data[i].count = old_data[i].count + 1;
+                        flag = false;
+                        break;
+                    }
+                }
+
+                if (flag)//新的商品添加
+                {
+                    array["gid"] = gid;
+                    array["count"] = 1;
+                    var jsonserializer1 = newjson1(array);
+                    console.log("存在数据：" + jsonserializer1);
+                    jsonserializer1 = new (Function("", "return" + jsonserializer1))();
+                    old_data[old_data.length] = jsonserializer1;
+                }
+            }
+
+            return setCookie(userid, JSON.stringify(old_data));
+
+        }
+
+        //移除数据从购物车cookie
+        function removeData(gid)
+        {
+            var deleteresult = '';
+            var removebool = false;
+            var deletevalue = 0;
+            var old_data = getCookie(userid);
+            if (old_data == '') return false;
+            old_data = new (Function("", "return" + old_data))();
+
+            for (var i = 0; i < old_data.length; i++)
+            {
+                if (old_data[i].gid == gid)
+                {
+                    if (old_data[i].count == 0) {
+                        return false;
+                    }
+                    old_data[i].count = old_data[i].count - 1;
+                    if (old_data[i].count == 0) {
+                        //删除为空的数据
+                        //   delete result[i].value[ii];
+                        deleteresult = JSON.stringify(old_data[i]);
+                        console.log(deleteresult);
+                        removebool = true;
+                        if (old_data[i].length == 1) {
+                            deleteresult = JSON.stringify(old_data[i]);
+                        }
+                        //   result[i].value[ii].replace("},null","");
+                    }
+
+                    break;
+                }
+            }
+
+            var resultstring = JSON.stringify(old_data);
+            console.log(resultstring + ":数据");
+
+            if (removebool) {
+                resultstring = resultstring.replace(deleteresult, "");
+                resultstring = resultstring.replace(",,", ",");
+                resultstring = resultstring.replace("[,", "[");
+                resultstring = resultstring.replace(",]", "]");
+            }
+            if (resultstring == '[]') {
+                resultstring = '';
+            }
+            console.log("最终："+resultstring);
+
+            return setCookie(userid, resultstring);
+        }
+
+        function setCookie(name, value) {
+            var Days = 3;//保存3天
+            if (name == "youke") {
+                Days = 1;//游客数据存一天
+            } else {
+                name = "mltxshopcart" + name;
+            }
+            var exp = new Date();
+            exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+            document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+        }
+
+        function getCookie(name) {
+            if (name != "youke") {
+                name = "mltxshopcart" + name;
+            }
+            if (document.cookie.length > 0) {
+                start = document.cookie.indexOf(name + "=");
+                if (start != -1) {
+                    start = start + name.length + 1;
+                    end = document.cookie.indexOf(";", start);//当indexOf()带2个参数时，第二个代表其实位置，参数是数字，这个数字可以加引号也可以不加（最好还是别加吧）
+                    if (end == -1) end = document.cookie.length;
+                    return unescape(document.cookie.substring(start, end));
+                }
+            }
+            return "";
+        }
+        
+    </script>
+
+
+</body>
+
+</html>
+

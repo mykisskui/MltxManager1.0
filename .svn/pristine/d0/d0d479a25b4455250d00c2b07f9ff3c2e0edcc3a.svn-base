@@ -1,0 +1,32 @@
+﻿
+var div_str = '<div id="div_comfirm"></div>';
+document.write(div_str);
+
+var dialog = {
+    comfirm: function (msg, callback_OK, callback_CANCEL) {
+        var str = '<div class="weui_dialog_confirm" id="dialog1">' +
+        '<div class="weui_mask"></div>' +
+        '<div class="weui_dialog">' +
+           '<div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>' +
+            '<div class="weui_dialog_bd" >' + msg + '</div>' +
+            '<div class="weui_dialog_ft">' +
+                '<a href="javascript:;" class="weui_btn_dialog default" id="btncancel">取消</a>' +
+               ' <a href="javascript:;" class="weui_btn_dialog primary" id="btnok">确定</a>' +
+            '</div></div></div>';
+
+        $("#div_comfirm").html(str);
+
+        btnok.onclick = function () {
+            $("#div_comfirm").html('');
+            if (callback_OK && typeof callback_OK == "function")
+                callback_OK(true);
+            close();
+        }
+        btncancel.onclick = function () {
+            $("#div_comfirm").html('');
+            if (callback_CANCEL && typeof callback_CANCEL == "function")
+                callback_CANCEL(false);
+            close();
+        }
+    } 
+}

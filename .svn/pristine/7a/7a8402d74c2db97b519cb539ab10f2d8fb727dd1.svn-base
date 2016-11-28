@@ -1,0 +1,38 @@
+﻿body {
+}
+@media screen and (max-width:320px ) {/*当屏幕尺寸小于>320*/
+    .div_shopcart_icon {
+        width: 30%;
+        background-color: #F5BE2B;
+        color: #fff;
+        text-align: center;
+        font-size: 40px;
+        padding-top: 5px;
+    }
+    .div_shopcart_text {
+        width: 70%;
+        background-color: #6CA94B;
+        color: #fff;
+        font-size: 20px;
+        text-align: center;
+        line-height: 50px;
+    }
+}
+@media screen and (min-width:321px ) { /*当屏幕尺寸大于>320*/
+    .div_shopcart_icon {
+        width: 30%;
+        background-color: #F5BE2B;
+        color: #fff;
+        text-align: center;
+        font-size: 40px;
+        padding-top: 10px;
+    }
+    .div_shopcart_text {
+        width: 70%;
+        background-color: #6CA94B;
+        color: #fff;
+        font-size: 20px;
+        text-align: center;
+        line-height: 60px;
+    }
+}

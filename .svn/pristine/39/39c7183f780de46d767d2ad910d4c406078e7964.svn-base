@@ -1,0 +1,94 @@
+﻿.fruitfooter_sub_on {
+    background-color:rgb(147,174,79)!important;
+}
+
+
+
+
+.fruitfooter {
+
+    display:-webkit-box;
+    height:50px;
+    background:#fff;
+    border-top:1px solid #ccc;
+}
+    .fruitfooter > div {
+        -webkit-box-flex:1;
+    }
+        .fruitfooter > div:nth-child(1) {
+            width:20%;
+            position:relative;
+        }
+        .fruitfooter > div:nth-child(2) {
+            width:50%;
+        }
+        .fruitfooter > div:nth-child(3) {
+            width:30%;
+        }
+        .fruitfooter > div:nth-child(2), .fruitfooter > div:nth-child(3) {
+            line-height:50px;
+        }
+        .fruitfooter > div:nth-child(3) {
+            text-align:right;
+            
+        }
+.fruitfooter > div:nth-child(3) > div {
+   background:#ABABAB;
+   color:#fff;
+   text-align:center;
+   font-size:16px;
+}
+.fruitfooter > div:nth-child(2) > span {
+            color:rgb(101,166,134);
+            font-weight:bold;
+
+}
+    .fruitfooter > div:nth-child(2) > span:nth-child(2) {
+        font-size:18px;
+    }
+    .fruitfooter > div:nth-child(2) > span:nth-child(1) {
+        font-size:14px;
+    }
+
+        .fruitfooter > div:nth-child(1) > div {
+                height: 50px;
+                width: 50px;
+                margin: auto;
+                background: #ababab;
+                position: absolute;
+                top: -10px;
+                border-radius:50%;
+        }
+.fruit_shoppingcartCount {/*显示购物数量*/
+    width:20px;
+    height:20px;
+    background:rgb(255, 25, 1);
+    color:#fff;
+    border-radius:50%;
+    position:absolute;
+    top: -2px;
+    right: -2px;
+    z-index: 999;
+    font-style:normal;
+    text-align:center;
+    font-size:14px;
+    text-overflow:ellipsis;
+    line-height:20px;
+    font-family:initial;
+}
+.fruit_shoppingcart_on {
+    background:rgb(255,206,85)!important;
+}
+.fruit_shoppingcartCount_on {
+    display:block;
+}
+            .fruitfooter > div:nth-child(1) > div > i:nth-child(1) {
+                    font-size: 30px;
+                    color: #fff;
+                    display: block;
+                    height: 50px;
+                    width: 50px;
+                    line-height: 50px;
+                    text-align: center;
+            }
+          

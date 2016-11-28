@@ -1,0 +1,77 @@
+﻿using MltxManager.Data;
+using MltxManager.Models.DBModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Web;
+using System.Web.Mvc;
+
+namespace MltxManager.Controllers
+{
+    public class Mltx_MallClassController : Controller
+    {
+        //
+        // GET: /Mltx_MallClass/
+
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 品类页面
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult MallClass()
+        {
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    StringBuilder sb = new StringBuilder();
+
+                    IList<Mltx_Group_first> firsts = null;
+                    IList<Mltx_Group_second> seconds = null;
+                    firsts =new GetBiz().GetCommodityGrouping().MltxGroupFirst;
+                    
+                    seconds = new GetBiz().GetCommodityGrouping().MltxGroupSecond;
+
+                    sb.Append("{");
+                    sb.Append("\"data\":[");
+                    foreach (Mltx_Group_first first in firsts)
+                    {
+                        sb.Append("{");
+                        sb.Append(string.Format("\"id\":\"{0}\",", first.GroupId));
+                        sb.Append(string.Format("\"name\":\"{0}\",", first.GroupName));
+                        sb.Append(string.Format("\"mark\":\"{0}\",", first.Remark));
+                        sb.Append("\"data\":["); 
+                        foreach (Mltx_Group_second second in seconds.Where(f => f.OwnerId == first.GroupId))
+                        {
+                            sb.Append("{");
+                            sb.Append(string.Format("\"id\":\"{0}\",", second.GroupId));
+                            sb.Append(string.Format("\"name\":\"{0}\",", second.GroupName));
+                            sb.Append(string.Format("\"oid\":\"{0}\",", second.OwnerId));
+                            sb.Append(string.Format("\"pic\":\"{0}\",", second.GroupPic));
+                            sb.Append(string.Format("\"mark\":\"{0}\"", second.Remark));
+                            sb.Append("},");
+                        }
+                        sb.Append("]},");
+                        sb = sb.Replace("},]}", "}]}");
+                    }
+
+                    sb.Append("]}");
+
+                    ViewBag.classData =  sb.ToString().Replace("]},]}", "]}]}");
+                }
+                catch (Exception ex)
+                {
+                    //Response.Redirect("");//跳转到错误页
+                }
+                return View();
+            }
+        }
+
+
+    }
+}

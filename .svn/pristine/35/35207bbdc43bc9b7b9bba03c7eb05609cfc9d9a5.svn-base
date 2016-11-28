@@ -1,0 +1,90 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using MltxManager.Data;
+using MltxManager.Data.MethodHepler;
+using MltxManager.Models.DBHelper.Mode;
+using MltxManager.Models.DBModel;
+
+namespace MltxManager.Controllers
+{
+    public class Mltx_SmsVerificationController : Controller
+    {
+
+        // GET: /WelcomeReply/
+        #region 主页面显示
+        /// <summary>
+        /// 页面显示
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Index()
+        {
+            var re = new GetBiz().GetSmsinfo();
+            if (re.errcode == 0)
+            {
+                ViewBag.ShuMu = true;
+                ViewBag.Id = re.smsinfo.Id;
+            }
+            else
+            {
+                ViewBag.ShuMu = false;
+                ViewBag.Id = null;
+            }
+
+            return View();
+        }
+        #endregion
+        #region 注册页面
+        /// <summary>
+        /// 短信验证 注册页面
+        /// </summary>
+        /// <returns></returns>
+        [PageAuthority(ModeId = Modular.短信设置,QuanId = Quanxian.增加)]
+        public ActionResult GetRegNo()
+        {
+            return View("RegNo");
+        }
+        /// <summary>
+        /// 短信验证 注册
+        /// </summary>
+        /// <param name="serialNo">短信序列号</param>
+        /// <param name="serialpass">密码</param>
+        /// <param name="remark">短信内容</param>
+        /// <returns></returns>
+        [PageAuthority(Leixing = false,ModeId = Modular.短信设置,QuanId = Quanxian.增加)]
+        public int InsertSms(string serialNo, string serialpass, string remark)
+        {
+            var re = new GetBiz().InsertSms(serialNo,serialpass,remark);
+            if (re)
+            {
+                return 0;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        /// <summary>
+        /// 短信验证删除
+        /// </summary>
+        /// <param name="id">验证ID</param>
+        /// <returns></returns>
+        [PageAuthority(Leixing = false,ModeId = Modular.短信设置,QuanId = Quanxian.增加)]
+        public int DeleteSms(int id)
+        {
+            var re = new GetBiz().DeleteSms(id);
+            if (re)
+            {
+                return 0;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        #endregion
+       
+    }
+}

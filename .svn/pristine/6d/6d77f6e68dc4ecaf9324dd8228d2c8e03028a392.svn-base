@@ -1,0 +1,61 @@
+﻿@using Webdiyer.WebControls.Mvc;
+
+@model PagedList<MltxManager.Models.DBModel.Mltx_MemberInfo>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/ImageBank.css" rel="stylesheet" />
+<div class="container-fluid" >
+    <div class="rule">    
+         <!-- BEGIN PAGE HEADER-->
+         <div class="row">
+            <div class="col-md-12">
+               <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+               <h3 class="titles" style="margin:0px;margin-bottom:10px;">
+                  首页模块 <small>首页模块</small>
+               </h3>
+               <ul class="page-breadcrumb breadcrumb">
+                 <li>
+                     <i class="icon-home"></i>
+                     <a href="javascript:location.reload()"> 首页模块</a> 
+                  </li> 
+               </ul>
+               <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+         </div>
+         <!-- END PAGE HEADER-->
+         <!-- BEGIN PAGE CONTENT-->                  
+         <div class="row">
+             <div class="col-md-7">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <div class="page-breadcrumb ">
+                       @* <a href="/MallOrderInfo/Create" class="btn default"><i class="icon-plus"></i> 添加</a>*@
+                        <a href="javascript:location.reload()" class="btn default"><i class="icon-refresh"></i> 刷新</a>
+                        <a href="#" class="img-delbutton1 btn default" style="display:none" id="checkboxdeletebutton"><i class="icon-remove"></i> 删除</a>
+                    </div>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+             </div>
+           </div>
+             <br />
+        <div class="row">
+            <div class="col-md-12">
+               <!-- BEGIN SAMPLE TABLE PORTLET-->
+               <div class="portlet">
+                  <div class="portlet-body" style="display: block;">
+                     <div class="table-responsive">
+                        
+                     </div>
+                  </div>
+               </div>
+               <!-- END SAMPLE TABLE PORTLET-->
+            </div>
+         <!-- END PAGE CONTENT--> 
+            </div>
+        </div>
+      </div>
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<link href="/css/box.css" rel="stylesheet" />
+<script src="~/Scripts/box.js"></script>
+<script src="/Scripts/_config.js"></script>
+
+

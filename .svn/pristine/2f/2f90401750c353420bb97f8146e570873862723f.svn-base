@@ -1,0 +1,94 @@
+﻿@using MltxManager.Models.DBModel
+@using Webdiyer.WebControls.Mvc
+@model MltxManager.Models.DBModel.Mltx_foretaste_report
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="/assets/plugins/jquery-1.10.2.min.js"></script>
+<script src="/Scripts/jquery-1.8.2.js"></script>
+<link href="/css/box.css" rel="stylesheet" />
+<script src="/Scripts/box.js"></script>
+<div class="container-fluid" id="gaodu">
+    <div class="rule">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <h3 class="titles" style="margin: 0px; margin-bottom: 10px;">试吃 <small>试吃报告</small>
+                </h3>
+                <ul class="page-breadcrumb breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="@Url.Content("~/Global/Index")">首页</a>
+                    </li>
+                    <i class="icon-angle-right"></i>
+                    <li>
+                        <a href="#">试吃报告</a>
+                    </li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <!-- BEGIN DASHBOARD STATS -->
+        <div class="row  col-md-12" style="padding-left: 10%;">
+
+            <div class="portlet-body form ">
+                <div class="form-horizontal">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">用户信息</label>
+                            <div class="col-md-5">
+
+                                @Model.Customer
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-body form ">
+                <div class="form-horizontal">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">用户评论</label>
+                            <div class="col-md-5">
+
+                                @Model.ForetasteContent
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.Pic))
+            {
+                <div class="portlet-body form ">
+                    <div class="form-horizontal">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">试吃图片</label>
+                                <div class="col-md-5">
+                                    @{
+                                        var a = Model.Pic.Split('|');
+                                        for (int i = 0; i < a.Length-1; i++)
+                                        {
+                                            <img src="@a[i]" width="100%"/>
+                                        }
+                                    }
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

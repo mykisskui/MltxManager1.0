@@ -1,0 +1,644 @@
+﻿@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>首页</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/css/Index.css" rel="stylesheet" type="text/css" @*media="screen and (max-width:539px )"*@ />
+        <link href="/assets/plugins/font-awesome/css/font-awesome.min.css"  rel="stylesheet" type="text/css"/><script src="~/Scripts/iScroll-4.2.5.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" />
+    <script src="/Scripts/loading.js" type="text/javascript"></script>
+    <style>
+     div{ -webkit-tap-highlight-color:rgba(255,0,0,0);}
+    </style>
+    
+    <script>
+        var viewbagslide = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.slides))';
+        var viewbagmenu = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.menus))';
+        var viewbagmodule = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.modules))';
+        
+    </script>
+    <script>
+        var winheight;
+        var defaultParentNodeResult = true;
+        var _translate = null;
+        var _distX = 0;
+        var whiles = true;
+        var winwidth = window.innerWidth;
+        function load() {
+            var _height = window.innerHeight;
+            var _width = window.innerWidth >= 640 ? 640 : window.innerWidth;
+           var headerHeight = document.getElementsByClassName('index_0_header').item(0).clientHeight;
+           var FloatHeight = document.getElementsByClassName('index_0_FloatMenu').item(0).clientHeight;
+           winheight = _height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2)) + 'px';
+
+            page_scroll_0.style.height = _height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2)) + 'px';
+            page_scroll_0.style.width = _width + 'px';
+            page_scroll_1.style.height = _height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2)) + 'px';
+            page_scroll_1.style.width = _width + 'px';
+            index_default.style.cssText = 'overflow:hidden;width:' + (_width) + 'px;height:' + (_height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2))) + 'px';
+            index_header.style.cssText = 'width:' + (_width * 2) + 'px;height:' + (_height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2))) + 'px';
+           // setTimeout(function () {
+                myscroll = new iScroll("page_scroll_0", {
+                    vScroll: true,
+                    vScrollbar: false,
+                    vScrollbar: false,
+                    bounce: false,
+                    lockDirection: true,
+                    onBeforeScrollStart: function () {
+                    }
+                    ,
+                    onScrollMove: function (e) {
+                      
+                    },
+                    onBeforeScrollMove: function (e) {
+                        if (!defaultParentNodeResult) {
+                            if (this.absDistX > this.absDistY * 2 + 10) {
+                                myscroll.hScroll = true;
+                            } else {
+                                myscroll.hScroll = false;
+                            }
+                        }
+                    },
+                    onBeforeScrollEnd: function () {
+                       
+                    }
+                });
+                myscroll = new iScroll("page_scroll_1", {
+                    vScroll: true,
+                    vScrollbar: false,
+                    vScrollbar: false,
+                    bounce: false,
+                    lockDirection: true,
+                    onBeforeScrollStart: null,
+                    onBeforeScrollStart: function () {
+                    }
+                  
+                });
+                myscroll = new iScroll("index_default", {
+                    vScroll: false,
+                    vScrollbar: false,
+                    hScrollbar: false,
+                    hScroll:true,
+                    snap: true,
+                    eventPassthrough:true,
+                    bounce: false,
+                    momentum: true,
+                    lockDirection: true,
+                    onBeforeScrollStart: function (e) {
+
+                        defaultParentNodeResult = default_parent(e);
+
+
+                      //var nodeType = e.explicitOriginalTarget ? e.explicitOriginalTarget.nodeName.toLowerCase() : (e.target ? e.target.nodeName.toLowerCase() : '');
+                      //  if (nodeType != 'select' && nodeType != 'option' && nodeType != 'input' && nodeType != 'textarea') {
+                      //      e.preventDefault();
+                      //  }
+                        whiles = true;
+
+                    },
+                    onScrollStart:function(e){
+                         
+                        default_Stop();//停止
+                       
+                    },
+                    onBeforeScrollMove: function (e) {
+                        
+                    },
+                    onScrollMove: function (e) {
+                 
+                      
+                        default_Stop();//停止
+                       
+                    },
+                    onTouchEnd: function () {
+                            
+                    },
+                    onBeforeScrollEnd: function (e) {
+
+                        var _end = false;
+
+                      
+                        if (!defaultParentNodeResult) {
+                            //if (LeftAndRight) {
+                            //    //鲜果
+                            //    _translate = 0;
+                            //    if (Math.abs(_distX + this.distX + 100 ) > 80) {
+                            //        //true
+                            //        _end = true;
+                            //    } else {
+                            //        myscroll.stop();
+                            //        index_header.className = index_header.className.trim() + ' transition';
+                            //        index_header.style.cssText = ' width: ' + (winwidth * 2) + 'px; height: ' + (winheight) + '; transition-property: transform; transform-origin: 0px 0px 0px; transform: translate(' + _translate + 'px, 0px)  translateZ(0px);';
+                            //    }
+                            //} else {
+                            //    //下午
+                            //    _translate = (winwidth >= 640 ? -640 : -winwidth);
+
+                            //    if (Math.abs(_distX + this.distX + 100) > 80) {
+                            //        //true
+                            //        _end = true;
+                            //    } else {
+                            //        myscroll.stop();
+                            //        index_header.className = index_header.className.trim() + ' transition';
+                            //        index_header.style.cssText = 'width: ' + (winwidth * 2) + 'px; height: ' + (winheight) + '; transition-property: transform; transform-origin: 0px 0px 0px; transform: translate(' + _translate + 'px, 0px)  translateZ(0px);';
+                            //    }
+                            //}
+
+                            //if (!_end) { return false; }
+                            if (this.distX > 0 && this.absDistX > (this.absDistY + 5)) {
+                                //左
+                                headerChange('index_0', 500);
+                            }
+                            if (this.distX < 0 && this.absDistX > (this.absDistY + 5)) {
+                                headerChange('index_1', 500);
+                                //右
+                            }
+                            //setTimeout(function () { 
+                            //    index_header.className = index_header.className.replace('transition', '');
+                            //}, 800);
+                        }
+                     
+
+                    },
+                    onScrollEnd: function (e) {
+                        
+                    }
+                });
+           // }, 100);
+                document.body.ontouchmove = function (event) {
+                    
+                    event.preventDefault();
+
+                }
+                
+        }
+        function default_parent(e) {
+            var default_parentNodes = e.target;
+            var de_parentNodeId;
+            de_parentNode = default_parentNodes.parentNode;
+            try{
+                while (de_parentNode != null) {
+                    de_parentNode = de_parentNode.parentNode;
+                    if (de_parentNode.className == 'index_0_slide') {
+                        de_parentNode = null;
+                        myscroll.hScroll = false;
+                        return true;
+                    }
+                }
+            } catch (e) {
+                de_parentNode = null;
+                myscroll.hScroll = true;
+            }
+            return false;
+        }
+        function default_Stop() {
+            
+            if (defaultParentNodeResult) {
+                myscroll.stop();
+                    _translate = (!LeftAndRight ? (winwidth >= 640 ? -640 : -winwidth) : 0);
+                    index_header.style.cssText = 'width: ' + (winwidth * 2) + 'px; height: ' + (winheight) + '; transition-property: transform; transform-origin: 0px 0px 0px; transform: translate(' + _translate + 'px, 0px)  translateZ(0px);';
+
+                
+            }
+        }
+        window.addEventListener('load', load, false);
+    </script>
+</head>
+<body>
+
+    <div class="body">
+          <!-- 头部start  search-->
+                <div class="index_0_header">
+                                <div class="index_0_header_top">
+                                    <ul>
+                                        <li>
+                                         @*   <i class="icon-map-marker"></i>*@
+                                        </li>
+                                        <li>
+                                            <div class="indexbuttonHeader">
+                                                <div class="indexbutton indexbutton_on" data-id="index_0">生鲜</div>
+                                                <div class="indexbutton indexbutton_off" data-id="index_1">下午茶</div>
+                                                <!-- 切换样式 -->
+                                                <div class="indexbutton indexbutton_ed indexbutton_on"></div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <i onclick="location.href='/Mltx_Template/search'" class="icon-search"></i>
+                                        </li>
+                                    </ul>
+                                </div>
+                </div>
+          <!-- 头部end -->
+        <div class="index_default" id="index_default">
+        <div class="index_header" id="index_header">
+                    <!-- 商城start -->
+                            <div class="index_0" id="page_scroll_0">
+                       <div style="overflow:hidden;">
+                                <!-- 幻灯片start -->
+                                <div class="index_0_slide" id="index_0_slide">
+                                         @*   <div class="index_0_slide_div" style="background-image:url(http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff);background-size:100% 100%;">
+                                                    <!-- 幻灯片图片 -->   
+                                    
+                                    
+                                            </div>*@
+                                    	<!--效果html开始-->
+                                        <div class="main_visual">
+	                                        <div class="main_image">
+		                                        <ul id="main_slide0">
+			                                       @* <li onclick="javascript:location.href='http://www.baidu.com'"><span style="background:url(http://www.tfresh.cn/css/Image/15168005/货到付款.jpg) center top no-repeat"></span></li>
+			                                        <li><span style="background:url(http://www.tfresh.cn/css/Image/15168005/weibonew.jpg) center top no-repeat"></span></li>*@
+		                                        </ul>
+		                                      @*  <a style="display:none;" href="javascript:;" id="btn_prev"></a>
+		                                        <a href="javascript:;"  style="display:none;" id="btn_next"></a>*@
+	                                        </div>
+                                        </div>
+			                                        <!--效果html结束-->
+                                </div>
+                                <!-- 幻灯片start -->
+                                <!-- indexMenuStart -->
+                                        <div class="index_0_Menu">
+                                            <div class="index_0_Menu_div">
+                                                   <ul id="index_0_menu_ul">
+                                                        @*<li onclick="javascript:location.href='http://www.baidu.com/'">
+                                                            <div>
+                                                                     <img src="http://www.tfresh.cn/css/Image/15168005/hightea_icon.png" />
+                                                                <div>
+                                                                    免费试吃
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                           <li>
+                                                            <div>
+                                                                     <img src="http://www.tfresh.cn/css/Image/15168005/hightea_icon.png" />
+                                                                <div>
+                                                                    免费试吃
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                          <li>
+                                                            <div>
+                                                                     <img src="http://www.tfresh.cn/css/Image/15168005/hightea_icon.png" />
+                                                                <div>
+                                                                    免费试吃
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                          <li>
+                                                            <div>
+                                                                     <img src="http://www.tfresh.cn/css/Image/15168005/hightea_icon.png" />
+                                                                <div>
+                                                                    免费试吃
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                          <li>
+                                                            <div>
+                                                                     <img src="http://www.tfresh.cn/css/Image/15168005/hightea_icon.png" />
+                                                                <div>
+                                                                    免费试吃
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                          <li>
+                                                            <div>
+                                                                     <img src="http://www.tfresh.cn/css/Image/15168005/hightea_icon.png" />
+                                                                <div>
+                                                                    免费试吃
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                          <li>
+                                                            <div>
+                                                                     <img src="http://www.tfresh.cn/css/Image/15168005/hightea_icon.png" />
+                                                                <div>
+                                                                    免费试吃
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                          <li>
+                                                            <div>
+                                                                     <img src="http://www.tfresh.cn/css/Image/15168005/hightea_icon.png" />
+                                                                <div>
+                                                                    免费试吃
+                                                                </div>
+                                                            </div>
+                                                        </li>*@
+                                                    </ul>
+                                            </div>
+                                        </div>
+                                <!-- indexMenuEnd -->
+
+                                <!-- indexModuleStart -->
+                                <div class="index_0_Module" id="index_0_module">
+                                    <!-- 单模块start -->
+                                        <div class="index_0_Module_1 index_0_ModuleMargin" style="background-image:url(http://www.tfresh.cn/css/MallRecPic/15168005/47-211.jpg);background-size:100% 100%;">
+                                        </div>
+                                    <!-- 单模块end -->
+                                    <!-- 三模块start -->
+                                        <div class="index_0_Module_3 index_0_ModuleMargin">
+                                                    <ul>
+                                                        <li>
+                                                            <img style="width:100%;height:100%;" src="http://www.tfresh.cn/css/MallRecPic/15168005/111_5363.jpg" />
+                                                        </li>
+                                                             <li>
+                                                            <img style="width:100%;height:100%;" src="http://www.tfresh.cn/css/MallRecPic/15168005/27-2111.jpg" />
+                                                        </li>
+                                                             <li>
+                                                            <img style="width:100%;height:100%;" src="http://www.tfresh.cn/css/MallRecPic/15168005/111_5363.jpg" />
+                                                        </li>
+                                                    </ul>
+                                        </div>
+                                    <!-- 三模块end -->
+                                    <!-- 四模块start -->
+                                    <div class="index_0_Module_4 index_0_ModuleMargin">
+                                            <ul>
+                                                <li>
+                                                    <img style="width:100%;height:100%;" src="http://www.tfresh.cn/css/MallRecPic/15168005/布朗.jpg" />
+                                                </li>
+                                                    <li>
+                                                    <img style="width:100%;height:100%;" src="http://www.tfresh.cn/css/MallRecPic/15168005/红心.jpg" />
+                                                </li>
+                                                   <li>
+                                                    <img style="width:100%;height:100%;" src="http://www.tfresh.cn/css/MallRecPic/15168005/甜心绿奇异果.jpg" />
+                                                </li>
+                                                   <li>
+                                                    <img style="width:100%;height:100%;" src="http://www.tfresh.cn/css/MallRecPic/15168005/46-211.jpg" />
+                                                </li>
+                                             
+                                            </ul>
+                                    </div>
+                                    <!-- 四模块end -->
+                                </div>
+                                <!-- indexModuleEnd -->
+                    
+                               </div>
+
+                            </div>
+                    <!-- 商城end -->
+                    <!-- 鲜果start  暂时不涉及鲜果-->
+                        <div class="index_1" id="page_scroll_1">
+                            <div style="overflow:hidden;">      
+                                 <!-- 幻灯片start -->
+                                        <div class="index_0_slide" id="index_0_slide_1">
+                                                  @*  <div class="index_0_slide_div" style="background-image:url(http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff);background-size:100% 100%;">
+                                                            <!-- 幻灯片图片 -->   
+                                    
+                                    
+                                                    </div>*@
+                                            	<!--效果html开始-->
+                                        <div class="main_visual">
+	                                        <div class="main_image1">
+		                                        <ul id="main_slide1">
+			                                       @* <li><span style="background:url(http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff) center top no-repeat"></span></li>
+			                                        <li><span style="background:url(http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff) center top no-repeat"></span></li>*@
+		                                        </ul>
+		                                     @*   <a href="javascript:;" id="btn_prev1"></a>
+		                                        <a href="javascript:;" id="btn_next1"></a>*@
+	                                        </div>
+                                        </div>
+			                                        <!--效果html结束-->
+                                        </div>
+                                        <!-- 幻灯片start -->
+                               <!-- indexMenuStart -->
+                                                <div class="index_0_Menu">
+                                                    <div class="index_0_Menu_div index_0_Menu_div_1">
+                                                           <ul id="index_0_menu_ul1">
+                                                            @*    <li>
+                                                                    <div>
+                                                                             <img src="http://www.atool.org/placeholder.png?size=240x240&text=120x120&&bg=ccc&fg=fff" />
+                                                                        <div>
+                                                                            免费试吃
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                                   <li>
+                                                                    <div>
+                                                                             <img src="http://www.atool.org/placeholder.png?size=240x240&text=120x120&&bg=ccc&fg=fff" />
+                                                                        <div>
+                                                                            免费试吃
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                                  <li>
+                                                                    <div>
+                                                                             <img src="http://www.atool.org/placeholder.png?size=240x240&text=120x120&&bg=ccc&fg=fff" />
+                                                                        <div>
+                                                                            免费试吃
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                                  <li>
+                                                                    <div>
+                                                                             <img src="http://www.atool.org/placeholder.png?size=240x240&text=120x120&&bg=ccc&fg=fff" />
+                                                                        <div>
+                                                                            免费试吃
+                                                                        </div>
+                                                                    </div>
+                                                                </li>*@
+                                                            </ul>
+                                                    </div>
+                                                </div>
+                                        <!-- indexMenuEnd -->
+                              <!-- indexModuleStart -->
+                                        <div class="index_0_Module" id="index_1_module">
+                                            <!-- 单模块start -->
+                                                <div class="index_0_Module_1 index_0_ModuleMargin" style="background-image:url(http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff);background-size:100% 100%;">
+                                                </div>
+                                            <!-- 单模块end -->
+                                            <!-- 三模块start -->
+                                                <div class="index_0_Module_3 index_0_ModuleMargin">
+                                                            <ul>
+                                                                <li>
+                                                                    <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                                </li>
+                                                                     <li>
+                                                                    <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                                </li>
+                                                                     <li>
+                                                                    <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                                </li>
+                                                            </ul>
+                                                </div>
+                                            <!-- 三模块end -->
+                                            <!-- 四模块start -->
+                                            <div class="index_0_Module_4 index_0_ModuleMargin">
+                                                    <ul>
+                                                        <li>
+                                                            <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                        </li>
+                                                            <li>
+                                                            <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                        </li>
+                                                           <li>
+                                                            <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                        </li>
+                                                           <li>
+                                                            <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                        </li>
+                                             
+                                                    </ul>
+                                            </div>
+                                            <!-- 四模块end -->
+                                        </div>
+                                        <!-- indexModuleEnd -->
+                                </div>
+                        </div>
+                    <!-- 鲜果end -->
+            </div>
+
+            </div>
+          <!-- 商城页脚 start -->
+                    <div class="index_0_FloatMenu">
+                          <ul id="footermenu">
+                           @*   <li>
+                                  <div>
+                                  <img src="http://www.tfresh.cn/css/Image/15168005/首页.png" />
+                                  </div>
+                                  <span>主页</span>
+                              </li>
+                                <li>
+                                  <div>
+                                  <img src="http://www.tfresh.cn/css/Image/15168005/分类.png" />
+                                  </div>
+                                  <span>这是菜单</span>
+                              </li>
+                                <li>
+                                  <div>
+                                  <img src="http://www.tfresh.cn/css/Image/15168005/购物车.png" />
+                                  </div>
+                                  <span>这是菜单</span>
+                              </li>
+                                <li>
+                                  <div>
+                                  <img src="http://www.tfresh.cn/css/Image/15168005/我的订单.png" />
+                                  </div>
+                                  <span>这是菜单</span>
+                              </li>
+                                <li>
+                                  <div>
+                                  <img src="http://www.tfresh.cn/css/Image/15168005/所有商品.png" />
+                                  </div>
+                                  <span>这是菜单</span>
+                              </li>
+                           *@
+                          </ul>
+                    </div>
+          <!-- 商城页脚 end -->
+
+
+
+     
+
+
+
+  
+    </div>
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/jquery.event.drag-1.5.min.js"></script>
+    <script src="~/Scripts/jquery.touchSlider.js"></script>
+    <script src="~/Scripts/banner.js"></script>
+    <script src="/Scripts/HTMLoutput.js" type="text/javascript"></script>
+    <script>
+      
+    </script>
+    <script type="text/javascript">
+        var indexdom = document;
+        var indexbutton = indexdom.getElementsByClassName('indexbutton');
+        var indexbutton_ed = indexdom.getElementsByClassName('indexbutton_ed').item(0);
+        var LeftAndRight = true;
+        var indexHeaderClick = true;
+        (function () {//初始化
+
+            outputmain.indexSlide(viewbagslide, 'main_slide0', 'main_slide1');
+            outputmain.indexMenu(viewbagmenu, 'index_0_menu_ul', 'index_0_menu_ul1');
+            outputmain.footerMenu(viewbagmenu, 'footermenu');
+            outputmain.indexModule(viewbagmodule, 'index_0_module', 'index_1_module');
+            init(0);
+        })();
+        function init(a,b,c) {
+            var indexbuttons = indexbutton.item(a);
+            var _height = indexbuttons.clientHeight;
+            var _width = indexbuttons.clientWidth;
+            indexbutton_ed.style.cssText = 'width:' + _width + 'px;height:'+_height+'px;';
+            indexbutton_ed.innerText = indexbuttons.innerText;
+
+        }
+        $('.indexbutton').on('click', function () {
+            if (!indexHeaderClick) {  return false; }
+            var self = this;
+            var className = self.className;
+            switch (className) {
+                case 'indexbutton indexbutton_on':
+                            //不执行切换
+                    break;
+                case 'indexbutton indexbutton_off':
+                    /*
+                        执行切换
+                    */
+                    var data_id = self.getAttribute('data-id');
+                    var indexHeader = indexdom.getElementById('index_header');
+                    AnimateAction(indexHeader, data_id, 0, 500);
+                    break;
+            }
+        });
+
+        function AnimateAction(obj, title, lefts, s) {
+            var left = 0;
+            indexHeaderClick = false;
+            left = obj.offsetLeft;
+            if (title == 'index_1') {
+                if (left == 0) {
+                    left = -(window.innerWidth >= 640 ? 640 : window.innerWidth);
+                }
+            }
+            else if (title == 'index_0') {
+                if (left < 0) {
+                    left = 0;
+                }
+            }
+            //$(obj).animate({ left: left + 'px' }, s);
+            //translate(-375px, 0px) scale(1)
+            //$(obj).css('translate', '(' + left + 'px,0px)').css('scale', 1);
+            obj.style.cssText = 'width: '+(window.innerWidth * 2)+'px; height: '+winheight+';transition-property: transform;transition:-webkit-transform ' + s + 'ms; transform-origin: 0px 0px 0px; transform: translate(' + (left) + 'px, 0px)  translateZ(0px);';
+            setTimeout(function () { headerChange(title,s,obj) }, 50);
+        }
+        /*
+            切换生鲜,下午茶按钮
+            @@param title 按钮编号
+        */
+        function headerChange(title,s,obj) {
+            switch (title) {
+                case 'index_1':
+                    $(indexbutton).eq(0).attr('class', $(indexbutton).eq(0).attr('class').replace('indexbutton_on', 'indexbutton_off'));
+                    $(indexbutton_ed).animate({ left: '80px' }, s);
+                    setTimeout(function () {
+                        $(indexbutton_ed).text('').text($(indexbutton).eq(1).text());
+                    }, (s / 2));
+                    LeftAndRight = false;
+                    break;
+                case 'index_0':
+                    $(indexbutton).eq(1).attr('class', $(indexbutton).eq(1).attr('class').replace('indexbutton_on', 'indexbutton_off'));
+                    $(indexbutton_ed).animate({ left: '0px' }, s);
+                    setTimeout(function () {
+                        $(indexbutton_ed).text('').text($(indexbutton).eq(0).text());
+                    }, (s / 2));
+                    LeftAndRight = true;
+                    break;
+            }
+            indexHeaderClick = true;
+            setTimeout(function () {
+                $(obj).css('transition', '');
+            }, s);
+        }
+    </script>
+</body>
+</html>

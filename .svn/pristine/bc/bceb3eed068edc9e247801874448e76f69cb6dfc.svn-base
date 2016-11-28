@@ -1,0 +1,131 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MltxManager.Models.DBModel
+{
+    /// <summary>
+    /// 订单主表
+    /// </summary>
+    public class Mltx_Order_main
+    {
+        //public int Id { get; set; }
+        /// <summary>
+        /// 订单id
+        /// </summary>
+        [Key]
+        public string OrderId { get; set; }
+        /// <summary>
+        /// 订单名 
+        /// </summary>
+        public string OrderName { get; set; }
+        /// <summary>
+        /// 商品总价格
+        /// </summary>
+        public decimal GoodsTotals { get; set; }
+        /// <summary>
+        /// 价格调整 可正可负
+        /// </summary>
+        public decimal OtherAdjust { get; set; }
+        /// <summary>
+        /// 邮费
+        /// </summary>
+        public decimal TransferFee { get; set; }
+        /// <summary>
+        /// 其他优惠 非正数
+        /// </summary>
+        public decimal Favourable { get; set; }
+        /// <summary>
+        /// 订单总价
+        /// </summary>
+        public decimal OrderTotals { get; set; }
+        /// <summary>
+        /// 商品数量
+        /// </summary>
+        public int GoodsCnt { get; set; }
+        /// <summary>
+        /// 微信用户标识 可为空
+        /// </summary>
+        public string Openid { get; set; }
+        /// <summary>
+        /// 买家姓名
+        /// </summary>
+        public string Customer { get; set; }
+        /// <summary>
+        /// 买家地址
+        /// </summary>
+        public string CustomerAddr { get; set; }
+        /// <summary>
+        /// 买家电话
+        /// </summary>
+        public string CustomerTel { get; set; }
+        /// <summary>
+        /// 买家要求 50字以内
+        /// </summary>
+        public string CustomerRem { get; set; }
+        /// <summary>
+        /// 订单类型
+        /// </summary>
+        public OrderCls OrderCls { get; set; }
+        /// <summary>
+        /// 支付方式
+        /// </summary>
+        public Payment Payment { get; set; }
+        /// <summary>
+        /// 上门自提 门店id
+        /// </summary>
+        [ForeignKey("ShopId")]
+        public Mltx_ShopInfo Shop { get; set; }
+
+        public int ShopId { get; set; }
+        /// <summary>
+        /// 上门自提时间
+        /// </summary>
+        public DateTime FetchTime { get; set; }
+        /// <summary>
+        /// 下单时间
+        /// </summary>
+        public DateTime OrderTime { get; set; }
+        /// <summary>
+        /// 支付时间
+        /// </summary>
+        public DateTime PayTime { get; set; }
+        /// <summary>
+        /// 订单状态
+        /// </summary>
+        public State State { get; set; }
+        public string Remark { get; set; }
+    }
+
+    public enum OrderCls
+    {
+        商城 = 0,
+        鲜果单 = 1
+    }
+
+    public enum Payment
+    {
+        微信支付 = 0,
+        支付宝支付 = 1,
+        上门自提 = 2,
+        货到付款 = 3
+    }
+
+    public enum State
+    {
+        取消 = -1,
+        完成 = 0,
+        未付款 = 1,
+        待发货 = 2,
+        发货中 = 3,
+        货到付款但未预付款 = 4,
+        货到付款已预付款=5,
+        等待自提=6,
+        待评价=7,
+        注销删除=100
+    }
+}

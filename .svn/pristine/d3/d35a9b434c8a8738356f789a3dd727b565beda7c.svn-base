@@ -1,0 +1,147 @@
+﻿body {
+}
+.div_baseinfo_details {
+    overflow:hidden;
+    border-bottom:2px solid #ccc;
+}
+.div_p_details {
+    font-size:25px;
+    color:#E01010;
+}
+.div_name_details {
+    height: 40px;
+    line-height: 40px;
+    padding-left: 5px;
+    color: #666;
+    font-size: 18px;
+}
+.div_price_details {
+    display: -webkit-box;
+    position: relative;
+    height: 40px;
+    line-height: 40px;
+}
+.divshoping_details {
+    position: absolute;
+    right: 10px;
+    top: 0px;
+}
+.div_guige {
+    display: -webkit-box;
+    height: 40px;
+    line-height: 40px;
+    border-bottom :2px solid #ccc;
+}
+    .div_guige div:nth-child(1) {
+            width: 40%;
+            padding-left:5px;
+            color:#666;
+    }
+    .div_guige div:nth-child(2) {
+            width: 60%;
+            position:relative;
+    }
+        .div_guige div:nth-child(2) div {
+            background-color: #64a786;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            color: #fff;
+            margin-top: 5px;
+            position: absolute;
+            right: 10px;
+            width: 50%;
+        }
+.c_css {
+    position: absolute;
+    right: 20px;
+    font-size: 35px;
+    color: #64a786;
+}
+#div_maininfo {
+    margin-top:5px;
+    width: 100%;
+}
+    #div_maininfo > p > img {
+        width: 100%;
+    }
+@media screen and (max-width:320px ) { /*当屏幕尺寸小于>320*/
+    .div_shopcart_icon {
+        width: 30%;
+        background-color: #F5BE2B;
+        color: #fff;
+        text-align: center;
+        font-size: 40px;
+        padding-top: 5px;
+        position: relative;
+    }
+
+    .div_shopcart_text {
+        width: 70%;
+        background-color: #64a786;
+        color: #fff;
+        font-size: 20px;
+        text-align: center;
+        line-height: 50px;
+    }
+
+    .main_vasual_details {
+        height: 150px;
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+    }
+
+    .span_count {
+        position: absolute;
+        font-size: 13px;
+        right: 20%;
+        top: 5%;
+        background-color: #64a786;
+        height: 20px;
+        width: 20px;
+        border-radius: 20px;
+        line-height: 20px;
+        display:none;
+    }
+}
+@media screen and (min-width:321px ) { /*当屏幕尺寸大于>320*/
+    .div_shopcart_icon {
+        width: 30%;
+        background-color: #F5BE2B;
+        color: #fff;
+        text-align: center;
+        font-size: 40px;
+        padding-top: 10px;
+        position: relative;
+    }
+
+    .div_shopcart_text {
+        width: 70%;
+        background-color: #64a786;
+        color: #fff;
+        font-size: 20px;
+        text-align: center;
+        line-height: 60px;
+    }
+
+    .main_vasual_details {
+        height: 200px;
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+    }
+
+    .span_count {
+        position: absolute;
+        font-size: 13px;
+        right: 20%;
+        top: 10%;
+        background-color: #64a786;
+        height: 25px;
+        width: 25px;
+        border-radius: 25px;
+        line-height: 25px;
+        display:none;
+    }
+}

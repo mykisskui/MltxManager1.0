@@ -1,0 +1,50 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using MltxManager.Data.MethodHepler;
+using MltxManager.Models.DBHelper;
+using MltxManager.Models.DBModel;
+using Webdiyer.WebControls.Mvc;
+
+namespace MltxManager.Data
+{
+    public class TicketData
+    {
+        private readonly MltxDbContext _db = new MltxDbContext();
+        /// <summary>
+        /// 查询提货券
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="kword"></param>
+        /// <returns></returns>
+        public ReturnMsg InsertTicket(int id, string kword)
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                if (!string.IsNullOrEmpty(kword))
+                {
+                    re.MltxTickets =
+                        _db.tickets.Where(a => a.Goods.GoodsName.Contains(kword))
+                            .OrderByDescending(a => a.Id)
+                            .ToPagedList(id, 10);
+                }
+                else
+                {
+                    re.MltxTickets = _db.tickets.OrderByDescending(a => a.Id).ToPagedList(id, 10);
+                }
+
+            }
+            catch (Exception e)
+            {
+                re.errcode = -1;
+                re.errmsg = e.Message;
+                MHepler.writelog_err("查询提货券：" + e.Message);
+                return re;
+            }
+            re.errcode = 0;
+            return re;
+        }
+    }
+}

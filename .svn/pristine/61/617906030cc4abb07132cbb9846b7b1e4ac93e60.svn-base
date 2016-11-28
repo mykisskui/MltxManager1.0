@@ -1,0 +1,251 @@
+﻿.fruitfooter_sub_on {
+    background-color:rgb(147,174,79)!important;
+}
+
+
+
+
+.fruitfooter {
+
+    display:-webkit-box;
+    height:50px;
+    background:#fff;
+    z-index:9999;
+    border-top:1px solid #ccc;
+    
+}
+    .fruitfooter > div {
+        -webkit-box-flex:1;
+    }
+        .fruitfooter > div:nth-child(1) {
+            width:20%;
+            position:relative;
+        }
+        .fruitfooter > div:nth-child(2) {
+            width:50%;
+        }
+        .fruitfooter > div:nth-child(3) {
+            width:30%;
+        }
+        .fruitfooter > div:nth-child(2), .fruitfooter > div:nth-child(3) {
+            line-height:50px;
+        }
+        .fruitfooter > div:nth-child(3) {
+            text-align:right;
+            
+        }
+.fruitfooter > div:nth-child(3) > div {
+   background:#ABABAB;
+   color:#fff;
+   text-align:center;
+   font-size:16px;
+}
+.fruitfooter > div:nth-child(2) > span {
+            color:rgb(101,166,134);
+            font-weight:bold;
+
+}
+    .fruitfooter > div:nth-child(2) > span:nth-child(2) {
+        font-size:18px;
+    }
+    .fruitfooter > div:nth-child(2) > span:nth-child(1) {
+        font-size:14px;
+    }
+
+        .fruitfooter > div:nth-child(1) > div:first-child {
+                height: 50px;
+                width: 50px;
+                margin: auto;
+                background: #ababab;
+                position: absolute;
+                top: -10px;
+                border-radius:50%;
+                z-index:9998;
+        }
+.fruit_shoppingcartCount {/*显示购物数量*/
+    width:20px;
+    height:20px;
+    display:none;
+    background:rgb(255, 25, 1);
+    color:#fff;
+    border-radius:50%;
+    position:absolute;
+    top: -2px;
+    right: -2px;
+    z-index: 999;
+    font-style:normal;
+    text-align:center;
+    font-size:14px;
+    text-overflow:ellipsis;
+    line-height:20px;
+    font-family:initial;
+}
+.fruit_shoppingcart_on {
+    background:rgb(255,206,85)!important;
+}
+.fruit_shoppingcartCount_on {
+    display:block;
+}
+            .fruitfooter > div:nth-child(1) > div > i:nth-child(1) {
+                    font-size: 30px;
+                    color: #fff;
+                    display: block;
+                    height: 50px;
+                    width: 50px;
+                    line-height: 50px;
+                    text-align: center;
+            }
+.fruitList {
+    list-style:none;
+    margin:0;
+    padding:0;
+
+}
+    .fruitList > li {
+        padding:10px 5px;
+        height:100px;
+        max-height:100px;
+        border-bottom:1px solid rgb(212, 212, 212);
+                position:relative;
+
+    }
+        .fruitList > li > a {
+        display:-webkit-box;
+        text-decoration:none;
+        }
+        .fruitList > li > a > div {
+            -webkit-box-flex:1;
+        }
+ .fruitList > li > a > div:nth-child(1) {
+        width:30%;
+}
+            .fruitList > li > a > div:nth-child(2) {
+                width:70%;
+                padding:0 0 0 10px;
+            }
+            .fruitList > li  > a> div:nth-child(2) > span {
+                display:block;
+            }
+            .fruitList > li > a > div:nth-child(1) > img {
+                width:100%;
+                max-width:100px;
+                max-height:100px;
+                height:100%;
+                display:block;
+                margin:auto;
+                
+            }
+.fruit_title {
+    color:#000;
+    font-weight:bold;
+    font-size:18px;
+}
+.fruit_ms {
+    color:#808080;
+      font-size:16px;
+      padding:10px 0;
+}
+.fruit_rmb {
+    font-size:16px;
+    font-weight:bold;
+    color:rgb(101,166,134);
+}
+.fruit_price {
+    font-size:18px;
+    font-weight:bold;
+    color:rgb(101,166,134);
+}
+ .fruitList > li > div:last-child {
+     position:absolute;
+     right:0;
+     bottom:0;
+     width:100px;
+     height:40px;
+     padding:0 10px 10px 0;
+}
+ .fruitList > li > div:last-child > div {
+        float:left;
+    }
+.fruit_jian,.fruit_jia {
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    border:1px solid #6CA94B;
+    color:#6ca94b;
+    text-align:center;
+    font-size:20px;
+    line-height:28px;
+    font-weight:bold;
+
+}
+.fruit_val {
+    color:#000;
+    height:30px;
+    line-height:28px;
+    font-size:20px;
+    padding:0 5px;
+    width:25px;
+    text-align:center;
+}
+.fruitshoppingList {
+    position:fixed!important;
+    border-top:1px solid #808080;
+    background-color:#eee;
+    z-index:9997;
+    display:none;
+
+}
+.fruitshoppingmu {
+    
+    position:fixed;
+    top:0;
+    background-color:rgba(78, 78, 78, 0.6);
+    display:none;
+    z-index:9996;
+}
+/*购物车*/
+.shoppingfruitList {
+   
+}
+
+    .shoppingfruitList > li {
+        padding:5px 0!important;
+        height:35px!important;
+        line-height:35px;
+
+    }
+        .shoppingfruitList > li >  div {
+         padding: 0 10px 0 0!important;
+    margin-bottom: -2px;
+            
+        }
+        .shoppingfruitList > li > a > div > span > span {
+            font-size:14px!important;
+        }
+ .shoppingfruitList > li > a > div > span > span:nth-child(1) {
+margin: 0 40px 0 0;
+  font-size:14px!important;
+}
+.fruitRemove {
+    height: 35px;
+    border-bottom: 1px solid rgb(214, 214, 214);
+    background: rgba(206, 206, 206, 0.65);
+}
+.fruitRemoveClick {
+        line-height: 35px;
+    padding: 0 10px 0 10px;
+    color: #333;
+    font-size: 14px;
+    float: right;
+    font-weight:bold;
+}
+/*详情----------------------*/
+
+.fruitDetails {
+    position:fixed;
+    bottom:51px;
+    background:#fff;
+    z-index:9995;
+    width:100%;
+    display:block;
+}

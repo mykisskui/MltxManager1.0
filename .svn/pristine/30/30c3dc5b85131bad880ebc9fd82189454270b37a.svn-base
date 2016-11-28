@@ -1,0 +1,6 @@
+﻿@{
+    ViewBag.Title = "fruitDetail";
+    Layout = string.Empty;
+}
+
+<h2>fruitDetail</h2>

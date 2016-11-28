@@ -1,0 +1,187 @@
+﻿@using System.Data
+@using Webdiyer.WebControls.Mvc;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Scripts/riqi/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Scripts/riqi/font-awesome.min.css" rel="stylesheet" />
+<link href="~/Scripts/riqi/daterangepicker-bs3.css" rel="stylesheet" />
+
+<script src="/Scripts/box.js"></script>
+<link href="~/css/box.css" rel="stylesheet" />
+<script src="~/Scripts/riqi/jquery.min.js"></script>
+<script src="~/Scripts/riqi/bootstrap.min.js"></script>
+<script src="~/Scripts/riqi/moment.js"></script>
+<script src="~/Scripts/riqi/daterangepicker.js"></script>
+<div class="container-fluid" id="gaodu" name="111" style="min-height: 600px;">
+    <!-- BEGIN PAGE HEADER-->
+    <div class="rule">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <h3 class="titles" style="margin: 0px; margin-bottom: 10px;">试吃  <small>添加试吃商品</small>
+                </h3>
+                <ul class="page-breadcrumb breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="/Mltx_Foretaste/Index">试吃管理</a>
+                    </li>
+                    <i class="icon-angle-right"></i>
+                    <li>
+                        <a href="#">添加试吃商品</a>
+
+                    </li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <div class="row  col-md-12" style="padding-left: 10%;">
+            <div class="portlet-body form ">
+                <div class="form-horizontal">
+
+
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">试吃商品</label>
+                            <div class="col-md-5">
+                                <a class="btn green" data-toggle="modal" href="#full">选择商品</a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"></label>
+                            <div class="col-md-5">
+                                <div class="" id="video_chose" hidden="hidden">
+                                    <input type="text" readonly="readonly" class="form-control" id="goodname" name="goodname" placeholder="" value="">
+                                    <input type="hidden" id="gid" name="gid" value=""/>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">结束时间</label>
+                        <div class="col-md-5">
+                            <div class="input-prepend input-group">
+                                <span class="add-on input-group-addon">
+                                    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                </span>
+                                <input type="text" style="width: 200px" name="birthday" id="birthday"
+                                       class="form-control" value="2013/03/18 00:00"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">期数</label>
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" id="R_Price" name="R_Price" placeholder="" value="">
+                        </div>
+                        <label class="col-md-2 control-label" style="text-align: left">期</label>
+                    </div>
+                    <div class="form-group" id="Isenable1">
+                            <label class="col-md-2 control-label">库存计算方式</label>
+                            <div class="col-md-5">
+
+                                <div class="radio-list">
+                                    <label class="radio-inline">
+                                        <span class="quanzi">
+                                            <input type="radio" name="kuchunjisuan" class="zhuangtai" value="0" checked>
+                                            正在试吃</span>
+                                    </label>
+                                    <label class="radio-inline">
+                                        <span class="baohan">
+                                            <input type="radio" name="kuchunjisuan" class="zhuangtai" value="1">
+                                            往期试吃</span>
+                                    </label>
+
+                                </div>
+
+                            </div>
+                            <!--隐藏域，保存状态值--->
+                        </div>
+
+                    <div class="form fluid">
+                        <div class="col-md-offset-2 col-md-5">
+                            <button type="button" id="baochun" class="btn green">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<!-- /.商品列表 -->
+<div class="modal fade" id="full" tabindex="-1" role="basic" aria-hidden="true">
+    <div class="modal-dialog modal-full" style="padding-top: 2px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">商品列表</h4>
+            </div>
+            <div class="modal-body" id="video_info">
+                <!--商品嵌入信息开始-->
+                <div class="main-db" style="border: 0px;">
+                    <div style="width: 100%; height: 100%">
+                        <iframe src="/Mltx_Foretaste/CreateiForetaste" name="addiframe" data-id="" id="addiframe" style="width: 100%; height: 400px; border-style: none;" scrolling="no" frameborder="0" onload="iFrameHeights()"></iframe>
+                    </div>
+                    <!--嵌入结束-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn default" onclick="Ndo();" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn green" onclick="Do();" data-dismiss="modal">确定</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+<!-- /.商品列表 -->
+<script>
+    $("#baochun").click(function() {
+        $.get("/Mltx_Foretaste/InsertForetasteData", { sp: $("#gid").val(), sj: $("#birthday").val(), qs: $("#R_Price").val(), zhuangtai: $('input[name="kuchunjisuan"]:checked').val() }, function (r) {
+            if (r == "ajaxerror") {
+                box.alert("权限未通过", "error");
+            } else if (r == 0) {
+                box.alert("添加成功,1秒后刷新");
+                setTimeout(function () { location.href = "/Mltx_Foretaste/Index" }, 1000);
+            } else {
+                box.alert("添加失败", "error");
+            }
+        });
+    });
+    
+    $('#birthday').daterangepicker({
+        singleDatePicker: true,
+        timePicker: true,
+        timePickerIncrement: 30,
+        format: 'YYYY/MM/DD h:mm'
+    },
+    function (start, end, label) {
+        console.log(start.toISOString(), end.toISOString(), label);
+    });
+    //控制右侧的下拉
+    var cmd = parent.document.getElementById("win");
+    cmd.height = $("#gaodu").height();
+    //素材选择取消
+    function Ndo() {
+        var divs = document.getElementsByClassName("voiceListTitle");
+        for (i = 0; i < divs.length; i++) {
+            divs[i].style.opacity = "1";
+            divs[i].style.border = "";
+        }
+        $("#gid").attr("value", "");
+        $("#goodname").attr("value", "");
+        $("#video_chose").hide();
+        var obj = parent.document.getElementById("win");
+        obj.height = $("#gaodu").height() + 100;
+    };
+    //素材选择确定
+    function Do() {
+        $("#video_chose").show();
+        var obj = parent.document.getElementById("win");
+        obj.height = $("#gaodu").height() + 100;
+
+    };
+</script>

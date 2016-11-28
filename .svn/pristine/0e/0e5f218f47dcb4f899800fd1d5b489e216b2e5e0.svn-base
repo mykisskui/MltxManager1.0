@@ -1,0 +1,40 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using MltxManager.Data;
+
+namespace MltxManager.Controllers
+{
+    public class Mltx_ForetasteController : Controller
+    {
+        //
+        // GET: /Mltx_Foretaste/
+        #region 试吃商品
+        /// <summary>
+        /// 试吃商品数据显示
+        /// </summary>
+        /// <param name="id">页数</param>
+        /// <param name="kword">查询关键字</param>
+        /// <returns></returns>
+        public ActionResult Index(int id = 1, string kword = null)
+        {
+            var re = new ForetasteDate().GetForetaste(id,kword);
+            if (re.errcode == 0)
+            {
+                return View(re.Foretastes);
+            }
+            else
+            {
+                return RedirectToAction("ErrorPage", "ToOtherPage", new { errmsg = "程序发生异常，请稍候重试！！" });
+            }
+        }
+
+        public ActionResult InsertForetaste()
+        {
+            return View();
+        }
+        #endregion
+    }
+}

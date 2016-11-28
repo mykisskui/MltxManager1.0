@@ -1,0 +1,212 @@
+﻿@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>品类</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/css/Index.css" rel="stylesheet" type="text/css" @*media="screen and (max-width:539px )"*@ />
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="/css/mallclass.css" rel="stylesheet" />
+    <script src="~/assets/plugins/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/iScroll-4.2.5.js"></script>
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script>
+        var myscroll_0,myscroll_1
+        function load() {
+            var _height = window.innerHeight;
+            var headerHeight = document.getElementsByClassName('index_0_header').item(0).clientHeight;
+            var FloatHeight = document.getElementsByClassName('index_0_FloatMenu').item(0).clientHeight;
+            page_scroll_0.style.height = _height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2)) + 'px';
+            clscontent.style.height = _height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2)) + 'px';
+            clsmenu.style.height = _height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2)) + 'px';
+            myscroll_0 = new iScroll("clsmenu", {
+                vScroll: true,
+                vScrollbar: false,
+                vScrollbar: false,
+                bounce: true,
+                momentum: true,
+                onBeforeScrollStart: function () {
+                }
+            });
+                myscroll_1 = new iScroll("clscontent", {
+                vScroll: true,
+                vScrollbar: false,
+                vScrollbar: false,
+                bounce: true,
+                momentum: true,
+                checkDOMChanges: true,
+                onBeforeScrollStart: function () {
+                }
+            }); 
+            document.body.ontouchmove = function (event) {
+                event.preventDefault();
+            }
+        }
+        window.addEventListener('load', load, false);
+    </script>
+</head>
+<body>
+    <script>
+        var userid = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.userid))';
+        var ClassData = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.classData))';
+    </script>
+
+    <div class="body">
+        <!-- 头部start  search-->
+        <div class="index_0_header">
+            <div class="index_0_header_top">
+                <ul>
+                    <li>
+                        <i class="icon-angle-left"></i>
+                    </li>
+                    <li>
+                        <div style="background-color: #fff; color: #64a786; font-size: 16px">
+                            品类
+                        </div>
+                    </li>
+                    <li>
+                        <i class="icon-search"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 头部end -->
+
+        <!-- 品类start -->
+        <div  id="page_scroll_0">
+            <div style="overflow: hidden">
+                <!-- 一级分类start-->
+                <div id="clsmenu" >
+                    <ul>
+                        加载中...
+                    </ul>
+                </div>
+                <!--一级分类end-->
+                <!--二级分类start-->
+                <div id="clscontent">
+                    <div id="div_clsconent" style="overflow:hidden">
+                        
+                        加载中...
+                    </div>
+                </div>
+                <!--二级分类end-->
+            </div>
+        </div>
+        <!-- 品类end -->
+
+
+        <!-- 商城页脚 start -->
+        <div class="index_0_FloatMenu">
+            <ul>
+                <li>
+                    <div>
+                        <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                    </div>
+                    <span>主页</span>
+                </li>
+                <li>
+                    <div>
+                        <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                    </div>
+                    <span>品类</span>
+                </li>
+                <li>
+                    <div>
+                        <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                    </div>
+                    <span>这是菜单</span>
+                </li>
+                <li>
+                    <div>
+                        <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                    </div>
+                    <span>这是菜单</span>
+                </li>
+                <li>
+                    <div>
+                        <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                    </div>
+                    <span>这是菜单</span>
+                </li>
+
+            </ul>
+        </div>
+        <!-- 商城页脚 end -->
+
+
+
+    </div>
+
+    <script>
+        function checkThis(e) {
+
+            $("#div_clsconent").css("transform", "translate(0px, 0px) scale(1) translateZ(0px)");
+            var dataname = e.getAttribute("data-name");
+            var li_list = document.getElementById("clsmenu").getElementsByTagName("ul")[0].children;
+            var div_list = document.getElementById("clscontent").getElementsByTagName("div")[0].children;
+            for (var j = 0; j < div_list.length; j++) {
+                if (div_list[j].id == dataname) {
+                    $("#" + dataname).show();
+                }
+                else {
+                    $("#" + div_list[j].id).hide();
+                }
+            }
+            for (var i = 0; i < li_list.length; i++) {
+                if (li_list[i] == e) {
+                    e.getElementsByTagName("div")[0].style.display = "block";
+                    $(e).css("background-color", "#eee");
+                } else {
+                    li_list[i].getElementsByTagName("div")[0].style.display = "none";
+                    $(li_list[i]).css("background-color", "#fff");
+                }
+            }
+        }
+
+        window.onload = function () {
+            var json = eval("(" + ClassData + ")");
+            var ul = clsmenu.getElementsByTagName("ul")[0];
+            var dcontent = document.getElementById("div_clsconent");
+            var str = "", k = "", all_str = "";
+            var url_d = "";
+
+            str += '<li data-name="all" onclick="checkThis(this);"><div></div>全部商品</li>';
+
+            all_str += '<div id="all"><ul><li class="cls_pic"><div><div><a href="/Mltx_MallClass/MallList?userid=' + userid + '"><img src="/Images/logo.jpg"/></a></div><span>全部</span></div></li>';
+
+            for (var i = 0; i < json.data.length; i++) {
+                str += '<li data-name="group' + json.data[i].id + '" ontouchstart="checkThis(this);"><div></div>' + json.data[i].name + '</li>';
+
+                k += '<div id="group' + json.data[i].id + '"><ul>';
+                for (var j = 0; j < json.data[i].data.length; j++) {
+
+                    url_d = '/Mltx_MallClass/MallList?userid=' + userid + '&title=' + json.data[i].data[j].name + '&groupid=' + json.data[i].data[j].id;
+                    all_str += '<li class="cls_pic">' +
+                                        '<div><div><a href="' + url_d + '"><img src="' + json.data[i].data[j].pic + '"/></a></div><span>' + json.data[i].data[j].name + '</span></div></li>';
+
+                    k += '<li class="cls_pic">' +
+                                        '<div><div><a href="' + url_d + '"><img src="' + json.data[i].data[j].pic + '"/></a></div><span>' + json.data[i].data[j].name + '</span></div></li>';
+                }
+                k += '</ul></div>';
+            }
+
+            all_str += '</ul></div>';
+
+            ul.innerHTML = str;
+            dcontent.innerHTML = all_str + k;
+        }
+</script>
+
+
+</body>
+
+</html>
+

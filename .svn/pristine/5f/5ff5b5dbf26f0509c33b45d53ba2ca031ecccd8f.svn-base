@@ -1,0 +1,233 @@
+﻿@model MltxManager.Models.DBHelper.ReturnMsg
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/box.css" rel="stylesheet" />
+<script src="~/Scripts/box.js"></script>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/assets/plugins/select2/select2_metro.css" />
+<div class="container-fluid" id="gaodu">
+    <div class="rule">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <h3 class="titles" style="margin: 0px; margin-bottom: 10px;">人员分组 <small>人员分组</small>
+                </h3>
+                <ul class="page-breadcrumb breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="@Url.Content("~/Global/Index")">首页</a>
+                    </li>
+                    <i class="icon-angle-right"></i>
+                    <li>
+                        <a href="#">人员分组</a>
+                    </li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <div class="row well">
+            <div class="col-md-12 ">
+                <div class="portlet-body">
+                    <div class="col-md-2 " style="padding-right: 30%">
+                        <select multiple="multiple" style="min-width: 80px; min-height: 300px; width: 300px" id="se1" name="first" class="form-control select2me">
+                           
+                            @foreach (var item in Model.mltx_userGroup)
+                            {
+                                <option value="@item.GroupId">@item.GroupName</option>
+                            }
+                        </select>
+                        <input type="hidden" value="" id="f1"/>
+                    </div>
+                    <div class="col-md-2 " style="padding-right: 30%">
+                        <select multiple="multiple" style="min-width: 80px; min-height: 300px; width: 300px" id="se2" name="first" class="form-control select2me">
+                            
+                            @foreach (var item in Model.MltxModelBasics)
+                            {
+                                <option value="@item.Id">@item.ModelName</option>
+                            }
+                        </select>
+                        <input type="hidden" value="" id="f1" />
+                    </div>
+                    <div class="col-md-2" style="padding-right: 30%;">
+                        <div id="second" style="height: 300px; width: 300px; border: 1px solid #e5e5e5; overflow-y: scroll;">
+                        </div>
+                        <input type="hidden" value="" id="s1" />
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-actions fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class=" col-md-3 center">
+                             <button  data-toggle="modal" data-target="#updatefen" onclick="updateGrou()"  class="btn green">修改分组</button>
+                            <button data-toggle="modal" data-target="#basic" class="btn green">新建分组</button>
+                        </div>
+                        <div class="col-md-offset-6 col-md-3 center">
+                            <input type="hidden" value="" id="bian" name="bian"/>
+                            <button id="updates" class="btn green">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE HEADER-->
+     <!---View-->
+                   <div class="modal fade in" id="basic" tabindex="-1" role="basic" aria-hidden="true">
+                        <div class="modal-dialog modal-basic">
+                           <div class="modal-content">
+                              <div class="modal-header">
+                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                 <h3 class="modal-title" style="font-family:'Microsoft YaHei';font-weight: 500;font-size: 20px;">请输入分组名称</h3>
+                              </div>
+                              <div class="modal-body" id="" style="height:100px" >
+                                  <div class="form-group">
+                                      <label class="col-md-3 control-label" >分组名称：</label>
+                                      <div class="col-md-5">
+                                        <input type="text"  class="form-control" id="OtherAdjust" name="OtherAdjust" value="" >
+                                     </div>
+                                   </div>                             
+                               </div>
+                              <div class="modal-footer">
+                                 <button type="button" class="btn default" data-dismiss="modal">取消</button>
+                                 <button type="button" class="btn green" id="Insert" data-dismiss="modal">确定</button>
+                              </div>
+                           <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                     </div>
+                  </div>
+    <!-- /.View -->
+    <!---View-->
+                   <div class="modal fade in" id="updatefen" tabindex="-1" role="basic" aria-hidden="true">
+                        <div class="modal-dialog modal-basic">
+                           <div class="modal-content">
+                              <div class="modal-header">
+                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                 <h3 class="modal-title" style="font-family:'Microsoft YaHei';font-weight: 500;font-size: 20px;">请修改分组名称</h3>
+                              </div>
+                              <div class="modal-body" id="" style="height:100px" >
+                                  <div class="form-group">
+                                      <label class="col-md-3 control-label" >分组名称：</label>
+                                      <div class="col-md-5">
+                                        <input type="text"  class="form-control" id="Adjust" name="OtherAdjust" value="" >
+                                     </div>
+                                   </div>                             
+                               </div>
+                              <div class="modal-footer">
+                                 <button type="button" class="btn default" data-dismiss="modal">取消</button>
+                                 <button type="button" class="btn green" id="update" data-dismiss="modal">确定</button>
+                              </div>
+                           <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                     </div>
+                  </div>
+            <!-- /.View -->
+</div>
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script>
+    var cmd = parent.document.getElementById("win");
+    cmd.height = $("#gaodu").height();
+    ///点击修改分组
+    function updateGrou() {
+        $("#Adjust").val($("#se1 option:selected").text());
+    }
+
+    $(function() {
+        //点击模块时显示模块权限
+        $("#se2").change(function () {
+            if ($("#se1").val()!="") {
+                $.get("/Mltx_Authority/GetModeAuth", { fenzhu: $("#se1").val().toString(), mode: $(this).val().toString() }, function (r) {
+                    $("#second").html(null);
+                    $("#second").append(r);
+                });
+            }
+            
+        });
+        //点击分组时显示模块权限
+        $("#se1").change(function () {
+            if ($("#se2").val().toString() != "") {
+                $.get("/Mltx_Authority/GetModeAuth", { fenzhu: $(this).val().toString(), mode: $("#se2").val().toString() }, function (r) {
+                    $("#second").html(null);
+                    $("#second").append(r);
+                });
+            }
+            
+        });
+        //修改分组模块权限
+        $("#updates").click(function() {
+            var xianzhong = "";
+            var checkedObj = $('input:checkbox[name="huoqu"]:checked');
+            checkedObj.each(function() {
+                var isCheck = this.value;
+                xianzhong += isCheck + ",";
+            });
+            if ($("#se1").val() != "") {
+                $.get("/Mltx_Authority/UpdateModeAuth", { quanxian: xianzhong, fenzhu: $("#se1").val().toString(), mode: $("#se2").val().toString() }, function (r) {
+                    if (r == "ajaxerror") {
+                        box.alert("权限未通过", "error");
+                    }
+                    else if (r == 0) {
+                        box.alert("添加成功");
+                        //setTimeout(function () {
+                        //    $.get("/Mltx_Authority/GetModeAuth", { fenzhu: $("#se1").val().toString(), mode: $(this).val().toString() }, function (r) {
+                        //        $("#second").html(null);
+                        //        $("#second").append(r);
+                        //    });
+                        //}, 2000);
+                        
+                    } else {
+                        box.alert("请选择分组", "error");
+                    }
+                });
+            } else {
+                box.alert("请选择分组", "error");
+            }
+
+        });
+        ///添加分组
+        $("#Insert").click(function() {
+            $.get("/Mltx_Authority/InsertGrouping", { name: $("#OtherAdjust").val() }, function (r) {
+                if (r == "ajaxerror") {
+                    box.alert("权限未通过", "error");
+                }
+                else if (r == 1) {
+                    box.alert("该分组已经存在", "error");
+                } else if (r == 0) {
+                    box.alert("保存成功");
+                    $.get("/Mltx_Authority/GetYongHuFenZhu", function (r) {
+                        $("#se1").html(null);
+                        $("#se1").html(r);
+                    })
+                    //location.href = "/Mltx_Authority/Admin";
+                    //setTimeout(function(){location.href = "/Mltx_Authority/Admin"}, 1000);
+                } else {
+                    box.alert("该分组保存失败", "error");
+                }
+            });
+        });
+        //修改分组
+        $("#update").click(function() {
+            $.get("/Mltx_Authority/UpdateGrouping", { id: $("#se1").val().toString(), name: $("#Adjust").val() }, function (r) {
+                if (r == "ajaxerror") {
+                    box.alert("权限未通过", "error");
+                }
+                else if (r==0) {
+                    box.alert("修改成功");
+                    $.get("/Mltx_Authority/GetYongHuFenZhu", function (r) {
+                        $("#se1").html(null);
+                        $("#se1").html(r);
+                    })
+                } else {
+                    box.alert("修改失败", "error");
+                }
+            });
+        });
+    });
+</script>

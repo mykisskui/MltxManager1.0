@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace MltxManager.Controllers
+{
+    public class Mltx_TemplateController : Controller
+    {
+        /// <summary>
+        /// 首页
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Index()
+        {
+            try { }
+            catch { }
+            return View();
+        }
+        /// <summary>
+        /// 搜索
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult sreach() {
+            try { }
+            catch { }
+            return View();
+        }
+
+    }
+}

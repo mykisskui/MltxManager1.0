@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using MltxManager.Data;
+
+namespace MltxManager.Controllers
+{
+    public class Mltx_TicketController : Controller
+    {
+        //
+        // GET: /Mltx_Ticket/
+
+        public ActionResult Index(int id = 1, string kword = null)
+        {
+            var re=new TicketData().InsertTicket(id,kword);
+            if (re.MltxTickets != null)
+            {
+                return View(re.MltxTickets);
+            }
+            else
+            {
+                return RedirectToAction("ErrorPage", "ToOtherPage", new { errmsg = "程序发生异常，请稍候重试！！" });
+            }
+            
+        }
+
+    }
+}

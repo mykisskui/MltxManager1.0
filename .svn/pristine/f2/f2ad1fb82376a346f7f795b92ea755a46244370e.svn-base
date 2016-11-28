@@ -1,0 +1,204 @@
+﻿@model MltxManager.Models.DBModel.Mltx_ShopInfo
+@{
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+    <link href="/css/box.css" rel="stylesheet" />
+    <link href="/uploadify/uploadify.css" rel="stylesheet" />
+    <script src="/Scripts/jquery-1.8.2.js"></script>
+    <script src="/Scripts/box.js"></script>
+    <script src="/assets/scripts/region_select.js"></script> 
+
+    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
+    <script>
+        var markersArray = [];
+        var geocoder, map, marker = null;
+
+        function init() {
+            var center = new qq.maps.LatLng(39.916527, 116.397128);
+            map = new qq.maps.Map(document.getElementById('container'), {
+                center: center,
+                zoom: 15
+            });
+
+            var info = new qq.maps.InfoWindow({ map: map });
+            geocoder1 = new qq.maps.Geocoder({
+                complete: function (result) {
+                    map.setCenter(result.detail.location);
+                    var marker = new qq.maps.Marker({
+                        map: map,
+                        position: result.detail.location
+                    });
+                    qq.maps.event.addListener(marker, 'click', function () {
+                        info.open();
+                        info.setContent('<div style="width:280px;height:100px;">' +
+                            result.detail.address + '</div>');
+                        info.setPosition(result.detail.location);
+                    });
+
+                    markersArray.push(marker);
+                }
+            });
+            var latLng = new qq.maps.LatLng(@ViewBag.la,@ViewBag.ln);
+            var info = new qq.maps.InfoWindow({ map: map });
+            geocoder1.getAddress(latLng);
+
+            geocoder = new qq.maps.Geocoder({
+                complete: function (result) {
+                    map.setCenter(result.detail.location);
+                    var marker = new qq.maps.Marker({
+                        map: map,
+                        position: result.detail.location
+                    });
+                    markersArray.push(marker);
+                }
+            });
+
+            qq.maps.event.addListener(map, 'click', function (event) {
+                clearOverlays();
+                var marker = new qq.maps.Marker({
+                    position: event.latLng,
+                    map: map
+                });
+                markersArray.push(marker);
+                var latLng = event.latLng,
+                    lat = latLng.getLat().toFixed(5),
+                    lng = latLng.getLng().toFixed(5);
+                document.getElementById("latLng").value = lat;
+                document.getElementById("lngLng").value = lng;
+            });
+
+            citylocation = new qq.maps.CityService({
+                complete: function (result) {
+                    map.setCenter(result.detail.latLng);
+                }
+            });
+            citylocation.searchLocalCity();
+        }
+
+        function clearOverlays() {
+            if (markersArray) {
+                for (i in markersArray) {
+                    markersArray[i].setMap(null);
+                }
+            }
+        }
+        function codeAddress() {
+            var address = document.getElementById("address").value;
+            geocoder.getLocation(address);
+        }
+</script>
+
+
+   <!-- END THEME STYLES -->
+  <div class="rule">
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+            <div class="col-md-12">
+               <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+               <h3 class="titles" style="margin:0px;margin-bottom:10px;">
+                 编辑门店 <small>设置门店信息</small>
+               </h3>
+               <ul class="page-breadcrumb breadcrumb">
+                     <i class="icon-home"></i>
+                  <a href="/MltxShop/Index"> 门店信息</a>
+                   <i class="icon-angle-right"></i>
+                  <a href="#"> 编辑门店信息复</a>
+               </ul>
+               <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+         </div>
+      <!-- BEGIN PAGE CONTENT-->                  
+        <div class="row">
+            <div class="col-md-15">
+                  <div class="portlet-body form ">
+        <form class="form-horizontal" method="post" role="form">
+            <dv class="form-body">
+                <div class="form-group">
+                    <label class="col-md-2 control-label">门店名称</label>
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" id="ShopName" name="ShopName" placeholder="" value="@Model.ShopName">
+                        <span class="span-point">*</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                                <label class="col-md-2 control-label">门店地址：</label>
+                              <div class="col-md-5">
+                                    <select name="location_p" id="location_p" class="input-small" style="height:30px;"  ></select>
+                                    <select name="location_c" id="location_c" class="input-small" style="height:30px;" ></select>
+                                    <select name="location_a" id="location_a" class="input-small" style="height:30px;" ></select>
+                                  <br />
+
+                                   @if (Model.ShopAddr != null)
+                                   {
+                                       string[] str = Model.ShopAddr.Split('|');
+                                        <script type="text/javascript">
+                                           new PCAS('location_p', 'location_c', 'location_a', '@str[0]', '@str[1]', '@str[2]');
+                                       </script>
+                                       <br />
+                                      <input type="text" class="form-control"name="ShopAddr" id="ShopAddr" value="@str[3]" placeholder="门店所在街区"/>
+                                   }
+                                   else
+                                   {
+                                        <script type="text/javascript">
+                                            new PCAS('location_p', 'location_c', 'location_a', '', '', '');
+                                       </script>
+                                       <br />
+                                      <input type="text" class="form-control"name="ShopAddr" id="ShopAddr" value="" placeholder="门店所在街区"/>
+                                   }
+                                                            
+                                </div>
+                            </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">门店电话</label>
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" id="ShopTel"  name="ShopTel" value="@Model.ShopTel">
+                        <span class="span-point">*</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">门店地点</label>
+                    @Html.Partial("_Map")
+                </div>
+              
+            <div class="form fluid">
+                <div class="col-md-offset-2 col-md-9 left">
+                    <button class="btn  green" id="submit_btn" onclick="return sunmitShop()">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    </div>
+</div>      
+    <!-- END PAGE CONTENT--> 
+</div>
+    <script>      
+        function sunmitShop() {
+            var $name = $("#ShopName");
+            var $HotelAddress = $("#ShopAddr");
+            var $HotelTelephone = $("#ShopTel");
+            var $latLa = $("#lngLng");
+            var $lngLn = $("#latLng");
+
+            if ($name.val() == "") {
+                box.alert("请添加门店名称.", "error")
+                $name.focus();
+                return false;
+            }
+            
+            if ($HotelAddress.val() == "") {
+                box.alert("请添加门店地址.", "error")
+                $HotelAddress.focus();
+                return false;
+            }
+            if ($HotelTelephone.val() == "") {
+                box.alert("请添加门店电话.", "error")
+                $HotelTelephone.focus();
+                return false;
+            }
+            if ($lngLn.val() == ""&&$lngLn.val()=="") {
+                box.alert("请选择门店地点.", "error")
+                return false;
+            }
+            $(".submit_btn").submit();
+        }
+   </script>

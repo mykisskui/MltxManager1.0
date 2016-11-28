@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace MltxManager.Models.DBHelper.Mode
+{
+    public enum Modular
+    {
+        人员分组=1,
+        人员管理=2,
+        分组信息=3,
+        商品管理=4,
+        商品订单=5,
+        鲜果订单=6,
+        商品评论=7,
+        会员信息=8,
+        幻灯片=9,
+        短信设置=10,
+        鲜果分组信息 = 11,
+        鲜果商品管理 = 12
+    }
+}

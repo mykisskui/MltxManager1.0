@@ -1,0 +1,13 @@
+﻿ .titles
+    {
+     font-size:30px;
+        font-family: Microsoft YaHei;
+        color: #000;
+    }
+.span-point {
+    display:block;
+    position:absolute;
+    left:97%;
+    top:30%;
+    color:#f00
+}

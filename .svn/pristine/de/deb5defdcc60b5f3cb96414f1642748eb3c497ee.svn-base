@@ -1,0 +1,301 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using MltxManager.Data.MethodHepler;
+using MltxManager.Models.DBHelper;
+using MltxManager.Models.DBHelper.Mode;
+using MltxManager.Models.DBModel;
+using Webdiyer.WebControls.Mvc;
+
+namespace MltxManager.Data
+{
+
+    public class ForetasteDate
+    {
+        private readonly MltxDbContext _db = new MltxDbContext();
+        #region 试吃商品
+        /// <summary>
+        /// 读取所有试吃商品
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="kword"></param>
+        /// <returns></returns>
+        public ReturnMsg GetForetaste(int id, string kword)
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(kword))
+                {
+                    re.Foretastes = _db.foretaste.Include("Goods").Where(a => a.Goods.GoodsName.Contains(kword))
+                        .OrderByDescending(a => a.Id)
+                        .Select(a => new Foretaste
+                        {
+                            Id = a.Id,
+                            ETime = a.ETime,
+                            GoodsId = a.Goods.GoodsId,
+                            Name = a.Goods.GoodsName,
+                            Sort = a.Sort,
+                            States = a.State
+                        }).ToPagedList(id, 10);
+                }
+                else
+                {
+                    re.Foretastes = _db.foretaste.Include("Goods").OrderByDescending(a => a.Id)
+                        .Select(a => new Foretaste
+                        {
+                            Id = a.Id,
+                            ETime = a.ETime,
+                            GoodsId = a.Goods.GoodsId,
+                            Name = a.Goods.GoodsName,
+                            Sort = a.Sort,
+                            States = a.State
+                        }).ToPagedList(id, 10);
+                }
+            }
+            catch (Exception e)
+            {
+                re.errcode = -1;
+                re.errmsg = e.Message;
+                MHepler.writelog_err("读取所有试吃商品：" + e.Message);
+                return re;
+            }
+            re.errcode = 0;
+            return re;
+        }
+        /// <summary>
+        /// 读取上架商品
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="kword"></param>
+        /// <returns></returns>
+        public ReturnMsg GetForetasteCommodity(int id, string kword)
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(kword))
+                {
+                    re.MltxGoodsInfoShops =
+                        _db.goodsinfo_shop.Where(a => a.Enable == Added.上架 && a.GoodsName.Contains(kword))
+                            .OrderByDescending(a => a.GoodsId)
+                            .ToPagedList(id, 6);
+                }
+                else
+                {
+                    re.MltxGoodsInfoShops =
+                        _db.goodsinfo_shop.Where(a => a.Enable == Added.上架)
+                            .OrderByDescending(a => a.GoodsId)
+                            .ToPagedList(id, 6);
+                }
+            }
+            catch (Exception e)
+            {
+
+                re.errcode = -1;
+                re.errmsg = e.Message;
+                MHepler.writelog_err("读取上架商品：" + e.Message);
+                return re;
+            }
+            re.errcode = 0;
+            return re;
+        }
+
+        /// <summary>
+        /// 试吃商品添加
+        /// </summary>
+        /// <param name="sp">商品</param>
+        /// <param name="sj">结束时间</param>
+        /// <param name="qs">期数</param>
+        /// <param name="zhuangtai">试吃状态</param>
+        /// <returns></returns>
+        public bool InsertForetaste(int sp, DateTime sj, int qs, int zhuangtai)
+        {
+
+            var re = new Mltx_foretaste
+            {
+                GroupId = sp,
+                Sort = qs,
+                ETime = sj,
+                State = (States)zhuangtai
+            };
+            try
+            {
+                _db.foretaste.Add(re);
+                if (_db.SaveChanges() > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    MHepler.writelog_err("试吃商品添加：添加失败", false);
+                    return false;
+
+                }
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("试吃商品添加：" + e.Message);
+                return false;
+                throw;
+            }
+
+        }
+        /// <summary>
+        /// 试吃商品状态修改
+        /// </summary>
+        /// <param name="i">试吃商品ID</param>
+        /// <param name="r">试吃商品状态</param>
+        /// <returns></returns>
+        public int DeleteForetaste(int i, int r)
+        {
+            try
+            {
+                var re = _db.foretaste.SingleOrDefault(a => a.Id == i);
+                if (re != null)
+                {
+                    re.State = r == 0 ? States.往期试吃 : States.正在试吃;
+                    return _db.SaveChanges() > 0 ? 0 : 1;
+                }
+                else
+                {
+                    MHepler.writelog_err("试吃商品状态修改：修改失败", false);
+                    return 1;
+                }
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("试吃商品状态修改：" + e.Message);
+                return 1;
+                throw;
+            }
+        }
+        /// <summary>
+        /// 修改试吃商品状态页面显示
+        /// </summary>
+        /// <param name="id">试吃ID</param>
+        /// <returns></returns>
+        public Foretaste UpdateForetastePage(int id)
+        {
+            try
+            {
+                return _db.foretaste.Where(a => a.Id == id).Select(a => new Foretaste
+                {
+                    Id = a.Id,
+                    ETime = a.ETime,
+                    GoodsId = a.GroupId,
+                    Name = a.Goods.GoodsName,
+                    Sort = a.Sort,
+                    States = a.State
+                }).SingleOrDefault();
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("修改试吃商品状态页面显示：" + e.Message);
+                return null;
+            }
+
+        }
+
+        /// <summary>
+        /// 试吃商品修改
+        /// </summary>
+        /// <param name="sp">商品</param>
+        /// <param name="sj">结束时间</param>
+        /// <param name="qs">期数</param>
+        /// <param name="zhuangtai">试吃状态</param>
+        /// <param name="id">试吃ID</param>
+        /// <returns></returns>
+        public bool UpdateForetasteData(int sp, DateTime sj, int qs, int zhuangtai, int id)
+        {
+            try
+            {
+                var re = _db.foretaste.SingleOrDefault(a => a.Id == id);
+                if (re != null)
+                {
+                    re.ETime = sj;
+                    re.GroupId = sp;
+                    re.State = (States)zhuangtai;
+                    re.Sort = qs;
+                    if (_db.SaveChanges() > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        MHepler.writelog_err("试吃商品修改：保存失败", false);
+                        return false;
+                    }
+                }
+                else
+                {
+                    MHepler.writelog_err("试吃商品修改：查询数据失败", false);
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("试吃商品修改：" + e.Message);
+                return false;
+            }
+        }
+        #endregion
+        #region 试吃报告表
+        /// <summary>
+        /// 试吃报告页显示
+        /// </summary>
+        /// <param name="id">页数</param>
+        /// <param name="kword">查询关键字</param>
+        /// <returns></returns>
+        public ReturnMsg Index_report(int id, string kword)
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                if (!string.IsNullOrEmpty(kword))
+                {
+                    re.MltxForetasteReports =
+                        _db.foretaste_report.Include("Foretaste.Goods")
+                            .Where(a => a.Foretaste.Goods.GoodsName.Contains(kword))
+                            .OrderByDescending(a => a.Id).ToPagedList(id, 10);
+                }
+                else
+                {
+                    re.MltxForetasteReports =
+                        _db.foretaste_report.Include("Foretaste.Goods").OrderByDescending(a => a.Id).ToPagedList(id, 10);
+                }
+
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("试吃报告页显示：" + e.Message);
+                re.errcode = -1;
+                return re;
+            }
+            re.errcode = 0;
+            return re;
+        }
+        /// <summary>
+        /// 查看试吃报告信息
+        /// </summary>
+        /// <param name="id">试吃报告ID</param>
+        /// <returns></returns>
+        public Mltx_foretaste_report InsertForetasteReport(int id)
+        {
+            try
+            {
+                var re = _db.foretaste_report.SingleOrDefault(a => a.Id == id);
+                return re;
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("查看试吃报告信息：" + e.Message);
+                return null;
+            }
+        }
+        #endregion
+
+       
+    }
+}

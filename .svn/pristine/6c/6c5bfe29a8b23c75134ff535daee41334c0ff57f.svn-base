@@ -1,0 +1,213 @@
+﻿@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>点评商品</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/css/Index.css" rel="stylesheet" type="text/css" @*media="screen and (max-width:539px )"*@ />
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/weixin/example.css" rel="stylesheet" />
+    <link href="~/css/weixin/weui.css" rel="stylesheet" />
+    <link href="~/css/mallorderlist.css" rel="stylesheet" />
+    <script src="~/assets/plugins/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/iScroll-4.2.5.js"></script>
+    <script src="~/Scripts/loading.js"></script>
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/cookiedata.js"></script>
+    <script src="~/Scripts/weixin/zepto.min.js"></script>
+    <script src="~/Scripts/weixin/example.js"></script>
+    <script>
+        var myscroll
+        function load() {
+            var _height = window.innerHeight;
+            var headerHeight = document.getElementsByClassName('index_0_header').item(0).clientHeight;
+            page_scroll_0.style.height = _height - headerHeight + 'px';
+           
+            myscroll = new iScroll("page_scroll_0", {
+                vScroll: true,
+                vScrollbar: false,
+                vScrollbar: false,
+                bounce: true,
+                momentum: true,
+                onBeforeScrollStart: function () {
+                }
+            });
+
+            document.body.ontouchmove = function (event) {
+                event.preventDefault();
+            }
+        }
+        window.addEventListener('load', load, false);
+    </script>
+</head>
+<body>
+    <script>
+        var _oid = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.oid))';
+        var orderdata = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.orderdata))';
+    </script>
+
+    <div class="body">
+        <!-- 头部start  search-->
+        <div class="index_0_header">
+            <div class="index_0_header_top">
+                <ul>
+                    <li ontouchstart="history.go(-1)">
+                        <i class="icon-angle-left" ></i>
+                    </li>
+                    <li>
+                        <div style="background-color: #fff; color: #64a786; font-size: 16px">
+                            点评商品
+                        </div>
+                    </li>
+                    <li>
+                        <i ></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 头部end -->
+
+        <!--评价商品列start -->
+        <div  id="page_scroll_0"  style="background-color:#eee">
+            <div id="commlist" style="overflow: hidden">
+                <ul style="list-style-type:none;">
+
+                </ul>
+            </div>
+        </div>
+        <!-- 评价商品列end -->
+
+
+        
+
+    </div>
+
+    <script src="~/Scripts/weixin/confirm_self.js"></script>
+    <script>
+       
+        window.onload = function () {
+            InitCommData();
+        }
+
+        function InitCommData() {
+            var json = eval("(" + orderdata + ")");
+            var ul = commlist.getElementsByTagName("ul")[0];
+            var str = '';
+
+            for (var i = 0; i < json.length; i++)
+            {
+                str += '<li class="orderlist_li" style="padding-top: 10px;"><div class="content_orderinfo"><div class="content_divimg">' +
+                      ' <img class="content_divimg_img" src="' + json[i].gpic + '"></div>' +
+                          '<div class="content_divinfo">' +
+                              '<div class="divname">' + json[i].gname + '</div>' +
+                              '<div>' + json[i].guige + '</div></div>' +
+                         ' <div class="content_divcount">x' + json[i].count + '</div></div>' +
+                            '<div class="weui_cells weui_cells_form" style="margin-top:0px">' +
+                            '<div class="weui_cell"><div class="weui_cell_bd weui_cell_primary">' +
+                                ' <textarea class="weui_textarea" placeholder="请输入您的意见" rows="3" style="font-family: microsoft yahei"></textarea></div></div></div>' +
+                       '<div class="div_btoom"><div class="divstar"><span style="font-size:0.8em">评星：</span>' +
+                             '<span onclick="_choseStar(this)" style="color: #64a786;">☆ </span>' +
+                              '<span onclick="_choseStar(this)" style="color: #64a786;">☆ </span>' +
+                               '<span onclick="_choseStar(this)" style="color: #64a786;">☆ </span>' +
+                               '<span onclick="_choseStar(this)" style="color: #64a786;">☆ </span>' +
+                               '<span onclick="_choseStar(this)" style="color: #64a786;">☆ </span>' +
+                               '<input type="hidden" value="0"/></div>' +
+                           '<div style="width:25%">' +
+                                '<div class="btn_submit" onclick="_submit(this,'+json[i].gid+')">提交</div></div></div></li>';
+                   
+            }
+
+            ul.innerHTML = str;
+            myscroll.refresh();
+        }
+
+        //评星
+        function _choseStar(e) {
+            var _tag = true;
+            var spanlist = $(e).parents(".divstar").children("span");
+            var _input = $(e).parents(".divstar").children("input");
+            for (var i = 1; i < spanlist.length; i++)
+            {
+                if (_tag) {
+                    $(spanlist[i]).text('★ ');
+                } else {
+                    $(spanlist[i]).text('☆ ');
+                }
+                if (spanlist[i] == e) {
+                    $(_input).val(i);
+                    _tag = false;
+                }
+            }
+        }
+
+        //提交
+        function _submit(e, gid) {
+            var _ul = commlist.getElementsByTagName("ul")[0];
+            var _cnt = _ul.getElementsByTagName("li").length;//可评论商品条数
+            console.log(_cnt);
+            var _tag = false;//表示不是最后一条
+            var _input = $(e).parents("li").children("div").children(".divstar").children("input");
+            var _textarea = $(e).parents("li").children(".weui_cells").children("div").children("div").children("textarea");
+            var _name = $(e).parents("li").children(".content_orderinfo").children(".content_divinfo").children(".divname");
+            var _gname = $(_name).text();
+
+            if ($(_textarea).val() == '') {
+                var _textarea_fun = function () {
+                    $(_textarea).focus();
+                    return false;
+                }
+                dialog.alert("请输入您的意见", _textarea_fun);
+            } else if ($(_input).val() == 0) {
+                dialog.alert("请给商品评星", "");
+            } else {
+                if (_cnt <= 1)
+                { _tag = true;}
+                var login_id = getCookie("mltxuserid");
+                //ajax请求
+                $.ajax({
+                    type: "post",
+                    async: true,
+                    url: "/Mltx_MallClass/_doComments/",
+                    data: {
+                        oid:_oid, gid: gid,gname:_gname,customer:login_id, star: $(_input).val(), _content: $(_textarea).val(),_tag:_tag
+                    },
+                    beforeSend: function () {
+                        showLoading();
+                    },
+                    success: function (data) {
+                        if (data != "0") {
+                            dialog.alert("评论失败！", "");
+                        } else {
+                            var _okcomm = function () {
+                                if (_tag) {
+                                    location.href = '/Mltx_MallClass/MallMyOrder?uid=' + login_id;
+                                } else {
+                                    $(e).parents("li").remove();
+                                    myscroll.refresh();
+                                }
+                            }
+                            dialog.alert("感谢您的意见！", _okcomm);
+                        }
+
+                    },
+                    complete: function () {
+                        removeLoading();
+                    }
+
+                });
+            }//end else
+        }
+    </script>
+
+</body>
+
+</html>
+

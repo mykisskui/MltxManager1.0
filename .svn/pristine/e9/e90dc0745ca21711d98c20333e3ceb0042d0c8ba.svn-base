@@ -1,0 +1,479 @@
+﻿@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>index</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/css/Index.css" rel="stylesheet" type="text/css" @*media="screen and (max-width:539px )"*@ />
+        <link href="/assets/plugins/font-awesome/css/font-awesome.min.css"  rel="stylesheet" type="text/css"/><script src="~/Scripts/iScroll-4.2.5.js"></script>
+    <script>
+
+        function load() {
+            var _height = window.innerHeight;
+            var _width = window.innerWidth >= 640 ? 640 : window.innerWidth;
+            var headerHeight = document.getElementsByClassName('index_0_header').item(0).clientHeight;
+            var FloatHeight = document.getElementsByClassName('index_0_FloatMenu').item(0).clientHeight;
+            page_scroll_0.style.height = _height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2)) + 'px';
+            page_scroll_0.style.width = _width + 'px';
+            page_scroll_1.style.height = _height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2)) + 'px';
+            page_scroll_1.style.width = _width + 'px';
+            index_default.style.cssText = 'overflow:hidden;width:' + (_width) + 'px;height:' + (_height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2))) + 'px';
+            index_header.style.cssText = 'width:' + (_width * 2) + 'px;height:' + (_height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2))) + 'px';
+           // setTimeout(function () {
+                myscroll = new iScroll("page_scroll_0", {
+                    vScroll: true,
+                    vScrollbar: false,
+                    vScrollbar: false,
+                    bounce: true,
+                    momentum: true,
+                    lockDirection: true,
+                    onBeforeScrollStart: function () {
+                    }
+                });
+                myscroll = new iScroll("page_scroll_1", {
+                    vScroll: true,
+                    vScrollbar: false,
+                    vScrollbar: false,
+                    bounce: true,
+                    momentum: true,
+                    lockDirection: true,
+                    onBeforeScrollStart: function () {
+                    }
+                });
+                myscroll = new iScroll("index_default", {
+                    vScroll: true,
+                    vScrollbar: false,
+                    hScrollbar: false,
+                    snap: true,
+                    momentum: true,
+                    lockDirection:true,
+                    onBeforeScrollStart: function () {
+                    },
+                    onScrollMove: function () {
+                            
+                        console.log(this.distX);
+
+                    },
+                    onBeforeScrollEnd: function () {
+                        if (this.distX > 0 && this.absDistX > (this.absDistY + 5)) {
+                            //左
+                            headerChange('index_0', 500);
+                        }
+
+                        if (this.distX < 0 && this.absDistX > (this.absDistY + 5)) {
+                            headerChange('index_1', 500);
+                            
+
+                            //右
+                        }
+                    }
+                });
+           // }, 100);
+            document.body.ontouchmove = function (event) {
+                event.preventDefault();
+            }
+        }
+        window.addEventListener('load', load, false);
+    </script>
+</head>
+<body>
+
+    <div class="body">
+          <!-- 头部start  search-->
+                <div class="index_0_header">
+                                <div class="index_0_header_top">
+                                    <ul>
+                                        <li>
+                                            <i class="icon-map-marker"></i>
+                                        </li>
+                                        <li>
+                                            <div class="indexbuttonHeader">
+                                                <div class="indexbutton indexbutton_on" data-id="index_0">生鲜</div>
+                                                <div class="indexbutton indexbutton_off" data-id="index_1">下午茶</div>
+                                                <!-- 切换样式 -->
+                                                <div class="indexbutton indexbutton_ed indexbutton_on"></div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <i class="icon-search"></i>
+                                        </li>
+                                    </ul>
+                                </div>
+                </div>
+          <!-- 头部end -->
+        <div class="index_default" id="index_default">
+        <div class="index_header" id="index_header">
+                    <!-- 商城start -->
+                            <div class="index_0" id="page_scroll_0">
+                       <div style="overflow:hidden;">
+                                <!-- 幻灯片start -->
+                                <div class="index_0_slide">
+                                            <div class="index_0_slide_div" style="background-image:url(http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff);background-size:100% 100%;">
+                                                    <!-- 幻灯片图片 -->   
+                                    
+                                    
+                                            </div>
+                                </div>
+                                <!-- 幻灯片start -->
+                                <!-- indexMenuStart -->
+                                        <div class="index_0_Menu">
+                                            <div class="index_0_Menu_div">
+                                                   <ul>
+                                                        <li>
+                                                            <div>
+                                                                     <img src="http://www.atool.org/placeholder.png?size=240x240&text=120x120&&bg=ccc&fg=fff" />
+                                                                <div>
+                                                                    免费试吃
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                           <li>
+                                                            <div>
+                                                                     <img src="http://www.atool.org/placeholder.png?size=240x240&text=120x120&&bg=ccc&fg=fff" />
+                                                                <div>
+                                                                    免费试吃
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                          <li>
+                                                            <div>
+                                                                     <img src="http://www.atool.org/placeholder.png?size=240x240&text=120x120&&bg=ccc&fg=fff" />
+                                                                <div>
+                                                                    免费试吃
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                          <li>
+                                                            <div>
+                                                                     <img src="http://www.atool.org/placeholder.png?size=240x240&text=120x120&&bg=ccc&fg=fff" />
+                                                                <div>
+                                                                    免费试吃
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                          <li>
+                                                            <div>
+                                                                     <img src="http://www.atool.org/placeholder.png?size=240x240&text=120x120&&bg=ccc&fg=fff" />
+                                                                <div>
+                                                                    免费试吃
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                          <li>
+                                                            <div>
+                                                                     <img src="http://www.atool.org/placeholder.png?size=240x240&text=120x120&&bg=ccc&fg=fff" />
+                                                                <div>
+                                                                    免费试吃
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                          <li>
+                                                            <div>
+                                                                     <img src="http://www.atool.org/placeholder.png?size=240x240&text=120x120&&bg=ccc&fg=fff" />
+                                                                <div>
+                                                                    免费试吃
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                          <li>
+                                                            <div>
+                                                                     <img src="http://www.atool.org/placeholder.png?size=240x240&text=120x120&&bg=ccc&fg=fff" />
+                                                                <div>
+                                                                    免费试吃
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                            </div>
+                                        </div>
+                                <!-- indexMenuEnd -->
+
+                                <!-- indexModuleStart -->
+                                <div class="index_0_Module">
+                                    <!-- 单模块start -->
+                                        <div class="index_0_Module_1 index_0_ModuleMargin" style="background-image:url(http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff);background-size:100% 100%;">
+                                        </div>
+                                    <!-- 单模块end -->
+                                    <!-- 三模块start -->
+                                        <div class="index_0_Module_3 index_0_ModuleMargin">
+                                                    <ul>
+                                                        <li>
+                                                            <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                        </li>
+                                                             <li>
+                                                            <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                        </li>
+                                                             <li>
+                                                            <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                        </li>
+                                                    </ul>
+                                        </div>
+                                    <!-- 三模块end -->
+                                    <!-- 四模块start -->
+                                    <div class="index_0_Module_4 index_0_ModuleMargin">
+                                            <ul>
+                                                <li>
+                                                    <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                </li>
+                                                    <li>
+                                                    <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                </li>
+                                                   <li>
+                                                    <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                </li>
+                                                   <li>
+                                                    <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                </li>
+                                             
+                                            </ul>
+                                    </div>
+                                    <!-- 四模块end -->
+                                </div>
+                                <!-- indexModuleEnd -->
+                    
+                               </div>
+
+                            </div>
+                    <!-- 商城end -->
+                    <!-- 鲜果start  暂时不涉及鲜果-->
+                        <div class="index_1" id="page_scroll_1">
+                            <div style="overflow:hidden;">      
+                                 <!-- 幻灯片start -->
+                                        <div class="index_0_slide">
+                                                    <div class="index_0_slide_div" style="background-image:url(http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff);background-size:100% 100%;">
+                                                            <!-- 幻灯片图片 -->   
+                                    
+                                    
+                                                    </div>
+                                        </div>
+                                        <!-- 幻灯片start -->
+                               <!-- indexMenuStart -->
+                                                <div class="index_0_Menu">
+                                                    <div class="index_0_Menu_div">
+                                                           <ul>
+                                                                <li>
+                                                                    <div>
+                                                                             <img src="http://www.atool.org/placeholder.png?size=240x240&text=120x120&&bg=ccc&fg=fff" />
+                                                                        <div>
+                                                                            免费试吃
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                                   <li>
+                                                                    <div>
+                                                                             <img src="http://www.atool.org/placeholder.png?size=240x240&text=120x120&&bg=ccc&fg=fff" />
+                                                                        <div>
+                                                                            免费试吃
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                                  <li>
+                                                                    <div>
+                                                                             <img src="http://www.atool.org/placeholder.png?size=240x240&text=120x120&&bg=ccc&fg=fff" />
+                                                                        <div>
+                                                                            免费试吃
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                                  <li>
+                                                                    <div>
+                                                                             <img src="http://www.atool.org/placeholder.png?size=240x240&text=120x120&&bg=ccc&fg=fff" />
+                                                                        <div>
+                                                                            免费试吃
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                    </div>
+                                                </div>
+                                        <!-- indexMenuEnd -->
+                              <!-- indexModuleStart -->
+                                        <div class="index_0_Module">
+                                            <!-- 单模块start -->
+                                                <div class="index_0_Module_1 index_0_ModuleMargin" style="background-image:url(http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff);background-size:100% 100%;">
+                                                </div>
+                                            <!-- 单模块end -->
+                                            <!-- 三模块start -->
+                                                <div class="index_0_Module_3 index_0_ModuleMargin">
+                                                            <ul>
+                                                                <li>
+                                                                    <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                                </li>
+                                                                     <li>
+                                                                    <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                                </li>
+                                                                     <li>
+                                                                    <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                                </li>
+                                                            </ul>
+                                                </div>
+                                            <!-- 三模块end -->
+                                            <!-- 四模块start -->
+                                            <div class="index_0_Module_4 index_0_ModuleMargin">
+                                                    <ul>
+                                                        <li>
+                                                            <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                        </li>
+                                                            <li>
+                                                            <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                        </li>
+                                                           <li>
+                                                            <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                        </li>
+                                                           <li>
+                                                            <img style="width:100%;height:100%;" src="http://www.atool.org/placeholder.png?size=426x260&text=426x260&&bg=ccc&fg=fff" />
+                                                        </li>
+                                             
+                                                    </ul>
+                                            </div>
+                                            <!-- 四模块end -->
+                                        </div>
+                                        <!-- indexModuleEnd -->
+                                </div>
+                        </div>
+                    <!-- 鲜果end -->
+            </div>
+
+            </div>
+          <!-- 商城页脚 start -->
+                    <div class="index_0_FloatMenu">
+                          <ul>
+                              <li>
+                                  <div>
+                                  <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                                  </div>
+                                  <span>主页</span>
+                              </li>
+                                <li>
+                                  <div>
+                                  <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                                  </div>
+                                  <span>这是菜单</span>
+                              </li>
+                                <li>
+                                  <div>
+                                  <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                                  </div>
+                                  <span>这是菜单</span>
+                              </li>
+                                <li>
+                                  <div>
+                                  <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                                  </div>
+                                  <span>这是菜单</span>
+                              </li>
+                                <li>
+                                  <div>
+                                  <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                                  </div>
+                                  <span>这是菜单</span>
+                              </li>
+                           
+                          </ul>
+                    </div>
+          <!-- 商城页脚 end -->
+
+
+
+     
+
+
+
+  
+    </div>
+
+
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript">
+        var indexdom = document;
+        var indexbutton = indexdom.getElementsByClassName('indexbutton');
+        var indexbutton_ed = indexdom.getElementsByClassName('indexbutton_ed').item(0);
+        var LeftAndRight = true; //true 左 
+        var indexHeaderClick = true;
+        (function () {//初始化
+            init(0);
+        })();
+        function init(a,b,c) {
+            var indexbuttons = indexbutton.item(a);
+            var _height = indexbuttons.clientHeight;
+            var _width = indexbuttons.clientWidth;
+            indexbutton_ed.style.cssText = 'width:' + _width + 'px;height:'+_height+'px;';
+            indexbutton_ed.innerText = indexbuttons.innerText;
+
+        }
+        $('.indexbutton').on('click', function () {
+            if (!indexHeaderClick) {  return false; }
+            var self = this;
+            var className = self.className;
+            switch (className) {
+                case 'indexbutton indexbutton_on':
+                            //不执行切换
+                    break;
+                case 'indexbutton indexbutton_off':
+                    /*
+                        执行切换
+                    */
+                    var data_id = self.getAttribute('data-id');
+                    var indexHeader = indexdom.getElementById('index_header');
+                    AnimateAction(indexHeader, data_id, 0, 500);
+                    break;
+            }
+        });
+
+        function AnimateAction(obj, title, lefts, s) {
+            var left = 0;
+            indexHeaderClick = false;
+            left = obj.offsetLeft;
+            if (title == 'index_1') {
+                if (left == 0) {
+                    left = -(window.innerWidth >= 640 ? 640 : window.innerWidth);
+                }
+            }
+            else if (title == 'index_0') {
+                if (left < 0) {
+                    left = 0;
+                }
+            }
+            //$(obj).animate({ left: left + 'px' }, s);
+            //translate(-375px, 0px) scale(1)
+            //$(obj).css('translate', '(' + left + 'px,0px)').css('scale', 1);
+            obj.style.cssText = 'width: 750px; height: 510px;transition-property: transform;transition:-webkit-transform ' + s + 'ms; transform-origin: 0px 0px 0px; transform: translate(' + (left) + 'px, 0px)  translateZ(0px);';
+            setTimeout(function () { headerChange(title,s,obj) }, 50);
+        }
+        /*
+            切换生鲜,下午茶按钮
+            @@param title 按钮编号
+        */
+        function headerChange(title,s,obj) {
+            switch (title) {
+                case 'index_1':
+                    $(indexbutton).eq(0).attr('class', $(indexbutton).eq(0).attr('class').replace('indexbutton_on', 'indexbutton_off'));
+                    $(indexbutton_ed).animate({ left: '80px' }, s);
+                    setTimeout(function () {
+                        $(indexbutton_ed).text('').text($(indexbutton).eq(1).text());
+                    }, (s/2));
+                    break;
+                case 'index_0':
+                    $(indexbutton).eq(1).attr('class', $(indexbutton).eq(1).attr('class').replace('indexbutton_on', 'indexbutton_off'));
+                    $(indexbutton_ed).animate({ left: '0px' }, s);
+                    setTimeout(function () {
+                        $(indexbutton_ed).text('').text($(indexbutton).eq(0).text());
+                    }, (s / 2));
+                    break;
+            }
+            indexHeaderClick = true;
+            setTimeout(function () {
+                $(obj).css('transition', '');
+            }, s);
+        }
+    </script>
+</body>
+</html>

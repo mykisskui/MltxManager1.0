@@ -1,0 +1,110 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web;
+using MltxManager.Models.DBModel;
+
+namespace MltxManager.Models.DBModel
+{
+    public class MltxDbContext : DbContext
+    {
+        public MltxDbContext()
+            : base("MltxDbContext")
+        {
+            
+        }
+        /// <summary>
+        /// 基础权限信息表
+        /// </summary>
+        public DbSet<Mltx_Authority_basic> auth_basic { get; set; }
+        /// <summary>
+        /// 评论信息
+        /// </summary>
+        public DbSet<Mltx_Comments> comments { get; set; }
+        /// <summary>
+        /// 商品信息表（鲜果单）
+        /// </summary>
+        public DbSet<Mltx_GoodsInfo_fresh> goodsinfo_fresh { get; set; }
+        /// <summary>
+        /// 商品信息表（商城）
+        /// </summary>
+        public DbSet<Mltx_GoodsInfo_shop> goodsinfo_shop { get; set; }
+        /// <summary>
+        /// 分组模块权限表
+        /// </summary>
+        public DbSet<Mltx_Group_Auth> group_auth { get; set; }
+        /// <summary>
+        /// 商品分组表(一级分组)
+        /// </summary>
+        public DbSet<Mltx_Group_first> group_first { get; set; }
+        /// <summary>
+        /// 鲜果单分组表
+        /// </summary>
+        public DbSet<Mltx_Group_fresh> group_fresh { get; set; }
+        /// <summary>
+        /// 分组模块信息表
+        /// </summary>
+        public DbSet<Mltx_Group_Model> group_model { get; set; }
+        /// <summary>
+        /// 商品分组表(二级分组)
+        /// </summary>
+        public DbSet<Mltx_Group_second> group_second { get; set; }
+        /// <summary>
+        /// 首页模块
+        /// </summary>
+        public DbSet<Mltx_IndexModule> index_m { get; set; }
+        /// <summary>
+        /// 会员信息表
+        /// </summary>
+        public DbSet<Mltx_MemberInfo> memberinfo { get; set; }
+        /// <summary>
+        /// 会员明细表
+        /// </summary>
+        public DbSet<Mltx_MemberLog> memberlog { get; set; }
+        /// <summary>
+        /// 会员等级
+        /// </summary>
+        public DbSet<Mltx_MemberRank> memberrank { get; set; }
+        /// <summary>
+        /// 菜单(所有菜单)
+        /// </summary>
+        public DbSet<Mltx_Menu> _menu { get; set; }
+        /// <summary>
+        /// 模块权限表
+        /// </summary>
+        public DbSet<Mltx_Model_Auth> model_auth { get; set; }
+        /// <summary>
+        /// 基础模块信息表
+        /// </summary>
+        public DbSet<Mltx_Model_basic> model_basic { get; set; }
+        /// <summary>
+        /// 订单主表
+        /// </summary>
+        public DbSet<Mltx_Order_main> order_m { get; set; }
+        /// <summary>
+        /// 订单从表
+        /// </summary>
+        public DbSet<Mltx_Order_sub> order_s { get; set; }
+        /// <summary>
+        /// 门店管理表
+        /// </summary>
+        public DbSet<Mltx_ShopInfo> shopinfo { get; set; }
+        /// <summary>
+        /// 幻灯片
+        /// </summary>
+        public DbSet<Mltx_Slide> _slide { get; set; }
+        /// <summary>
+        /// 后台登陆人员分组管理表
+        /// </summary>
+        public DbSet<Mltx_UserGroup> usergroup { get; set; }
+        /// <summary>
+        /// 后台登陆人员管理表
+        /// </summary>
+        public DbSet<Mltx_UserInfo> userinfo { get; set; }
+        /// <summary>
+        /// 短信管理表
+        /// </summary>
+        public DbSet<Mltx_SmsInfo> smsinfo { get; set; }
+    }
+}

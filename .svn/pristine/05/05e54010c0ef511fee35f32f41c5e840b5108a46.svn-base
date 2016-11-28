@@ -1,0 +1,5 @@
+﻿@{
+    ViewBag.Title = "fruitDetail";
+}
+
+<h2>fruitDetail</h2>

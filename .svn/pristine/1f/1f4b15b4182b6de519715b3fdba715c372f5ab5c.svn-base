@@ -1,0 +1,655 @@
+﻿@model MltxManager.Models.DBModel.Mltx_Address
+@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>确认订单</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/css/Index.css" rel="stylesheet" type="text/css" @*media="screen and (max-width:539px )"*@ />
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/mallList.css" rel="stylesheet" />
+    <link href="~/css/mallorder.css" rel="stylesheet" />
+    <script src="~/assets/plugins/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/iScroll-4.2.5.js"></script>
+    <script src="~/Scripts/loading.js"></script>
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/cookiedata.js"></script>
+    <link href="~/css/weixin/example.css" rel="stylesheet" />
+    <link href="~/css/weixin/weui.css" rel="stylesheet" />
+    <script src="~/Scripts/weixin/zepto.min.js"></script>
+    <script src="~/Scripts/weixin/example.js"></script>
+    <script src="/assets/scripts/region_select.js"></script> 
+    
+    <script>
+        var myscroll, myscroll_0,myscroll_1;
+        function load() {
+            var _height = window.innerHeight;
+            console.log(_height);
+            var headerHeight = document.getElementsByClassName('index_0_header').item(0).clientHeight;
+            var shopcarHeight = document.getElementsByClassName('shopcar_float').item(0).clientHeight;
+            page_scroll_0.style.height = _height - headerHeight - shopcarHeight- 1 + 'px';//多减1表示shopcar_float的border-top
+         
+            page_scroll_0_addr.style.height = _height - headerHeight + 'px';
+            page_scroll_0_createOredit.style.height = _height - headerHeight + 'px';
+
+            myscroll = new iScroll("page_scroll_0", {
+                vScroll: true,
+                vScrollbar: false,
+                vScrollbar: false,
+                bounce: true,
+                momentum: true,
+                onBeforeScrollStart: function () {
+                }
+            });
+            myscroll_0 = new iScroll("page_scroll_0_addr", {
+                vScroll: true,
+                vScrollbar: false,
+                vScrollbar: false,
+                bounce: true,
+                momentum: true,
+                onBeforeScrollStart: function () {
+                }
+            });
+            myscroll_1 = new iScroll("page_scroll_0_createOredit", {
+                vScroll: true,
+                vScrollbar: false,
+                vScrollbar: false,
+                bounce: true,
+                momentum: true,
+                onBeforeScrollStart: function () {
+                }
+            });
+
+            document.body.ontouchmove = function (event) {
+                event.preventDefault();
+            }
+        }
+        window.addEventListener('load', load, false);
+    </script>
+
+</head>
+<body>
+    <script>
+        var otherdata = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.otherdata))';
+        var login_id = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.login_id))';//登陆号
+    </script>
+    
+    <div id="div_loading"></div>
+<!---订单确定页div_body-->
+    <div class="body" id="body_order">
+        <!-- 头部start  search-->
+        <div class="index_0_header">
+            <div class="index_0_header_top">
+                <ul>
+                    <li ontouchstart="history.go(-1)">
+                        <i class="icon-angle-left" ></i>
+                    </li>
+                    <li>
+                        <div style="background-color: #fff; color: #64a786; font-size: 16px">
+                            确认订单
+                        </div>
+                    </li>
+                    <li >
+                        <i class=""></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 头部end -->  
+
+        <!-- 品类start -->
+        <div  id="page_scroll_0" style="background-color:#eee">
+            <div id="divlist" style="overflow: hidden">
+
+                <!--地址start-->
+               @if (ViewBag.addr == "no")
+                {
+                    <div class="div_address_null" id="div_address_0" >
+                        <div style="width:80%">
+                            <div>请选择配送地址</div>                            
+                        </div>
+                        <div class="div_right" onclick="toaddr()"><i class="icon-angle-right" style="top:30px"></i></div>
+                    </div>                    
+                }
+                else
+                {
+                    <div class="div_address" id="div_address_0" >
+                        <div style="width:80%">
+                            <div>@Model.UserName</div>
+                            <div>@Model.Province @Model.City @Model.District @Model.Area</div>
+                            <div>@Model.Tel</div>
+                        </div>
+                        <div class="div_right" onclick="toaddr()"><i class="icon-angle-right"></i></div>
+                    </div>
+                }
+                
+                <!--地址end-->
+
+                <!--支付方式-->
+                <div class="div_payment">
+                   <div class="weui_cells weui_cells_access">
+                        <a class="weui_cell" href="javascript:;">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>支付方式</p>
+                            </div>
+                            <div class="weui_cell_ft" id="showActionSheet" data-payment="">请选择</div>
+                        </a>
+                    </div>
+                </div>
+                <!--支付方式end-->
+                
+                <!--订单列表-->
+              <ul style="margin-top:10px">
+                  
+                </ul>
+                <!--订单列表end-->
+                
+                <!--订单总价 优惠 运费-->
+               <div class="div_info" >
+                    <div class="weui_cells" style="margin-top:0">
+                        <div class="weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>商品总价</p>
+                            </div>
+                            <div class="weui_cell_ft" id="price_sum"></div>
+                        </div>
+                        <div class="weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>运费</p>
+                            </div>
+                            <div class="weui_cell_ft">￥0.00</div>
+                        </div>
+                        <div class="weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>优惠</p>
+                            </div>
+                            <div class="weui_cell_ft">- ￥0.00</div>
+                        </div>
+                    </div>
+              </div>
+                <!--订单总价 优惠 运费end-->
+                
+                <!--留言-->
+                <div class="weui_cells_title">订单留言</div>
+                 <div class="weui_cells weui_cells_form" style="margin-bottom:10px">
+                    <div class="weui_cell">
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <textarea class="weui_textarea" placeholder="请输入留言" rows="3" style="font-family: microsoft yahei"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!--留言end-->
+
+            </div>
+        </div>
+        <!-- 品类end -->
+
+        <!--购物车结算start-->
+        <div class="shopcar_float" id="shopcar_float">
+            <span id="span_sumprice" data-price=""></span>
+            <div ontouchstart="">提交订单</div>
+        </div>
+        <!--购物车结算end-->
+
+    </div>
+<!---订单确定页div_body-->
+
+<!--地址库列表页div_body-->    
+    <div class="body" id="body_addr" style="display:none">
+        <!-- 头部start  search-->
+        <div class="index_0_header_addr">
+            <div class="index_0_header_top">
+                <ul>
+                    <li ontouchstart="toOrder()">
+                        <i class="icon-angle-left" ></i>
+                    </li>
+                    <li>
+                        <div style="background-color: #fff; color: #64a786; font-size: 16px">
+                            地址库
+                        </div>
+                    </li>
+                    <li >
+                        <i class="icon-plus" ontouchstart="creatAddr()"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 头部end -->  
+
+        <!-- 地址列表start -->
+        <div  id="page_scroll_0_addr" >
+            <div id="divlist_addr">
+                <!--地址列表-->
+                <ul>
+                  
+                </ul>
+                <!--地址列表-->
+            </div>
+
+        </div>
+        <!-- 地址列表end -->
+
+    </div>
+<!--地址库列表页div_body-->  
+    
+ 
+<!--新增 编辑地址库div_body-->    
+    <div class="body" id="body_addr_createOredit" style="display:none">
+        <!-- 头部start  search-->
+        <div class="index_0_header_createOredit">
+            <div class="index_0_header_top">
+                <ul>
+                    <li ontouchstart="_backAddr()">
+                        <i class="icon-angle-left" ></i>
+                    </li>
+                    <li>
+                        <div id="div_edit_title" style="background-color: #fff; color: #64a786; font-size: 16px">      
+                        </div>
+                    </li>
+                    <li >
+                        <i class=""></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 头部end -->  
+
+        <!-- 创建编辑表单start -->
+        <div  id="page_scroll_0_createOredit" >
+            <div id="divlist_createOredit">
+                <div class="weui_cells_title"></div>
+                    <div class="weui_cells weui_cells_form">
+                        <div class="weui_cell">
+                            <div class="weui_cell_hd"><label class="weui_label" style="width:4.5em">收货人</label></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <input class="weui_input" id="UserName" type="text" placeholder=""/>
+                            </div>
+                        </div>
+                        <div class="weui_cell">
+                            <div class="weui_cell_hd"><label class="weui_label" style="width:4.5em">省</label></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                 <select name="location_p" id="location_p" class="input-small" style="height: 30px;    width: 70%;"></select>
+                            </div>
+                        </div>
+                        <div class="weui_cell">
+                            <div class="weui_cell_hd"><label class="weui_label" style="width:4.5em">市</label></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                 <select name="location_c" id="location_c" class="input-small" style="height: 30px;    width: 70%;"></select>
+                            </div>
+                        </div>
+                        <div class="weui_cell">
+                            <div class="weui_cell_hd"><label class="weui_label" style="width:4.5em">区</label></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                 <select name="location_a" id="location_a" class="input-small" style="height: 30px;    width: 70%;"></select>
+                            </div>
+                        </div>
+                         <div class="weui_cell">
+                            <div class="weui_cell_hd"><label class="weui_label" style="width:4.5em">详细地址</label></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <input class="weui_input" id="Area" type="text" placeholder=""/>
+                            </div>
+                        </div>
+                        <div class="weui_cell">
+                            <div class="weui_cell_hd"><label class="weui_label" style="width:4.5em">手机号</label></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <input class="weui_input" id="Tel" type="number" placeholder=""/>
+                            </div>
+                        </div>
+                        <div class="weui_cells weui_cells_form" style="margin-top:0">
+                            <div class="weui_cell weui_cell_switch">
+                                <div class="weui_cell_hd weui_cell_primary">设为默认地址</div>
+                                <div class="weui_cell_ft">
+                                    <input class="weui_switch" id="IsDefault" type="checkbox">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <div id="div_submit" style="text-align: center;margin-top: 20px;background-color: #6CA94B;width: 50%;margin-left: 25%;  height: 35px;line-height: 35px;color: #fff;border-radius: 30px;" data-tag="" data-id="" ontouchstart="_submit(this)">保存</div>
+            </div>
+
+        </div>
+        <!-- 创建编辑表单end -->
+
+    </div>
+<!--新增编辑地址库页div_body-->  
+    
+    
+       <!--BEGIN actionSheet-->
+    <div id="actionSheet_wrap">
+        <div class="weui_mask_transition" id="mask"></div>
+        <div class="weui_actionsheet" id="weui_actionsheet">
+            <div class="weui_actionsheet_menu">
+                <div class="weui_actionsheet_cell" ontouchstart="chosePay(this,0)">货到付款</div>
+                <div class="weui_actionsheet_cell" ontouchstart="chosePay(this,1)">微信支付</div>
+            </div>
+            <div class="weui_actionsheet_action">
+                <div class="weui_actionsheet_cell" id="actionsheet_cancel">取消</div>
+            </div>
+        </div>
+    </div>
+    <!--END actionSheet-->  
+    
+    <script src="~/Scripts/weixin/confirm_self.js"></script>
+    <script>
+       
+        $(document).ready(function () {
+            InitData();
+        });
+
+        function InitData() {
+            var json = eval("(" + otherdata + ")");
+            var ul = divlist.getElementsByTagName("ul")[0];
+            var str = '';
+
+            for (var i = 0; i < json.data.length; i++) {
+                str += '<li style="background-color:#fff"><div class="divimg"><img src="' + json.data[i].gpic + '"/></div>' +
+                       '<div class="divcontent_order">'+
+                         '<div class="divname">' + json.data[i].gname + '</div>' +
+                          '<div class="divguige">' + json.data[i].guige + '</div>' +
+                          '<div class="divprice">￥' + json.data[i].rprice + '</div></div>' +
+                      '<div class="divend_order">'+
+                         '<span>X' + json.data[i].count + '</span>' +
+                       '</div> </li>';
+            }
+
+            ul.innerHTML = str;
+            span_sumprice.innerText = "￥" + json.sumPrice;
+            span_sumprice.setAttribute("data-price", json.sumPrice);
+            price_sum.innerText = "￥" + json.sumPrice;
+            myscroll.refresh();
+        }
+
+        
+        
+        document.getElementById("showActionSheet").onclick = function () {
+            var mask = $('#mask');
+            var weuiActionsheet = $('#weui_actionsheet');
+            weuiActionsheet.addClass('weui_actionsheet_toggle');
+            mask.show().addClass('weui_fade_toggle').one('click', function () {
+                hideActionSheet(weuiActionsheet, mask);
+            });
+            $('#actionsheet_cancel').one('click', function () {
+                hideActionSheet(weuiActionsheet, mask);
+            });
+            weuiActionsheet.unbind('transitionend').unbind('webkitTransitionEnd');
+           
+        }
+        //隐藏
+        function hideActionSheet(weuiActionsheet, mask) {
+            weuiActionsheet.removeClass('weui_actionsheet_toggle');
+            mask.removeClass('weui_fade_toggle');
+            weuiActionsheet.on('transitionend', function () {
+                mask.hide();
+            }).on('webkitTransitionEnd', function () {
+                mask.hide();
+            })
+        }
+
+       //选择支付方式
+        function chosePay(e,num) {
+            $("#showActionSheet").text($(e).text());
+            $("#showActionSheet").attr("data-payment", num);
+            
+            var mask = $('#mask');
+            var weuiActionsheet = $('#weui_actionsheet');
+            hideActionSheet(weuiActionsheet, mask);
+        }
+      
+        //下单页到地址列表页
+        function toaddr() {
+            $.ajax({
+                type: "post",
+                async: true,
+                url: "/Mltx_MallClass/MallAddressList", // 你请求的地址
+                data: {
+                    'login_id': login_id, //会员号
+                },
+                beforeSend: function () {
+                    showLoading();
+                },
+                success: function (data) {
+                    console.log(data);
+                    if (data == "-1")
+                    {
+                        removeLoading();
+                    }
+                    else if (data == "-2")
+                    {
+                        removeLoading();
+                    }
+                    else {
+                        document.title = "地址库";
+                        body_order.style.display = "none";
+                        body_addr_createOredit.style.display = "none"
+                        body_addr.style.display = "block";
+                        Add_addressinfo(data);
+                        removeLoading();
+                    }
+                }
+            });
+
+            //
+        }
+
+        ///创建编辑页到地址列表页
+        function _backAddr() {
+            document.title = '地址库';
+            body_order.style.display = "none";
+            body_addr.style.display = "block";
+            body_addr_createOredit.style.display = "none"
+        }
+
+        //地址列表页左上角返回
+        function toOrder() {
+            document.title = '确认订单';
+            body_order.style.display = "block";
+            body_addr.style.display = "none";
+            body_addr_createOredit.style.display = "none"
+            
+        }
+        //添加数据到地址列表
+        function Add_addressinfo(add_data) {
+            var json = eval("(" + add_data + ")");
+            var ul = divlist_addr.getElementsByTagName("ul")[0];
+            var str = '';
+
+            for (var i = 0; i < json.length; i++) {
+                var span_str = '', default_tag = '1';
+                if (json[i].isdefault == '0')//是默认地址
+                {
+                    span_str = '<span>默认</span>';
+                    default_tag = '0';
+                }
+                str += '<li><div style="width:80%;position:relative" onclick="_goback(this)">' +
+                            '<div class="data-name">' + json[i].username + '</div>' +
+                            '<div class="data-area" data-prov="' + json[i].prov + '" data-city="' + json[i].city + '" data-dist="' + json[i].district + '" data-area="' + json[i].area + '">' + json[i].prov + ' ' + json[i].city + ' ' + json[i].district + ' ' + json[i].area + '</div>' +
+                '<div class="data-tel">' + json[i].tel + '</div>' + span_str +
+                '</div><div class="div_right" data-default="' + default_tag + '" onclick="editAddr(this,' + json[i].id + ')"><i class="icon-angle-right"></i></div>' +
+                '<i class="icon-remove-sign" ontouchstart="deleteAddr(this,'+json[i].id+')" style="position: absolute;top: 0;right: 7px;font-size: 1.5em;color: #ccc;"></i>'+
+                '</li>';
+            }
+
+            ul.innerHTML = str;
+        }
+
+        //选择地址，回到下单页
+        function _goback(e) {
+            var _name = $(e).children(".data-name").text();
+            var _area = $(e).children(".data-area").text();
+            var _tel = $(e).children(".data-tel").text();
+
+            var str = '<div style="width:80%">' +
+                          '<div>' + _name + '</div>' +
+                            '<div>' + _area + '</div>' +
+                            '<div>' + _tel + '</div>' +
+                        '</div>' +
+                        '<div class="div_right" onclick="toaddr()"><i class="icon-angle-right"></i></div>';
+
+            div_address_0.innerHTML = str;
+            div_address_0.setAttribute("class", "div_address");
+
+            toOrder();
+        }
+        
+        //删除地址
+        function deleteAddr(e,id) {
+            var _deleteAddr = function () {
+               // 
+                console.log(id);
+                $.ajax({
+                    type: "post",
+                    async: true,
+                    url: "/Mltx_MallClass/deleteAddr", // 你请求的地址
+                    data: {
+                        'id': id, //要删除的id
+                    },
+                    beforeSend: function () {
+                        showLoading();
+                    },
+                    success: function (data) {
+                        if (data == "-1")//异常
+                        {
+                            location.href = "";
+                        } else {
+                            $(e).parents("li").remove();
+                        }
+
+                        removeLoading();
+                    }
+                });
+            };
+
+            dialog.comfirm("确认删除此地址？", _deleteAddr, "");
+        }
+
+        //编辑地址信息
+        function editAddr(e, id) {            
+            var _name = $(e).parents("li").children("div").children(".data-name").text();
+            var _sum_area = $(e).parents("li").children("div").children(".data-area").text();
+            var _prov = $(e).parents("li").children("div").children(".data-area").attr("data-prov");
+            var _city = $(e).parents("li").children("div").children(".data-area").attr("data-city");
+            var _dist = $(e).parents("li").children("div").children(".data-area").attr("data-dist");
+            var _area = $(e).parents("li").children("div").children(".data-area").attr("data-area");
+            var _tel = $(e).parents("li").children("div").children(".data-tel").text();
+            var _isdefault = $(e).attr("data-default");
+            console.log(_name + _area + _tel);
+            body_order.style.display = "none";
+            body_addr.style.display = "none";
+            body_addr_createOredit.style.display = "block";
+            div_edit_title.innerText = "编辑地址";
+            document.title = '编辑地址';
+            UserName.value = _name;
+            Area.value = _area;
+            Tel.value = _tel;
+            new PCAS('location_p', 'location_c', 'location_a', _prov, _city, _dist);
+            if (_isdefault == "0") {
+                IsDefault.checked = true;
+            } else {
+                IsDefault.checked = false;
+            }
+            div_submit.setAttribute("data-tag", "edit");//提交按钮自定义属性，区分创建和编辑
+            div_submit.setAttribute("data-id", id);//提交按钮自定义属性，要编辑的数据id
+
+        }
+
+        ///新建地址库
+        function creatAddr() {
+            body_order.style.display = "none";
+            body_addr.style.display = "none";
+            body_addr_createOredit.style.display = "block";
+            div_edit_title.innerText = "创建地址";
+            document.title = '创建地址';
+            UserName.value = '';
+            Area.value = '';
+            Tel.value = '';
+            IsDefault.checked = false;
+            new PCAS('location_p', 'location_c', 'location_a', '山东省', '青岛市', '市南区');
+            div_submit.setAttribute("data-tag", "create");//提交按钮自定义属性，区分创建和编辑
+
+        }
+
+        //创建 编辑地址信息提交
+        function _submit(e) {
+            //验证
+            var $uname = $("#UserName");
+            var $area = $("#Area");
+            var $tel = $("Tel");
+            if ($uname.val() == "") {
+                var _uname_fun = function () {
+                    $uname.focus();
+                    return false;
+                }
+                dialog.alert("请输入收货人信息", _uname_fun);
+               
+            } else if ($area.val() == "") {
+                var _area_fun = function () {
+                    $area.focus();
+                    return false;
+                }
+                dialog.alert("请输入详细地址", _area_fun);
+             
+            } else if ($tel.val() == "") {
+                var _tel_fun = function () {
+                    $tel.focus();
+                    return false;
+                }
+                dialog.alert("请输入电话号码", _tel_fun);
+                
+            } else {
+                var tag = $(e).attr("data-tag");//标识
+                var id = $(e).attr("data-id")
+                Ajax_submit(id,tag);
+            }
+        }
+
+        //提交ajax
+        function Ajax_submit(id,tag) {
+            var uname = UserName.value;
+            var area = Area.value;
+            var tel = Tel.value;
+            var prov = location_p.value;
+            var city = location_c.value;
+            var dist = location_a.value;
+            var isdefault = '1';//初始值为非默认
+            if (IsDefault.checked) {
+                isdefault = "0";
+            } else {
+                isdefault = "1";
+            }
+            $.ajax({
+                type: "post",
+                async: true,
+                url: "/Mltx_MallClass/createOrediteAddr", // 你请求的地址
+                data: {
+                    'id': id, 'login_id':login_id,'username':uname,'prov':prov,'city':city,'dist':dist,'area':area,'tel':tel,'isdefault':isdefault,'tag':tag
+                },
+                beforeSend: function () {
+                    showLoading();
+                },
+                success: function (data) {
+                    if (data != "0") {
+                        removeLoading();
+                    } else {
+                        toaddr();
+                        removeLoading();
+                    }
+
+                }
+            });
+        }
+    </script>
+
+
+</body>
+
+</html>
+

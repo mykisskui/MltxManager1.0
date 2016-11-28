@@ -1,0 +1,577 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .floatbutfindbutton {
+        background-color: #28b779 !important;
+        border-color: #d5d5d5;
+        float: left;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        width: 100px;
+        text-align: center;
+        padding: 10px 0;
+        border: 1px solid #d5d5d5;
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .dropzone .dz-preview {
+        width: 382px!important;
+        margin: -78px 0 0 0!important;
+    }
+
+    .dz-message {
+        display: none!important;
+    }
+
+    .dz-image {
+        width: 100%!important;
+        height: 100px!important;
+    }
+
+        .dz-image > img {
+            width: 100%!important;
+            height: 100px!important;
+        }
+
+    .dz-remove {
+        width: 100%;
+        background-color: #28b779 !important;
+        color: #fff;
+        padding: 5px;
+    }
+
+    .dz_remove:hover {
+        cursor: pointer!important;
+        text-decoration: none!important;
+    }
+
+    .imageshow {
+        margin: 2px 0 0 0;
+        width: 100px;
+        height: 100px;
+        background-color: #28b779 !important;
+        line-height: 100px;
+        text-align: center;
+        color: #fff;
+    }
+
+    #upload {
+        width: 100px;
+        position: absolute;
+    }
+
+    .imageupbutton {
+        height: 30px;
+        width: 100px;
+        margin: 2px 0;
+        background-color: #28b779 !important;
+    }
+
+    .image_cancel, .image_sub {
+        float: left;
+        width: 49px;
+        text-align: center;
+        color: #fff;
+        line-height: 30px;
+    }
+
+        .image_cancel, .image_sub:hover {
+            cursor: pointer;
+        }
+
+    .image_border {
+        border: 1px solid #FFF;
+        height: 20px;
+        float: left;
+        margin: 5px 0;
+    }
+
+    .menuinfoclass {
+        line-height: 30px;
+        width: 440px;
+        border: 1px solid #d5d5d5;
+        margin: 5px 0;
+    }
+
+    .menudelete, .menuupdate {
+        font-size: 16px;
+        line-height: 33px;
+        color: #616161;
+        cursor: pointer;
+    }
+
+    .floatmenuShow:hover {
+        background-color: #e2e2e2;
+    }
+
+    .menuinput {
+        border: 1px solid #d5d5d5;
+        font-size: 14px;
+        color: #858585;
+        padding: 5px 4px;
+        line-height: 1.2;
+        outline: none;
+        margin-bottom: 10px;
+        width: 163px;
+        margin-left: 15px;
+    }
+
+    .IndexMenuSub {
+        background-color: #28b779 !important;
+        color: #fff;
+        height: 35px;
+    }
+
+    .APPInput {
+        display: none;
+    }
+
+
+    /**----------------*/
+    .Module {
+        width: 100px;
+        height: 35px;
+        text-align: center;
+        line-height: 35px;
+        background-color: #eeeeee;
+        float: left;
+        margin-right: 5px;
+        color: #636363;
+        font-size: 14px;
+    }
+
+    .Module_Template, .ModuleWechat {
+        width: 100px;
+        height: 35px;
+        text-align: center;
+        line-height: 35px;
+        background-color: #eeeeee;
+        float: left;
+        margin-right: 5px;
+        color: #636363;
+        font-size: 14px;
+    }
+
+    .Module:hover {
+        cursor: pointer;
+        background-color: #D4D4D4;
+        color: #fff;
+    }
+
+    .ModuleWechat:hover {
+        cursor: pointer;
+        background-color: #D4D4D4;
+        color: #fff;
+    }
+
+    .Module_Template:hover {
+        cursor: pointer;
+        background-color: #D4D4D4;
+        color: #fff;
+    }
+
+    .Module_on {
+        background-color: #28b779 !important;
+        color: #fff;
+    }
+
+    .ModuleTemplate {
+    }
+
+    .ModuleWechat:nth-child(2) {
+        margin: 0;
+    }
+
+    .ModuleTemplatediv {
+        margin-bottom: 5px;
+    }
+
+    .ModuleApp {
+        display: none;
+    }
+</style>
+<script>
+</script>
+<div class="container-fluid">
+    <div class="rule">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <h3 class="titles">首页模块编辑 <small>首页模块编辑</small>
+                    <a href="javascript:history.go(-1);location.reload()" class="btn default" style="float: right;"><i class="icon-arrow-left"></i>返回</a>
+                </h3>
+
+                <ul class="page-breadcrumb breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="/Mltx_Menu/MenuModule">首页模块</a>
+                    </li>
+                    <i class="icon-angle-right"></i>
+                    <li><a href="JavaScript:location.reload()">首页模块编辑</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row  col-md-12" style="padding-left: 10%;">
+            <div class="portlet-body form ">
+                <div class="form-horizontal" role="form" data-action="/Mltx_Member/IndexEdit" id="form" method="post">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">模块标题</label>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control" value="" id="Title" name="Title" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">模块选择</label>
+                            <div class="col-md-5">
+                                <style>
+                                    
+                                      </style>
+                                <div class="Module Module_on" data-class="0">单模块</div>
+                                <div class="Module" data-class="1">三模块</div>
+                                <div class="Module" data-class="2">四模块</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">商城/鲜果</label>
+                            <div class="col-md-5">
+                                <div class="Module_Template Module_on" data-class="0">商城</div>
+                                <div class="Module_Template" data-class="1">鲜果</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">模块设置</label>
+                        <div class="col-md-5" id="ModuleTemp">
+                            @* 数据add *@
+                         @*   <div class="ModuleTemplate">
+                                <div class="ModuleTemplatediv">
+                                    <form action="/Mltx_Merchandise/FigureUploadedFile" method="post" enctype="multipart/form-data" class="dropzone dz-clickable dz-started ModuleUpload" id="myDropzone"
+                                        style="min-height: 130px!important; height: 130px!important; font-size: 20px; background-color: #28b779 !important; border: 0; color: #fff; padding: 50px 0; text-align: center;">
+                                        选择图片
+                                        <input type="hidden" name="shumu" value="1" />
+                                    </form>
+                                </div>
+                                <div class="ModuleTemplatediv">
+                                    <input type="text" value="" class="form-control" placeholder="路径" />
+                                </div>
+                                <div class="ModuleTemplatediv" style="display: inline-table;">
+                                    <div class="ModuleWechat Module_on" data-class="0" data-id="Module_0">微信</div>
+                                    <div class="ModuleWechat" data-class="1" data-id="Module_0">安卓</div>
+                                </div>
+                                <div class="ModuleTemplatediv">
+                                    <input type="text" value="" class="form-control ModuleApp"  placeholder="安卓菜单类型" />
+                                </div>
+                                <div class="ModuleTemplatediv">
+                                    <input type="text" value="" class="form-control ModuleApp" placeholder="安卓菜单参数" />
+                                </div>
+                            </div>*@
+                            
+                             @* 数据add *@
+                        </div>
+                    </div>
+                    <style>
+                        .rankselect {
+                            text-align: center!important;
+                            padding: 3px!important;
+                            line-height: 20px;
+                            margin-right: 5px!important;
+                            margin-top: 3px!important;
+                            font-size: 12px;
+                        }
+
+                        .rankselecttrue {
+                            background: #28b779!important;
+                            color: #fff!important;
+                        }
+
+                        .rankselectfalse {
+                            background: #efefef !important;
+                            color: #818181!important;
+                        }
+                    </style>
+
+                    <input type="hidden" value="" id="jsonsid" name="jsonsid" />
+                    <input type="hidden" value="rankselect0," id="rankselectid" name="rankselectid" />
+                    <input type="hidden" value="" id="ranki" name="ranki" />
+                    <div class="form fluid">
+                        <div class="col-md-offset-2 col-md-5">
+                            <input id="id" value="" name="id" type="hidden" />
+                            <button type="button" class="btn green" onclick="return authcode.yanzheng(this,'IndexEdit','form')">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<link href="/css/box.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<link href="~/Scripts/dropzone/dropzone.css" rel="stylesheet" />
+<script src="~/Scripts/dropzone/dropzone.js"></script>
+<script src="/assets/plugins/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="/Scripts/box.js"></script>
+<script src="/Scripts/_config.js"></script>
+
+<script>
+    /*
+        0 模块选择的类型
+        1 0 商城 1鲜果
+    */
+    var Modules = [],ModuleTemplateData=[];
+
+    Modules[0] = 0;//模块类型默认值
+    Modules[1] = 0;//默认值商城
+    Modules[2] = 0;//默认值微信
+    var ModuleSelect = $(".Module").eq(Modules[0]);
+    var ModuleTemplate = $('.Module_Template').eq(Modules[1]);
+    $(".Module,.Module_Template,.ModuleWechat").live('click',function () {
+        var _self = this;
+        var _frame = window.parent.document.getElementById('win');
+        var _frameHeighton = false;
+        switch (_self.className) {
+            case 'Module':
+                Selects(ModuleSelect, _self, 'Module_on', 0);
+                ModuleSelect = _self;
+
+                switch (Number(_self.getAttribute('data-class'))) {
+                    case 0:
+                        ModuleTemplateDisplay(1);
+                        break;
+                    case 1:
+                        ModuleTemplateDisplay(3);
+                        break;
+                    case 2:
+                        ModuleTemplateDisplay(4);
+                        break;
+                }
+                var ModuleTempHeight = ModuleTemp.clientHeight;
+           
+                    _frame.style.height = (ModuleTempHeight + 170+170) + "px";
+                
+                    
+                break;
+            case 'Module_Template':
+                Selects(ModuleTemplate, _self, 'Module_on', 1);
+                ModuleTemplate = _self;
+                break;
+            case 'ModuleWechat':
+                var _self_dataClass = Number(_self.getAttribute('data-class'));
+                var _self_datawechatApp = Number($(_self).attr('data-wecahtandapp'));
+                if (_self_dataClass == 1) {
+                        _frame.style.height = (_frame.clientHeight + 68) + 'px';
+                } else {
+                        _frame.style.height = (_frame.clientHeight - 68) + 'px'
+                }
+                Selects(_self_dataClass == 0 ? $(_self).parent().find('div[data-class=1]') : $(_self).parent().find('div[data-class=0]'), _self, 'Module_on', 2);
+                var _self_data = ModuleTemplateSerializerJsonAction(ModuleTemplateData[_self_datawechatApp]);
+                _self_data.WebApp = _self_dataClass;
+                ModuleTemplateData[_self_datawechatApp] = ModuleTemplateSerializerJsonAction(_self_data);
+                switch (_self_dataClass) {
+                    case 0:
+                        ModuleAppShowAndHide(_self, false, authcode.dom.getElementsByClassName('ModuleApp'));
+                        break;
+                    case 1:
+                        ModuleAppShowAndHide(_self, true, authcode.dom.getElementsByClassName('ModuleApp'));
+                        break;
+                }
+                break;
+        }
+    });
+    /*
+        @@param a 默认值
+        @@param b this
+        @@param c 添加及获取值
+    */
+    function Selects(a, b, c, d) {
+        b = $(b);
+        console.log($(a));
+        a != null && $(a).removeClass(c);
+        Modules[d] = b.attr('data-class');
+        b.addClass(c);
+    }
+    /*
+        @@param a 对象
+        @@param b show hide 
+        @@param c 类型
+    */
+    function ModuleAppShowAndHide(a, b, c) {
+        a = $(a);
+        b ? a.parent().parent().find(c).show() : a.parent().parent().find(c).hide();
+    }
+
+    function ModuleTemplateDisplay(a) {
+        
+        $('.ModuleTemplate').hide();
+        for (var i = 0; i < a; i++) {
+            $('#ModuleTemplate' + i).show();
+        }
+    }
+    /*
+    @@param a 编号 模块数
+    */
+    function ModuleTemplateAdd(a, b, c) {
+        var _result = '';
+        for (var i = 0; i < a; i++) {
+
+                
+
+            _result += '<div style="'+(i == 0 ? 'display:block;' : 'display:none;')+'" class="ModuleTemplate" id="ModuleTemplate'+i+'">'+
+                       '<div class="ModuleTemplatediv">'+
+                       '<form action="/Mltx_Merchandise/FigureUploadedFile" method="post" enctype="multipart/form-data" class="dropzone dz-clickable dz-started ModuleUpload" id="myDropzone"' +
+                       'style=" min-height: 130px!important; height: 130px!important; font-size:20px; background-color: #28b779 !important; border: 0; color: #fff; padding: 50px 0; text-align: center;">' +
+                       '选择图片' +
+                       '<input type="hidden" name="shumu" value="1" />' +
+                       '</form>' +
+                       '</div>' +
+                       '<div class="ModuleTemplatediv">' +
+                       '<input type="text" value=""  class="form-control" placeholder="路径" />' +
+                       '</div>' +
+                       '<div class="ModuleTemplatediv" style="display: inline-table;">' +
+                       '<div class="ModuleWechat Module_on" data-WecahtAndApp="'+i+'" data-class="0">微信</div>' +
+                       '<div class="ModuleWechat" data-WecahtAndApp="' + i + '" data-class="1">安卓</div>' +
+                       '</div>' +
+                       '<div class="ModuleTemplatediv">' +
+                       '<input type="text" value=""  class="form-control ModuleApp" placeholder="安卓菜单类型" />' +
+                       '</div>' +
+                       '<div class="ModuleTemplatediv">' +
+                       '<input type="text" value=""  class="form-control ModuleApp" placeholder="安卓菜单参数" />' +
+                       '</div>' +
+                       '</div>';
+
+            ModuleTemplateData[i] = ModuleTemplateJsonAction(i);
+        }
+
+        authcode.dom.getElementById('ModuleTemp').innerHTML = _result;
+    }
+    ModuleTemplateAdd(4);
+    
+    /*
+        转换对象
+    */
+    function ModuleTemplateSerializerJsonAction(a, b, c) {
+        var _result = '';
+        typeof a == 'string' ? ( _result = JSON.parse(a)) : ( _result = JSON.stringify(a));
+        console.log(_result);
+        return _result;
+
+    }
+    /*
+        @@param a 序号
+    */
+    function ModuleTemplateJsonAction(a,b,c) {
+        //webapp 微信或安卓 默认0 微信
+        var _result = '{' +
+            '"ID":'+a+',' +
+            '"Image":"",' +
+            '"URL":"",' +
+            '"WebApp":0,' +
+            '"Type":"",' +
+            '"Value":""' +
+            '}';
+        return _result;
+    }
+        $('.ModuleUpload').click(function () {
+            myDropzone = this;
+        });
+        Dropzone.options.myDropzone = {
+            //指定上传图片的路径
+            url: "/Mltx_Merchandise/FigureUploadedFile",
+
+            //添加上传取消和删除预览图片的链接，默认不添加
+            addRemoveLinks: true,
+            //关闭自动上传功能，默认会true会自动上传
+            //也就是添加一张图片向服务器发送一次请求
+            autoProcessQueue: false,
+            //允许上传多个照片
+            uploadMultiple: true,
+
+            //每次上传的最多文件数，经测试默认为2，坑啊
+            //记得修改web.config 限制上传文件大小的节
+            parallelUploads: 10,
+
+            init: function () {
+                myDropzone = this; // closure
+                var l;
+                this.on("addedfile", function () {
+                    //  $("#myDropzone").find('.dz-remove').text('删除');
+                });
+                $(".image_sub").click(function () {
+
+                    if (myDropzone.files.length == 0) {
+                        box.alert('请选择图片', 1);
+                    } else {
+                        myDropzone.processQueue();
+                    }
+                });
+                $('.image_cancel').click(function () {
+                    try {
+                        img_remove("myDropzone");
+                        myDropzone.files.length = 0;
+                    } catch (e) { }
+                });
+                return false;//阻止提交
+
+                //当上传完成后的事件，接受的数据为JSON格式
+                this.on("complete", function (data) {
+                    if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                        try {
+
+                            if (data.xhr.status == 200) {
+                                var response = JSON.parse(data.xhr.response);
+                            } else {
+                                box.alert('上传失败,请刷新重试', 1);
+                                img_remove("myDropzone");
+                                return false;
+                            }
+                        } catch (e) {
+                            box.alert('上传失败,请重新登录', 1);
+                            img_remove("myDropzone");
+                            return false;
+                        }
+
+                        if (response.Result) {
+                            $.ajax({
+                                url: authcode.dom.getElementById('upload').getAttribute('data-action'),
+                                type: 'post',
+                                data: { mid: menu_id[1], id: menu_id[0], image: response.mingcheng },
+                                dataType: 'json',
+                                beforeSend: function () {
+                                    /*  
+                                        提示
+                                    */
+                                },
+                                async: false,
+                                success: function (data) {
+                                    if (data.errcode == 0) {
+                                        MenuDataoutput("myDropzone", data.menus);
+                                        box.alert(data.errmsg);
+                                        img_remove("myDropzone");
+                                        //
+                                    } else {
+                                        box.alert(data.errmsg, 1);
+                                    }
+                                }
+                            })
+                        } else {
+                            //  response.response;
+                        }
+                    }
+                });
+
+                //删除图片的事件，当上传的图片为空时，使上传按钮不可用状态
+                this.on("removedfile", function () {
+                });
+            }
+        };
+
+
+
+
+
+
+</script>

@@ -1,0 +1,2 @@
+﻿@model Webdiyer.WebControls.Mvc.PagedList<MltxManager.Models.DBModel.Mltx_Ticket>
+

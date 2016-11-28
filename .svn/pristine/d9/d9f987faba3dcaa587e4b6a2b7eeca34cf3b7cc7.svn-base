@@ -1,0 +1,518 @@
+﻿@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>下午茶</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/css/Index.css" rel="stylesheet" type="text/css" @*media="screen and (max-width:539px )"*@ />
+        <link href="/assets/plugins/font-awesome/css/font-awesome.min.css"  rel="stylesheet" type="text/css"/><script src="~/Scripts/iScroll-4.2.5.js"></script>    <link href="/css/fruithome.css" rel="stylesheet" />    <script src="/Scripts/loading.js" type="text/javascript"></script>    <script>
+        var winheight;
+        var defaultParentNodeResult = true;
+        var _translate = null;
+        var _distX = 0;
+        var whiles = true;
+        var winwidth = window.innerWidth;
+        function load() {
+            var _height = window.innerHeight;
+            var _width = window.innerWidth >= 640 ? 640 : window.innerWidth;
+            var headerHeight;
+            var FloatHeight;
+            try {
+                FloatHeight = document.getElementsByClassName('fruitfooter').item(0).clientHeight;
+                headerHeight = document.getElementsByClassName('index_0_header').item(0).clientHeight;
+            } catch (e) {
+                //false
+                FloatHeight = 0;
+            }
+            winheight = _height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2)) + 'px';
+            console.log(_height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2)) + 'px');
+            page_scroll_0.style.height = _height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 1)) + 'px';
+            page_scroll_0.style.width = _width + 'px';
+            myscroll = new iScroll("page_scroll_0", {
+                vScroll: true,
+                vScrollbar: false,
+                vScrollbar: false,
+                bounce: false,
+                lockDirection: true,
+                onBeforeScrollStart: function () {
+                }
+                      ,
+                onScrollMove: function (e) {
+
+                },
+                onBeforeScrollMove: function (e) {
+
+                },
+                onBeforeScrollEnd: function () {
+
+                }
+
+            });
+            document.body.ontouchmove = function (event) {
+
+                event.preventDefault();
+
+            }
+        }
+        window.addEventListener('load', load, false);
+    </script>    <style>
+        .fruit_on {
+            visibility:hidden;
+        }
+    </style>    <script>
+        var freshData = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.fresh))';
+    </script>    </head>            <body>
+                <div class="body">
+          <!-- 头部start  search-->
+                <div class="index_0_header">
+                                <div class="index_0_header_top">
+                                    <ul>
+                                        <li ontouchstart="history.go(-1)">
+                                        <i class="icon-angle-left"></i>
+                                        </li>
+                                        <li>
+                                     <div style="background-color: #fff; color: #64a786; font-size: 16px;font-weight:bold;">
+                                            鲜果
+                                        </div>
+                                        </li>
+                                       <li>
+
+                                       </li>
+                                    </ul>
+                                </div>
+                </div>
+          <!-- 头部end -->
+                    <!-- 列表start -->
+                    <div id="page_scroll_0">
+                        <div>
+                            <ul class="fruitList">
+                             @*   <li>
+                                    <a href="www.baidu.com">
+                                    <div>
+                                        <img src="" />
+                                    </div>
+                                    <div>
+                                        <span class="fruit_title">越南红心火龙果</span>
+                                        <span class="fruit_ms">1个装</span>
+                                        <span>
+                                            <span class="fruit_rmb">¥</span>
+                                            <span class="fruit_price">19.00</span>
+                                        </span>
+                                      
+                                    </div>
+                                    </a>
+                                      <div>
+                                            <div class="fruit_jian fruit_on">-</div>
+                                            <div class="fruit_val fruit_on">0</div>
+                                            <div class="fruit_jia">+</div>
+                                        </div>
+                                </li>
+                                  <li>
+                                    <a href="www.baidu.com">
+                                    <div>
+                                        <img src="" />
+                                    </div>
+                                    <div>
+                                        <span class="fruit_title">越南红心火龙果</span>
+                                        <span class="fruit_ms">1个装</span>
+                                        <span>
+                                            <span class="fruit_rmb">¥</span>
+                                            <span class="fruit_price">19.00</span>
+                                        </span>
+                                      
+                                    </div>
+                                    </a>
+                                      <div>
+                                            <div class="fruit_jian fruit_on">-</div>
+                                            <div class="fruit_val fruit_on">0</div>
+                                            <div class="fruit_jia">+</div>
+                                        </div>
+                                </li>
+                                  <li>
+                                    <a href="www.baidu.com">
+                                    <div>
+                                        <img src="" />
+                                    </div>
+                                    <div>
+                                        <span class="fruit_title">越南红心火龙果</span>
+                                        <span class="fruit_ms">1个装</span>
+                                        <span>
+                                            <span class="fruit_rmb">¥</span>
+                                            <span class="fruit_price">19.00</span>
+                                        </span>
+                                      
+                                    </div>
+                                    </a>
+                                      <div>
+                                            <div class="fruit_jian fruit_on">-</div>
+                                            <div class="fruit_val fruit_on">0</div>
+                                            <div class="fruit_jia">+</div>
+                                        </div>
+                                </li>
+                                  <li>
+                                    <a href="www.baidu.com">
+                                    <div>
+                                        <img src="" />
+                                    </div>
+                                    <div>
+                                        <span class="fruit_title">越南红心火龙果</span>
+                                        <span class="fruit_ms">1个装</span>
+                                        <span>
+                                            <span class="fruit_rmb">¥</span>
+                                            <span class="fruit_price">19.00</span>
+                                        </span>
+                                      
+                                    </div>
+                                    </a>
+                                      <div>
+                                            <div class="fruit_jian fruit_on">-</div>
+                                            <div class="fruit_val fruit_on">0</div>
+                                            <div class="fruit_jia">+</div>
+                                        </div>
+                                </li>
+                                  <li>
+                                    <a href="www.baidu.com">
+                                    <div>
+                                        <img src="" />
+                                    </div>
+                                    <div>
+                                        <span class="fruit_title">越南红心火龙果</span>
+                                        <span class="fruit_ms">1个装</span>
+                                        <span>
+                                            <span class="fruit_rmb">¥</span>
+                                            <span class="fruit_price">19.00</span>
+                                        </span>
+                                      
+                                    </div>
+                                    </a>
+                                      <div>
+                                            <div class="fruit_jian fruit_on">-</div>
+                                            <div class="fruit_val fruit_on">0</div>
+                                            <div class="fruit_jia">+</div>
+                                        </div>
+                                </li>
+                                  <li>
+                                    <a href="www.baidu.com">
+                                    <div>
+                                        <img src="" />
+                                    </div>
+                                    <div>
+                                        <span class="fruit_title">越南红心火龙果</span>
+                                        <span class="fruit_ms">1个装</span>
+                                        <span>
+                                            <span class="fruit_rmb">¥</span>
+                                            <span class="fruit_price">19.00</span>
+                                        </span>
+                                      
+                                    </div>
+                                    </a>
+                                      <div>
+                                            <div class="fruit_jian fruit_on">-</div>
+                                            <div class="fruit_val fruit_on">0</div>
+                                            <div class="fruit_jia">+</div>
+                                        </div>
+                                </li>
+                                  <li>
+                                    <a href="www.baidu.com">
+                                    <div>
+                                        <img src="" />
+                                    </div>
+                                    <div>
+                                        <span class="fruit_title">越南红心火龙果</span>
+                                        <span class="fruit_ms">1个装</span>
+                                        <span>
+                                            <span class="fruit_rmb">¥</span>
+                                            <span class="fruit_price">19.00</span>
+                                        </span>
+                                      
+                                    </div>
+                                    </a>
+                                      <div>
+                                            <div class="fruit_jian fruit_on">-</div>
+                                            <div class="fruit_val fruit_on">0</div>
+                                            <div class="fruit_jia">+</div>
+                                        </div>
+                                </li>
+                                  <li>
+                                    <a href="www.baidu.com">
+                                    <div>
+                                        <img src="" />
+                                    </div>
+                                    <div>
+                                        <span class="fruit_title">越南红心火龙果</span>
+                                        <span class="fruit_ms">1个装</span>
+                                        <span>
+                                            <span class="fruit_rmb">¥</span>
+                                            <span class="fruit_price">19.00</span>
+                                        </span>
+                                      
+                                    </div>
+                                    </a>
+                                      <div>
+                                            <div class="fruit_jian fruit_on">-</div>
+                                            <div class="fruit_val fruit_on">0</div>
+                                            <div class="fruit_jia">+</div>
+                                        </div>
+                                </li>*@
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- 列表end -->
+                    <!-- 页脚start -->
+                    <div class="fruitfooter">
+                        <!-- 存在商品,点击时伸展此div效果 -->
+                        <div>
+                          
+                            <div id="fruitcart" class="fruityuan">
+                                <i class="icon-shopping-cart"></i>
+                                <i id="fruit_shopping_count" class="fruit_shoppingcartCount">
+                                    0
+                                </i>
+                            </div>
+                              <!-- 当有商品存在,点击展开 -->
+                            <div class="fruitshoppingList" id="fruitshoppingList">
+                                <div class="fruitRemove">
+                                    <div class="fruitRemoveClick">清空</div>
+                                </div>
+                                    <!-- 数据区域start -->
+                               <ul class="fruitList shoppingfruitList">
+                                <li>
+                                    <a href="#">
+                                    <div>
+                                        <span>
+                                        <span class="fruit_title">越南红心火龙果</span>
+
+                                            <span class="fruit_rmb">¥</span>
+                                            <span class="fruit_price">19.00</span>
+                                        </span>
+                                      
+                                    </div>
+                                    </a>
+                                      <div >
+                                            <div class="fruit_jian">-</div>
+                                            <div class="fruit_val">0</div>
+                                            <div class="fruit_jia">+</div>
+                                        </div>
+                                </li>
+                              </ul>
+                                <!-- 数据区域end -->
+
+
+                            </div>
+                            <div class="fruitshoppingmu"></div>
+                        </div>
+                        <div>
+                            <span>¥</span>
+                            <span id="fruitPriceCount">00.00</span>
+                        </div>
+                        <div >
+                            <div class="fruitfooter_sub_on">
+                              立即结算
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 页脚end -->
+          </div>
+
+                <script src="/Scripts/jquery-1.8.2.min.js"></script>
+                <script src="/Scripts/FruitCookie.js" type="text/javascript"></script>
+                <script>
+                    var _userid = 'mltxfruit', displays = false;
+                    var _calss = 0;
+                    function fruitfooterAction() {
+                        var fruitfooter = $('.fruitfooter').find('div').eq(0);
+                        var _fruiWidth = fruitfooter.width();
+                        fruitfooter.find('div').eq(0).css('left', ((_fruiWidth - 50) / 2));
+                        for (var i = 0; i < $('.fruitList > li > div').length; i++) {
+                            $('.fruitList > li > div').eq(i).attr('data-id', 11 + i);
+                            //if (11 + i == 19) {
+                            //    $('.fruitList > li > div').eq(i).attr('data-id', 12);
+                            //}
+                        }
+                        //输出数据
+                        $('.fruitList').eq(0).html(fruitcookieMain.fruitListData(freshData, _calss, '/Mltx_Template/fruitDetail'));//第三个参数为路径
+
+                        if (getCookie(_userid) != '') {
+                            var _count = 0,_prices = 0;
+                            var fruit_data = getCookie(_userid);
+                            var ulList_Target = $('.fruitList > li');
+                            fruit_data = JSON.parse(fruit_data);
+                            for (var i = 0; i < fruit_data.length; i++) {
+                                if (ulList_Target.find('div[data-id=' + fruit_data[i].id + ']').length > 0) {
+                                    var ulfinddiv = ulList_Target.find('div[data-id=' + fruit_data[i].id + ']');
+                                    var span_price = ulfinddiv.parent().find('a').find('div').eq(1).find('span').eq(2).find('span[class=fruit_price]');
+                                    ulfinddiv.find('.fruit_on').removeClass('fruit_on');
+                                    ulfinddiv.find('.fruit_val').html(fruit_data[i].count);
+                                    _count += fruit_data[i].count;
+                                    _prices += Number(span_price.text()) * fruit_data[i].count;
+                                   
+                                }
+                            }
+                            //初始化数据值
+                            _count > 0 && (fruitcookieMain.fruit_count.className = fruitcookieMain.fruit_count.className + ' '+fruitcookieMain.fruit_count_on+'',
+                            fruitcookieMain.fruit_cart.className = fruitcookieMain.fruit_cart.className+' '+fruitcookieMain.fruit_cart_on+'');
+                            fruitcookieMain.fruit_count.innerHTML = _count;
+                            fruitPriceCount.innerHTML = fruitcookieMain.Price(getCookie(_userid));
+                        }
+                    }
+                    fruitfooterAction();
+                    $('.fruitList > li > div').on('click', function () {
+                        var _target = event.target;
+                        var _fruitValue = _target.parentNode.children[1];
+                        var _fruitValueHTML = _fruitValue.innerHTML;
+                        var _id = Number(_target.parentNode.getAttribute('data-id'));
+                        switch (_target.getAttribute('class')) {
+                            case 'fruit_jia':
+                                $(_target.parentNode).find('.fruit_on').removeClass('fruit_on');
+                                _fruitValue.innerHTML = Number(_fruitValueHTML) + 1;
+                                fruitcookieMain.Add(_userid, _id, 1, _calss, 0);
+                                break;
+                            case 'fruit_jian':
+                                _fruitValue.innerHTML = (Number(_fruitValueHTML) <= 0 ? 0 : Number(_fruitValueHTML) - 1);
+                                fruitcookieMain.Add(_userid, _id, 1, _calss, 1);
+                                if (Number(_fruitValueHTML) <= 1) {
+                                    $(_target.parentNode).find('.fruit_jian,.fruit_val').addClass('fruit_on')
+                                }
+                                break;
+                        }
+                        console.log(fruitcookieMain.Price(getCookie(_userid)));
+                        fruitPriceCount.innerHTML = fruitcookieMain.Price(getCookie(_userid));
+                    });
+                    /*
+                        购物车操作
+                    */
+                    $('.shoppingfruitList > li > div').live('click', function () {
+                        var _target = event.target;
+                        var _fruitValue = _target.parentNode.children[1];
+                        var _fruitValueHTML = _fruitValue.innerHTML;
+                        var _id = Number(_target.parentNode.getAttribute('data-id'));
+                        var fruitListobj = $('.fruitList').find('li').find('div[data-id=' + _id + ']');
+                        switch (_target.getAttribute('class')) {
+                            case 'fruit_jia':
+                                $(_target.parentNode).find('.fruit_on').removeClass('fruit_on');
+                                _fruitValue.innerHTML = Number(_fruitValueHTML) + 1;
+                                fruitcookieMain.Add(_userid, _id, 1, _calss, 0);
+                                break;
+                            case 'fruit_jian':
+                                _fruitValue.innerHTML = (Number(_fruitValueHTML) <= 0 ? 0 : Number(_fruitValueHTML) - 1);
+                                fruitcookieMain.Add(_userid, _id, 1, _calss, 1);
+                                if (Number(_fruitValueHTML) <= 1) {
+                                    _target.parentNode.parentNode.remove();
+                                    fruitListobj.parent().find('.fruit_jian,.fruit_val').addClass('fruit_on');
+                                    fruitListobj.parent().find('.fruit_val').text(0);
+                                    shopping_window_height_Add_Remove();
+                                }
+                                break;
+                        }
+                        //更新对应列表下数值
+                      
+                      fruitPriceCount.innerHTML = fruitcookieMain.Price(getCookie(_userid));
+                      if (getCookie(_userid) == '') {
+                          //执行清空
+                          allRemove(false);
+                      } else {
+                          fruitListobj.find('.fruit_val').html(fruitcookieMain.fruitCount(_calss, JSON.parse(getCookie(_userid)), _id));
+                      }
+                    });
+                    /*
+                        重置购物车高度
+                    */
+                    function shopping_window_height_Add_Remove(a) {
+                        var fruitshoppingheight = fruitshoppingList;
+                        fruitshoppingheight.style.height = fruitshoppingheight.clientHeight - 46;
+
+                    
+                    }
+                    /*
+                        清空
+                    */
+                    $('.fruitRemoveClick').on('click', function () {
+                        allRemove(true);
+                    });
+                    /*
+                        清空
+                        @@param a 主动调用 true 被动调用 false
+                        
+                    */
+                    function allRemove(a) {
+                        var _win_Width = window.innerWidth;
+                        var _win_height_0 = window.innerHeight;
+                        var _win_height = 0; //高度
+                        var _bottom = 50;//固定值
+                        var fruitshoppingListobj = $('#fruitshoppingList');
+                        fruitshoppingListobj.animate({ 'height': 0 }, 500);
+                        $('.fruitshoppingmu').css('width', _win_Width).css('height', _win_height_0 - _bottom).hide();
+                        _bottom = _win_height + _bottom + 10;
+                        $("#fruitcart").animate({ 'bottom': 0 }, 500);
+                        setTimeout(function () {
+                            $("#fruitcart").css('top', '-10px').css('position', 'absolute!important').css('margin', 'initial');
+                            fruitshoppingListobj.css('width', 0).css('bottom', 0)
+                       .css('border-radius', 0).hide();
+                        }, 500);
+                        displays = false;
+                        if (a) {
+                            //主动调用清除数据
+                            var fruit_data = JSON.parse(getCookie(_userid));
+                            var _fruitListfind = $('.fruitList > li');
+                            for (var i = 0; i < fruit_data.length; i++) {
+                                var _div_id = _fruitListfind.find('div[data-id=' + fruit_data[i].id + ']');
+                                _div_id.find('.fruit_jian,.fruit_val').addClass('fruit_on');
+                                _div_id.find('.fruit_val').text(0);
+                                $(fruitcookieMain.fruit_cart).removeClass('fruit_shoppingcart_on');
+                                $(fruitcookieMain.fruit_count).removeClass(fruitcookieMain.fruit_count_on);
+                                $(fruitPriceCount).text('00.00');
+                            }
+                            setCookie(_userid, '');
+                            fruitcookieMain.initData = [];
+                        }
+
+                    }
+                    $('#fruitcart,.fruitshoppingmu').on('click', function () {
+                        var _self = this;
+                        var _win_Width = window.innerWidth;
+                        var _win_height_0 = window.innerHeight;
+                        var _win_height = 0; //高度
+                        var _bottom = 50;//固定值
+                        var fruitshoppingListobj = $('#fruitshoppingList');
+                        if (getCookie(_userid) == '') { return false; }
+                        if (!displays) {
+                            //开启
+                            var fruit_data = JSON.parse(getCookie(_userid));
+                            _win_height = 46 * Number(fruitcookieMain.NumberCount(_calss, fruit_data)) + 36;
+                            fruitshoppingListobj.css('width', _win_Width).css('bottom', 50)
+                            .css('border-radius', 0).show().animate({ 'height': _win_height }, 500);
+                            //.css('transform', 'translate(0px, -50px)').css('transition-property', 'transform')
+                            //.css('transition', '-webkit-transform 500ms');
+                            $('.fruitshoppingmu').css('width', _win_Width).css('height', _win_height_0 - _bottom).show();
+                            _bottom = _win_height + _bottom + 10;
+                            $(_self).css('top', 'inherit').css('position', 'fixed!important').css('margin', 0)
+                            .animate({ 'bottom': _bottom }, 500);
+                            displays = true;
+                            //加载数据
+                            $('.shoppingfruitList').html(fruitcookieMain.HTMLData(getCookie(_userid), _calss));
+                        } else {
+                            //关闭
+                            fruitshoppingListobj.animate({ 'height': 0 }, 500);
+                            $('.fruitshoppingmu').css('width', _win_Width).css('height', _win_height_0 - _bottom).hide();
+                            _bottom = _win_height + _bottom + 10;
+                            $("#fruitcart").animate({ 'bottom': 0 }, 500);
+                            setTimeout(function () {
+                                $("#fruitcart").css('top', '-10px').css('position', 'absolute!important').css('margin', 'initial');
+                                fruitshoppingListobj.css('width', 0).css('bottom', 0)
+                           .css('border-radius', 0).hide();
+                            }, 500);
+                            displays = false;
+                        }
+                    });
+                    
+                </script>
+      </body>
+    </html>

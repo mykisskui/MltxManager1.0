@@ -1,0 +1,5 @@
+﻿@{
+    ViewBag.Title = "MallComment";
+}
+
+<h2>MallComment</h2>

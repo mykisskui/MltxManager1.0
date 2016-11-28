@@ -1,0 +1,7 @@
+﻿
+@using MltxManager.Models.DBModel
+@model Webdiyer.WebControls.Mvc.PagedList<MltxManager.Models.DBModel.Mltx_foretaste_report>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}

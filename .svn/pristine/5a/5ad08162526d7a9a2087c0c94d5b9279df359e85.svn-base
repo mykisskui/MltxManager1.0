@@ -1,0 +1,8 @@
+﻿@model MltxManager.Models.DBModel.Mltx_Ticket
+<div class="form-group">
+    <label class="col-md-5 control-label text-">该提货券对应的水果为：</label>
+    <div class="col-md-5">
+        <input type="text" id="thqhm" name="thqhm" class="form-control" value="@Model.Goods.GoodsName" style="width: 238px" readonly placeholder=""/>
+        <input type="hidden" name="name" value="@Model.Id" id="tihqid"/>
+    </div>
+</div>

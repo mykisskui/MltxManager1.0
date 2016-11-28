@@ -1,0 +1,66 @@
+﻿using MltxManager.Data;
+using MltxManager.Models.DBHelper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace MltxManager.WebService.SmsInterface
+{
+    /// <summary>
+    /// RegSmsCode 的摘要说明
+    /// </summary>
+    /// http://sms.tfresh.cn/SmsInterface/RegSmsCode?uphone=15151532535&ucode=xxx
+    public class RegSmsCode : IHttpHandler
+    {
+
+        public void ProcessRequest(HttpContext context)
+        {
+            context.Response.ContentType = "text/plain";
+            string msg = null;
+            string User_Phone = context.Request.Params["uphone"];
+            string User_Code = context.Request.Params["ucode"];
+            ReturnMsg rmsg = new ReturnMsg();
+            SmsData sd = new SmsData();
+
+            rmsg = sd.GetMemberInfo(User_Phone);
+            if (rmsg.errcode == 0)//有数据
+            {
+                if (rmsg.MemberInfo.UserCode != User_Code)
+                {
+                    msg = String.Format("9999|验证码不对");
+                }
+                else
+                {
+                    string emsg = sd.AddOrUpdateMemberInfo(User_Phone, User_Code, null);
+                    if (emsg == "error")
+                    {
+                        msg = String.Format("9999|验证失败，请重新获取验证码");
+                    }
+                    else
+                    {
+                        msg = String.Format("0000|验证成功");
+                    }
+                }
+            }
+            else if (rmsg.errcode == 1)//没有信息 请先获取验证码
+            {
+                msg = String.Format("9999|先进行验证码申请，才能完成注册");
+            }
+            else 
+            {
+                msg = String.Format("9999|验证异常;" + rmsg.errmsg);
+            }
+
+            context.Response.Write(msg);
+        }
+
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+}

@@ -1,0 +1,214 @@
+﻿@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>我的订单</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/css/Index.css" rel="stylesheet" type="text/css" @*media="screen and (max-width:539px )"*@ />
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/mallList.css" rel="stylesheet" />
+    <link href="~/css/weixin/example.css" rel="stylesheet" />
+    <link href="~/css/weixin/weui.css" rel="stylesheet" />
+    <link href="~/css/mallorderlist.css" rel="stylesheet" />
+    <script src="~/assets/plugins/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/iScroll-4.2.5.js"></script>
+    <script src="~/Scripts/loading.js"></script>
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/cookiedata.js"></script>
+    <script src="~/Scripts/weixin/zepto.min.js"></script>
+    <script src="~/Scripts/weixin/example.js"></script>
+    <script>
+        var myscroll
+        function load() {
+            var _height = window.innerHeight;
+            var headerHeight = document.getElementsByClassName('index_0_header').item(0).clientHeight + document.getElementsByClassName("listclassy").item(0).clientHeight + 2;
+            page_scroll_0.style.height = _height - headerHeight  + 'px';
+          
+            myscroll = new iScroll("page_scroll_0", {
+                vScroll: true,
+                vScrollbar: false,
+                vScrollbar: false,
+                bounce: true,
+                momentum: true,
+                onBeforeScrollStart: function () {
+                }
+            });
+
+            document.body.ontouchmove = function (event) {
+                event.preventDefault();
+            }
+        }
+        window.addEventListener('load', load, false);
+    </script>
+</head>
+<body>
+    <script>
+        var orderData = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.orderData))';
+    </script>
+
+    <div class="body">
+        <!-- 头部start  search-->
+        <div class="index_0_header">
+            <div class="index_0_header_top">
+                <ul>
+                    <li ontouchstart="history.go(-1)">
+                        <i class="icon-angle-left" ></i>
+                    </li>
+                    <li>
+                        <div style="background-color: #fff; color: #64a786; font-size: 16px">
+                            我的订单
+                        </div>
+                    </li>
+                    <li ontouchstart="">
+                        <i class=""></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 头部end -->
+
+         <!--订单状态 start-->
+        <div class="listclassy" style=" border-top:0;   border-bottom: 2px solid #eee;background-color:#eee">
+                <div ontouchstart="sortList(this,1)" data-cls="chose">未完成</div>
+                <div ontouchstart="sortList(this,0)" data-cls="nochose">已完成</div>
+                <div ontouchstart="sortList(this,-1)" data-cls="nochose">已取消</div>
+        </div>        
+        <!--订单状态 end-->
+
+        <!-- 订单列start -->
+        <div  id="page_scroll_0" style="background-color:#eee">
+            <div id="order_list" style="overflow: hidden;">
+                <ul style="list-style-type:none">
+                   
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- 订单列end -->
+
+
+   
+
+
+    </div>
+
+    <script src="~/Scripts/weixin/confirm_self.js"></script>
+    <script>
+        window.onload = function () {
+            InitOrderdata(orderData);
+        }
+
+        function sortList(e, state) {
+
+            //修改样式
+            var ajax_ext = true;
+            if ($(e).attr("data-cls") == "chose") {
+                ajax_ext = false;
+            }
+            var divlist = document.getElementsByClassName("listclassy")[0].children;
+            var group_id = '';
+            for (var i = 0; i < divlist.length; i++) {
+                if (divlist[i] == e) {
+                    $(e).css("background-color", "#fff");
+                    $(e).css("color", "#6CA94B");
+                    $(e).attr("data-cls", "chose");
+                }
+                else {
+                    $(divlist[i]).css("background-color", "#6CA94B");
+                    $(divlist[i]).css("color", "#fff");
+                    $(divlist[i]).attr("data-cls", "nochose");
+                }
+            }
+
+            console.log(ajax_ext);
+            if (ajax_ext) {
+                var login_id = getCookie("mltxuserid");
+                if (login_id == '') {
+                    //登陆信息已失效，去登陆页
+                    location.href = "/Mltx_MallClass/MallLogin";
+                }
+                $.ajax({
+                    url: "/Mltx_MallClass/_getmyorderByState",
+                    type: "post",
+                    data: { uid: login_id, state: state },
+                    beforeSend: function () {
+                        showLoading();
+                    },
+                    success: function (data) {
+                        if (data === '-1') {
+                            //数据异常
+                        } else if (data == '1') {
+                            //参数缺失
+                        }
+                        else {
+                            ///显示数据
+                            InitOrderdata(data);
+                        }
+                    },
+                    complete: function () {
+                        removeLoading();
+                    }
+                });
+            }
+
+        }
+
+        function InitOrderdata(odata) {
+            var json = eval("(" + odata + ")");
+            var ul = order_list.getElementsByTagName("ul")[0];
+            var str = '';
+            var str_btom = '';
+            var ulr_details = '';
+
+            for (var i = 0; i < json.length; i++) {
+                var state = '';
+                ulr_details = "/Mltx_MallClass/MallMyOrderDetails?oid=" + json[i].oid;
+                switch (json[i].state) {
+                    case "-1": state = "已取消"; break;
+                    case "0": state = "已完成"; break;
+                    case "1": state = "未付款"; str_btom = '<div class="btn_orderinfo"><div class="btn_borderdiv"><div class="btncancel_orderinfo">取消订单</div><div class="btnok_orderinfo">立即支付</div></div></div>'; break;
+                    case "2": state = "待发货"; break;
+                    case "3": state = "发货中"; break;
+                    case "4": state = "未付款"; str_btom = '<div class="btn_orderinfo"><div class="btn_borderdiv"><div class="btncancel_orderinfo">取消订单</div><div class="btnok_orderinfo">立即支付</div></div></div>'; break;
+                    case "5": state = "货到付款"; break;
+                    case "6": state = "待自提"; break;
+                    case "7": state = "待评价"; break;
+                    default: state = "无效订单"; break;
+                }
+                str += '<li class="orderlist_li"><div class="header_orderinfo">' +
+                           '<div>订单编号: ' + json[i].oid + '</div>' +
+                           '<div>' + state + '</div>' +
+                       '</div>' +
+                       '<a href=' + ulr_details + '><div class="content_orderinfo">' +
+                           '<div class="content_divimg">' +
+                               '<img class="content_divimg_img" src="' + json[i].gpic + '"/>' +
+                           '</div>' +
+                           '<div class="content_divinfo">' +
+                               '<div >' + json[i].oname + '</div>' +
+                               '<div >' + json[i].guige + '</div>' +
+                           '</div>' +
+                           '<div class="content_divcount">x' + json[i].count + '</div>' +
+                       '</div></a>' +
+                      ' <div class="paycount_orderinfo">' +
+                        '共<span>' + json[i].sumcount + '</span>个商品 实付金额:<span>￥' + json[i].totals + '</span>' +
+                       '</div>' + str_btom +
+                       '</li>';
+            }
+            console.log(str);
+
+            ul.innerHTML = str;
+        }
+    </script>
+
+</body>
+
+</html>
+

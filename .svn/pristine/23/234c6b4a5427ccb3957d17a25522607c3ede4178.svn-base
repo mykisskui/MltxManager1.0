@@ -1,0 +1,84 @@
+﻿using MltxManager.Models.DBModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Script.Serialization;
+
+namespace MltxManager.Controllers
+{
+    public class Mltx_TemplateController : Controller
+    {
+
+        private MltxDbContext db = new MltxDbContext();
+        /// <summary>
+        /// 首页
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Index()
+        {
+            IEnumerable<Mltx_Slide> slides = null;
+            IEnumerable<Mltx_Menu> menus = null;
+            IEnumerable<Mltx_IndexModule> modules = null;
+
+            try {
+                slides = db._slide.OrderBy(f => f.sort);//所有幻灯片数据
+                menus = db._menu.OrderBy(f => f.Sort);//所有菜单数据
+                modules = db.index_m;//所有首页模块
+                /*
+                    微信端不区分(web,安卓)
+                 */
+
+                foreach (Mltx_IndexModule item in modules) {
+                   // byte[] bytes = Encoding.UTF8.GetBytes(item.Value);
+                  //  item.Value = Convert.ToBase64String(bytes);
+                    item.Value = HttpUtility.UrlEncode(item.Value);
+                    
+                }
+
+                ViewBag.slides = json<Mltx_Slide>(slides.ToList());
+                ViewBag.menus = json<Mltx_Menu>(menus.ToList());
+                ViewBag.modules = json<Mltx_IndexModule>(modules.ToList());
+
+            }
+            catch {
+                    
+            }
+            
+            
+            return View();
+        }
+        /// <summary>
+        /// 搜索
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult search()
+        {
+            try { }
+            catch { }
+            return View();
+        }
+
+        /// <summary>
+        /// 泛型转换json
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public string json<T>(List<T> t) {
+            string result = string.Empty;
+            try
+            {
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                result = js.Serialize(t);
+            }
+            catch {
+                result = string.Format("{0}", "error");
+            }
+            return result;
+        }
+
+    }
+}

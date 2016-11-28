@@ -1,0 +1,277 @@
+﻿@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>购物车</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/css/Index.css" rel="stylesheet" type="text/css" @*media="screen and (max-width:539px )"*@ />
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/mallList.css" rel="stylesheet" />
+    <link href="~/css/weixin/example.css" rel="stylesheet" />
+    <link href="~/css/weixin/weui.css" rel="stylesheet" />
+    <script src="~/assets/plugins/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/iScroll-4.2.5.js"></script>
+    <script src="~/Scripts/loading.js"></script>
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/cookiedata.js"></script>
+    <script src="~/Scripts/weixin/zepto.min.js"></script>
+    <script src="~/Scripts/weixin/example.js"></script>
+    <script>
+        var myscroll
+        function load() {
+            var _height = window.innerHeight;
+            var headerHeight = document.getElementsByClassName('index_0_header').item(0).clientHeight;
+            var FloatHeight = document.getElementsByClassName('index_0_FloatMenu').item(0).clientHeight;
+            var shopcarHeight = document.getElementsByClassName('shopcar_float').item(0).clientHeight;
+            page_scroll_0.style.height = _height - headerHeight - shopcarHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2)) + 'px';
+          
+            myscroll = new iScroll("page_scroll_0", {
+                vScroll: true,
+                vScrollbar: false,
+                vScrollbar: false,
+                bounce: true,
+                momentum: true,
+                onBeforeScrollStart: function () {
+                }
+            });
+
+            document.body.ontouchmove = function (event) {
+                event.preventDefault();
+            }
+        }
+        window.addEventListener('load', load, false);
+    </script>
+</head>
+<body>
+    <script>
+        var userid = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.userid))';
+        var shopcarData = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.shopcarData))';
+    </script>
+
+    <div class="body">
+        <!-- 头部start  search-->
+        <div class="index_0_header">
+            <div class="index_0_header_top">
+                <ul>
+                    <li ontouchstart="history.go(-1)">
+                        <i class="icon-angle-left" ></i>
+                    </li>
+                    <li>
+                        <div style="background-color: #fff; color: #64a786; font-size: 16px">
+                            购物车
+                        </div>
+                    </li>
+                    <li ontouchstart="clearshopcar()">
+                        <i class="icon-trash"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 头部end -->
+
+        <!-- 品类start -->
+        <div  id="page_scroll_0">
+            <div id="divlist" style="overflow: hidden">
+                <ul>
+                   
+
+                </ul>
+            </div>
+        </div>
+        <!-- 品类end -->
+
+        <!--购物车结算start-->
+        <div class="shopcar_float" id="shopcar_float">
+            <span id="span_sumprice" data-price=""></span>
+            <div ontouchstart="toOrderPage()">立即结算</div>
+        </div>
+        <!--购物车结算end-->
+
+        <!-- 商城页脚 start -->
+        <div class="index_0_FloatMenu">
+            <ul>
+                <li>
+                    <div>
+                        <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                    </div>
+                    <span>主页</span>
+                </li>
+                <li>
+                    <div>
+                        <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                    </div>
+                    <span>品类</span>
+                </li>
+                <li>
+                    <div>
+                        <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                    </div>
+                    <span style="color:#6CA94B">购物车</span>
+                </li>
+                <li>
+                    <div>
+                        <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                    </div>
+                    <span>这是菜单</span>
+                </li>
+                <li>
+                    <div>
+                        <img src="http://www.atool.org/placeholder.png?size=640x260&text=640x260&&bg=ccc&fg=fff" />
+                    </div>
+                    <span>这是菜单</span>
+                </li>
+
+            </ul>
+        </div>
+        <!-- 商城页脚 end -->
+
+
+
+    </div>
+
+    <script src="~/Scripts/weixin/confirm_self.js"></script>
+    <script>
+       
+        window.onload = function () {
+            InitData();
+        }
+
+        function InitData() {
+            var json = eval("(" + shopcarData + ")");
+            var ul = divlist.getElementsByTagName("ul")[0];
+            var str = '';
+            if (json.data.length == 0){
+                $("#shopcar_float").css("visibility", "hidden");//购物车为空
+            }
+            else {
+                for (var i = 0; i < json.data.length; i++) {
+                    var _url = "/Mltx_MallClass/MallDetails?goodid=" + json.data[i].gid;
+                    str += '<li><div class="divimg"><a href="'+_url+'"><img src="' + json.data[i].gpic + '" data-original ="' + json.data[i].gpic + '"/></a></div>' +
+                           '<div class="divcontent">' +
+                               '<div class="divname">' + json.data[i].gname + '</div>' +
+                               '<div class="divguige">' + json.data[i].guige + '</div>' +
+                               '<div class="divprice" data-price="' + json.data[i].rprice + '">￥' + json.data[i].rprice + '</div>' +
+                            '</div>' +
+                             '<div class="divend"><div class="divremove" data-id="'+json.data[i].gid+'" ontouchstart="removeCar(this)"><i class="icon-remove"></i></div>' +
+                                 '<div class="divshoping">' +
+                                    '<span class="span_jian span_jian_shopcar" id="jian' + json.data[i].gid + '"  data-id="' + json.data[i].gid + '" ontouchstart="shop_jian_shopcar(this)">-</span>' +
+                                    '<span class="span_value span_value_shopcar" id="span' + json.data[i].gid + '">' + json.data[i].count + '</span>' +
+                                    '<span class="span_jia" data-id="' + json.data[i].gid + '" ontouchstart="shop_jia_shopcar(this)">+</span>' +
+                                '</div></div></li>';
+                }
+
+                ul.innerHTML = str;
+                span_sumprice.innerText = "￥" + json.sumPrice;
+                span_sumprice.setAttribute("data-price", json.sumPrice);
+                myscroll.refresh();
+            }
+
+        }
+
+        ///修改总价 仅用于页面展示
+        function ChangeSumPrice() {
+            var sum_price = 0;
+            //计算总价格
+            var li_list = document.getElementById("divlist").getElementsByTagName("ul")[0].children;
+
+            for (var i = 0; i < li_list.length; i++) {
+                var _price = parseFloat(li_list[i].getElementsByClassName("divprice")[0].getAttribute("data-price")).toFixed(2);
+                console.log(_price);
+                var _count = li_list[i].getElementsByClassName("span_value")[0].innerText;
+                sum_price = sum_price + (_price * parseInt(_count));
+
+            }
+            console.log(sum_price);
+            span_sumprice.innerText = "￥" + sum_price.toFixed(2);
+        }
+
+        function shop_jia_shopcar(e) {
+            var gid = e.getAttribute("data-id");
+            var span_id = "span" + gid;
+            var count = $("#" + span_id).text();
+            if (count >= 99)
+                return false;
+            var c = parseInt(count) + 1;
+            $("#" + span_id).text(c);
+
+            addData(gid);
+            ChangeSumPrice();
+        }
+
+        function shop_jian_shopcar(e) {
+            var gid = e.getAttribute("data-id");
+            var span_id = "span" + gid;
+
+            var count = $("#" + span_id).text();
+            if (count == '1') {
+                var _remove = function () {
+                    var _li = $(e).parents("li");
+                    _li.remove();
+                    removeData(gid);
+                    ChangeSumPrice();
+                }
+                dialog.comfirm("确认删除？", _remove, "");
+            }
+            else {
+                var c = parseInt(count) - 1;
+                $("#" + span_id).text(c);
+                removeData(gid);
+                ChangeSumPrice();
+            }
+
+        }
+
+        //删除一条购物车记录
+        function removeCar(e) {
+            var _removeCar = function () {
+                var gid = e.getAttribute("data-id");
+                var _li = $(e).parents("li");
+                _li.remove();
+                removeData_all(gid);
+                ChangeSumPrice();
+            }
+
+            dialog.comfirm("确认删除？", _removeCar, "");
+        }
+
+        //清空购物车
+        function clearshopcar() {
+            var _clearshopcar = function(){
+                $("#shopcar_float").css("visibility", "hidden");
+                divlist.getElementsByTagName("ul")[0].innerHTML = '';
+                clearCookie(userid);
+            }
+
+            dialog.comfirm("确认清空购物车？", _clearshopcar, "");
+        }
+
+        ///下订单
+        function toOrderPage() {
+            var _login = function () {
+                location.href = "http://www.baidu.com";//去登陆
+            }
+            
+            var login_user_id = getCookie('mltxuserid');
+            console.log(login_user_id);
+            if (login_user_id == '') {
+                //未登录，先登录
+                dialog.comfirm("抱歉，你还没有注册或登陆", _login, "", "", "去注册登陆");
+            } else {
+                location.href = "/Mltx_MallClass/DoOrder?login_id=" + login_user_id;
+            }
+        }
+       
+    </script>
+
+</body>
+
+</html>
+

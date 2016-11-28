@@ -1,0 +1,376 @@
+﻿@using MltxManager.Models.DBModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/css/box.css" rel="stylesheet" />
+<script src="/Scripts/box.js"></script>
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script src="/uploadify/jquery.uploadify.js"></script>
+<link href="~/Scripts/dropzone/dropzone.css" rel="stylesheet" />
+<script src="~/Scripts/dropzone/dropzone.js"></script>
+<!--主要样式-->
+<style>
+    .tree {
+        min-height: 20px;
+        padding: 19px;
+        margin-bottom: 20px;
+        background-color: #fbfbfb;
+        border: 0px solid #999;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+        -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    }
+
+        .tree li {
+            list-style-type: none;
+            margin: 0;
+            padding: 10px 5px 0 5px;
+            position: relative;
+        }
+
+            .tree li::before, .tree li::after {
+                content: '';
+                left: -20px;
+                position: absolute;
+                right: auto;
+            }
+
+            .tree li::before {
+                border-left: 1px solid #999;
+                bottom: 50px;
+                height: 100%;
+                top: 0;
+                width: 1px;
+            }
+
+            .tree li::after {
+                border-top: 1px solid #999;
+                height: 20px;
+                top: 25px;
+                width: 25px;
+            }
+
+            .tree li span {
+                -moz-border-radius: 5px;
+                -webkit-border-radius: 5px;
+                border: 1px solid #999;
+                border-radius: 5px;
+                display: inline-block;
+                padding: 3px 8px;
+                text-decoration: none;
+            }
+
+            .tree li.parent_li > span {
+                cursor: pointer;
+            }
+
+        .tree > ul > li::before, .tree > ul > li::after {
+            border: 0;
+        }
+
+        .tree li:last-child::before {
+            height: 30px;
+        }
+
+        .tree li.parent_li > span:hover, .tree li.parent_li > span:hover + ul li span {
+            background: #eee;
+            border: 1px solid #94a0b4;
+            color: #000;
+        }
+
+    .txt {
+        height: 30px;
+        border: 1px solid #999;
+    }
+
+    .sp {
+        width: 40%;
+    }
+
+    .sp1 {
+        width: 36.7%;
+    }
+</style>
+<div class="container-fluid" id="gaodu">
+    <div class="rule">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <h3 class="titles" style="margin: 0px; margin-bottom: 10px;">商品分组 <small>商品分组信息</small>
+                </h3>
+                <ul class="page-breadcrumb breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="javascript:;">首页</a>
+                    </li>
+                    <i class="icon-angle-right"></i>
+                    <li>
+                        <a href="#">商品分组信息</a>
+
+                    </li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7" style="padding-bottom: 1%;">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <div class="page-breadcrumb ">
+                    <a href="#" class="btn default" data-toggle="modal" data-target="#basic" onclick="group('添加')"><i class="icon-plus"></i>添加</a>
+                </div>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <div class="row">
+            <div class="tree" id="yinchang" style="padding: 0% 10%; min-height: 350px">
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!---View-->
+<div class="modal fade in" id="basic" tabindex="-1" role="basic" aria-hidden="true">
+    <div class="modal-dialog modal-basic">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3 class="modal-title" style="font-family: 'Microsoft YaHei'; font-weight: 500; font-size: 20px;">一级分组</h3>
+            </div>
+            <div class="modal-body" id="" style="height: 100px">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">分组名称：</label>
+                    <div class="col-md-5">
+                        <input type="hidden" class="form-control" id="leixing" name="OtherAdjust" value="">
+                        <input type="hidden" class="form-control" id="yijiid" name="OtherAdjust" value="">
+                        <input type="text" class="form-control" id="OtherAdjust" name="OtherAdjust" value="">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn green" id="Insert" data-dismiss="modal">确定</button>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+<!-- /.View -->
+<!---View-->
+<div class="modal fade in" id="basic1" tabindex="-1" role="basic1" aria-hidden="true">
+    <div class="modal-dialog modal-basic">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3 class="modal-title" style="font-family: 'Microsoft YaHei'; font-weight: 500; font-size: 20px;">二级分组</h3>
+            </div>
+            <div class="modal-body" id="">
+                <div class="row">
+                    <label class="col-md-3 control-label" style="padding-left: 50px;">分组名称：</label>
+                    <div class="col-md-5">
+                        <input type="hidden" class="form-control" id="yijiid1" name="yijiid" value="">
+                        <input type="text" class="form-control" id="OtherAdjust1" name="OtherAdjust" value="">
+                        <input type="hidden" class="form-control" id="tupian" name="tupian" value="">
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-md-3 control-label" style="margin-top: 11px; padding-left: 50px;">分组图片：</label>
+                    <div class="col-md-5" style="margin-top: 13px;">
+                        <form action="~/Mltx_Merchandise/SaveUploadedFile" method="post" enctype="multipart/form-data" class="dropzone dz-clickable dz-started" id="dropzoneForm" style="border: 2px dashed #0087F7; border-radius: 5px;">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn green" id="Insert1" data-dismiss="modal">确定</button>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+<!-- /.View -->
+<!---View-->
+<div class="modal fade in" id="basic2" tabindex="-1" role="basic1">
+    <div class="modal-dialog modal-basic">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3 class="modal-title" style="font-family: 'Microsoft YaHei'; font-weight: 500; font-size: 20px;">二级分组</h3>
+            </div>
+            <div class="modal-body" id="">
+                <div class="row">
+                    <label class="col-md-3 control-label" style="padding-left: 50px;">分组名称：</label>
+                    <div class="col-md-5">
+                        <input type="hidden" class="form-control" id="erjiid" name="yijiid" value="">
+                        <input type="text" class="form-control" id="erjiname" name="OtherAdjust" value="">
+                        <input type="hidden" class="form-control" id="tupian1" name="tupian" value="">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <label class="col-md-12 control-label text-center" style="margin-top: 11px;">已有图片</label>
+                        </div>
+                        <div class="row text-center">
+                            <img src="#" id="tupianxian" alt="Alternate Text" style="width: 200px; height: 177px" />
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <label class="col-md-12 control-label text-center" style="margin-top: 11px;">改变图片</label>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-md-12 center text-center">
+                                <form action="~/Mltx_Merchandise/SaveUploadedFile" method="post" enctype="multipart/form-data" class="dropzone dz-clickable dz-started" id="dropzoneForm1" style="border: 2px dashed #0087F7; border-radius: 5px; width: 200px; height: 177px; padding: 5px; margin-left: 15%">
+                                </form>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn green" id="UpdateTwoLevels" data-dismiss="modal">确定</button>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+<!-- /.View -->
+
+@* ReSharper disable once PossiblyUnassignedProperty *@
+@* ReSharper disable once PossiblyUnassignedProperty *@
+<script>
+    //控制右侧的下拉
+    var cmd = parent.document.getElementById("win");
+    cmd.height = $("#gaodu").height();
+    //点击一级分组
+    function group(r) {
+        $("#leixing").val('0');
+    }
+    //点击二级分组
+    function group1(r) {
+        $("#leixing1").val('0');
+        $("#yijiid1").val(r);
+    }
+
+    //一级分组修改
+    function updateYiji(id, name) {
+        $("#leixing").val(1);
+        $("#yijiid").val(id);
+        $("#OtherAdjust").val(name);
+    }
+
+    function UpdateTwoLevels(id, name, tupian) {
+        $("#erjiid").val(id);
+        $("#erjiname").val(name);
+        $("#tupian1").val(tupian);
+        $("#tupianxian").attr("src", tupian);
+    }
+    //一级分组删除
+    function Delete(r) {
+        if (confirm("你确定要删除？")) {
+            $.get("/Mltx_Merchandise/DeletFirstClassGrouping", { id: r }, function (re) {
+                huidiao(re, "删除");
+            });
+        }
+    }
+    //二级分组删除
+    function DeleteTwoLevels(r) {
+        if (confirm("你确定要删除？")) {
+            $.get("/Mltx_Merchandise/DeletTwoLevels", { id: r }, function (re) {
+                huidiao(re, "删除");
+            });
+        }
+    }
+    $(function () {
+        $.get("/Mltx_Merchandise/GroupingLocal", function(r) {
+            $("#yinchang").html(r);
+        })
+        //一级分组添加编辑
+        $("#Insert").click(function () {
+            if ($("#leixing").val() == 0) {
+                $.get("/Mltx_Merchandise/InsertFirstClassGrouping", { name: $("#OtherAdjust").val().toString() }, function (r) {
+                    huidiao(r, "添加");
+                });
+            } else if ($("#leixing").val() == 1) {
+                $.get("/Mltx_Merchandise/UpdateFirstClassGrouping", { name: $("#OtherAdjust").val().toString(), id: $("#yijiid").val() }, function (r) {
+                    huidiao(r, "编辑");
+                });
+            }
+        });
+        //二级分组添加
+        $("#Insert1").click(function () {
+            $.get("/Mltx_Merchandise/InsertTwoLevels", { yiji: $("#yijiid1").val(), name: $("#OtherAdjust1").val().toString(), tupian: $("#tupian").val().toString() }, function (r) {
+                huidiao(r, "添加");
+            });
+        });
+        //二级分组编辑
+        $("#UpdateTwoLevels").click(function() {
+            $.get("/Mltx_Merchandise/UpdateTwoLevels", { id: $("#erjiid").val(), name: $("#erjiname").val(), tupian: $("#tupian1").val() }, function (r) {
+                huidiao(r, "修改");
+            });
+        });
+    });
+
+    function huidiao(r, c) {
+        if (r == "ajaxerror") {
+            box.alert("对不起,你的权限不够", "error");
+        } else if (r == 0) {
+            box.alert(c + "成功");
+            $.get("/Mltx_Merchandise/GroupingLocal", function (r) {
+                $("#yinchang").html(r);
+            })
+        } else {
+            box.alert(c + "失败", "error");
+        }
+    }
+    //File Upload response from the server
+    Dropzone.options.dropzoneForm = {
+        //添加上传取消和删除预览图片的链接，默认不添加
+        addRemoveLinks: true,
+        init: function () {
+            this.on("complete", function (data) {
+                if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                    var res = eval('(' + data.xhr.responseText + ')');
+                    if (res.Result) {
+                        $("#tupian").val(res.mingcheng);
+                    }
+                    else {
+                        box.alert("图片上传失败", "error");
+                    }
+                }
+            });
+        }
+    };
+    Dropzone.options.dropzoneForm1 = {
+        //添加上传取消和删除预览图片的链接，默认不添加
+        addRemoveLinks: true,
+        init: function () {
+            this.on("complete", function (data) {
+                if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                    var res = eval('(' + data.xhr.responseText + ')');
+                    if (res.Result) {
+                        $("#tupian1").val(res.mingcheng);
+                    }
+                    else {
+                        box.alert("图片上传失败", "error");
+                    }
+                }
+            });
+        }
+    };
+</script>

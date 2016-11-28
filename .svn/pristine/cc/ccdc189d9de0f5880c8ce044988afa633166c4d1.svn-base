@@ -1,0 +1,60 @@
+﻿@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>index</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+</head>
+<body>
+
+    <div class="body">
+        
+        <!-- 商城start -->
+                <div class="index_0">
+
+                    <!-- 头部start -->
+                <div class="index_0_header">
+                            
+                </div>
+                    <!-- 头部end -->
+                    <!-- 幻灯片start -->
+                    <div class="index_0_slide">
+
+                    </div>
+                    <!-- 幻灯片start -->
+                    <!-- indexMenuStart -->
+                            <div class="index_0_Menu">
+
+                            </div>
+                    <!-- indexMenuEnd -->
+
+                    <!-- indexModuleStart -->
+                    <div class="index_0_Module">
+                            
+                    </div>
+                    <!-- indexModuleEnd -->
+                    <div class="index_0_FloatMenu">
+
+                    </div>
+                </div>
+        <!-- 商城end -->
+
+
+        <!-- 鲜果start  暂时不涉及鲜果-->
+                <div class="index_1">
+
+                </div>
+        <!-- 鲜果end -->
+    
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+﻿using MltxManager.Data;
+using MltxManager.Models.DBHelper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Script.Serialization;
+
+namespace MltxManager.Controllers
+{
+    public class Mltx_SlideController : Controller
+    {
+        Slide cs = new Slide();
+        JavaScriptSerializer js = new JavaScriptSerializer();
+        ReturnMsg msg = new ReturnMsg();
+        //
+        // GET: /Mltx_Slide/
+
+        public ActionResult Index()
+        {
+            return View();
+        }
+        /// <summary>
+        /// 幻灯片
+        /// </summary>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        public ActionResult Slide(int page = 1) {
+
+            try {
+                msg = cs.SlideIndex(page);
+            }
+            catch { }
+            return View(msg.slides);
+        }
+        /// <summary>
+        /// 编辑
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult SlideAddEdit(int id = 0 ) {
+            try {
+                msg = cs.SlideAddEditList(id);
+            }
+            catch { }
+            return View(msg.slide);
+        }
+    }
+}

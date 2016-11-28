@@ -1,0 +1,44 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Web;
+
+namespace MltxManager.Models.DBModel
+{
+    /// <summary>
+    /// 试吃报告表
+    /// </summary>
+    public class Mltx_foretaste_report
+    {
+        /// <summary>
+        /// 试吃报告表ID
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
+        /// 试吃id 外键，关联试吃商品表id
+        /// </summary>
+        public int ForetasteId { get; set; }
+        /// <summary>
+        /// 试吃商品表
+        /// </summary>
+        [ForeignKey("ForetasteId")]
+        public Mltx_foretaste Foretaste { get; set; }
+        /// <summary>
+        /// 试吃人信息 
+        /// </summary>
+        public string Customer { get; set; }
+        /// <summary>
+        /// 试吃评价
+        /// </summary>
+        public string ForetasteContent { get; set; }
+        /// <summary>
+        /// 试吃评星
+        /// </summary>
+        public int Star { get; set; }
+        /// <summary>
+        /// 试吃图片 多张以‘|’分割
+        /// </summary>
+        public string Pic { get; set; }
+    }
+}

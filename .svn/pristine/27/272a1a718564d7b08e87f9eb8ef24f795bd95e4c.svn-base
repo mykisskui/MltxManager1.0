@@ -1,0 +1,201 @@
+﻿using MltxManager.Models.DBModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using MltxManager.Models.DBHelper.Mode;
+using Webdiyer.WebControls.Mvc;
+
+namespace MltxManager.Models.DBHelper
+{
+    //DBHelper类方法返回错误信息类
+    public class ReturnMsg
+    {
+        /// <summary>
+        /// 错误码
+        /// </summary>
+        public int errcode { get; set; }
+        /// <summary>
+        /// 错误信息
+        /// </summary>
+        public string errmsg { get; set; }
+        /// <summary>
+        /// 主订单 list列表
+        /// </summary>
+        public PagedList<Mltx_Order_main> plist_order_m { get; set; }
+        /// <summary>
+        /// 两条基础数据
+        /// </summary>
+        public IList<DoubleBase> DoubleBases { get; set; }
+        /// <summary>
+        /// 分组表 获取分组表数据
+        /// </summary>
+        public IList<Mltx_UserGroup> mltx_userGroup { get; set; }
+        /// <summary>
+        /// 基础模块表
+        /// </summary>
+        public IList<Mltx_Model_basic> MltxModelBasics { get; set; }
+        /// <summary>
+        /// 订单详情列表
+        /// </summary>
+        public List<Mltx_Order_sub> mltx_order_sub { get; set; }
+        /// <summary>
+        /// 人员信息表
+        /// </summary>
+        public PagedList<Mltx_UserInfo> MltxUserInfos { get; set; }
+        /// <summary>
+        /// 单独人员信息
+        /// </summary>
+        public Mltx_UserInfo MltxUserInfo { get; set; }
+        /// <summary>
+        /// 会员等级
+        /// </summary>
+        public PagedList<Mltx_MemberRank> Level { get; set; }
+        /// <summary>
+        /// 会员等级
+        /// </summary>
+        public Mltx_MemberRank Level_n { get; set; }
+        /// <summary>
+        /// 会员信息
+        /// </summary>
+        public Mltx_MemberInfo MemberInfo { get; set; }
+        /// <summary>
+        /// 会员信息
+        /// </summary>
+        public PagedList<Mltx_MemberInfo> MemberInfos { get; set; }
+        /// <summary>
+        /// 会员明细
+        /// </summary>
+        public PagedList<Mltx_MemberLog> MemberLogs { get; set; }
+        /// <summary>
+        /// 评论信息list
+        /// </summary>
+        public PagedList<Mltx_Comments> commentlist { get; set; }
+        /// <summary>
+        /// 商品一级分组
+        /// </summary>
+        public IList<Mltx_Group_first> MltxGroupFirst { get; set; }
+        /// <summary>
+        /// 鲜果一级分组
+        /// </summary>
+        public IList<Mltx_Group_fresh> MltxGroupFreshes { get; set; }
+        /// <summary>
+        /// 商品二级分组
+        /// </summary>
+        public IList<Mltx_Group_second> MltxGroupSecond { get; set; }
+        /// <summary>
+        /// 单个商品评论信息列表
+        /// </summary>
+        public PagedList<Mltx_Comments> commnetlist_goods { get; set; }
+        /// <summary>
+        /// 商品信息表
+        /// </summary>
+        public PagedList<Mltx_GoodsInfo_shop> MltxGoodsInfoShops { get; set; }
+        /// <summary>
+        /// 鲜果商品信息表
+        /// </summary>
+        public PagedList<Mltx_GoodsInfo_fresh> MltxGoodsInfoFreshes { get; set; }
+        /// <summary>
+        /// 单个商品信息
+        /// </summary>
+        public Mltx_GoodsInfo_shop MltxGoodsInfoShop { get; set; }
+        /// <summary>
+        /// 单个鲜果商品信息
+        /// </summary>
+        public Mltx_GoodsInfo_fresh MltxGoodsInfoFresh { get; set; }
+        /// <summary>
+        /// 门店信息list
+        /// </summary>
+        public PagedList<Mltx_ShopInfo> shopinfolist { get; set; }
+        /// <summary>
+        /// 门店信息
+        /// </summary>
+        public Mltx_ShopInfo shopinfo { get; set; }
+        /// <summary>
+        /// 短信配置信息
+        /// </summary>
+        public Mltx_SmsInfo smsinfo { get; set; }
+        public Mltx_Menu menu { get; set; }
+        public IEnumerable<Mltx_Menu> menus { get; set; }
+        public PagedList<Mltx_IndexModule> indexmodules { get; set; }
+        public  Mltx_IndexModule indexmodule { get; set; }
+        public PagedList<Mltx_Slide> slides { get; set; }
+        public Mltx_Slide slide { get; set; }
+        /// <summary>
+        /// 商城分组一二级关联信息
+        /// </summary>
+        public List<ShopGroupData> shopgroupdata { get; set; }
+        /// <summary>
+        /// 根据分组id获取的商品信息
+        /// </summary>
+        public List<GoodsBase> goodsbaseList { get; set; }
+        /// <summary>
+        /// 我的订单信息
+        /// </summary>
+        public List<OrderBase> orderbaseList { get; set; }
+        /// <summary>
+        /// 会员用户信息
+        /// </summary>
+        public MemberBase userbaseinfo { get; set; }
+        /// <summary>
+        /// 地址库信息
+        /// </summary>
+        public List<Mltx_Address> addressList { get; set; }
+        /// <summary>
+        /// 默认地址信息
+        /// </summary>
+        public Mltx_Address address { get; set; }
+        /// <summary>
+        /// 会员等级信息 消费次数 金额
+        /// </summary>
+        public MemberRankBase memberrankinfo { get; set; }
+        /// <summary>
+        /// 试吃表
+        /// </summary>
+        public PagedList<Foretaste> Foretastes { get; set; }
+        /// <summary>
+        /// 试吃报告表
+        /// </summary>
+        public PagedList<Mltx_foretaste_report> MltxForetasteReports { get; set; }
+        /// <summary>
+        /// 幻灯片列表-
+        /// </summary>
+        public List<SlideBase> slidebaseList { get; set; }
+        /// <summary>
+        /// 菜单列表-
+        /// </summary>
+        public List<MenuBase> menubaseList { get; set; }
+        /// <summary>
+        /// 首页模块列表-
+        /// </summary>
+        public List<Mltx_IndexModule> indexmodleBaselist { get; set; }
+        /// <summary>
+        /// 提货券管理表
+        /// </summary>
+        public PagedList<Mltx_Ticket> MltxTickets { get; set; }
+        /// <summary>
+        /// 提货券
+        /// </summary>
+        public Mltx_Ticket ticket { get; set; }
+        /// <summary>
+        /// 提货券基础信息 包含商品
+        /// </summary>
+        public TicketBase ticketbase { get; set; }
+        /// <summary>
+        /// 商城商品列表
+        /// </summary>
+        public List<Mltx_GoodsInfo_shop> goodslist { get; set; }
+        /// <summary>
+        /// 商品评价 list
+        /// </summary>
+        public List<Mltx_Comments> com_list { get; set; }
+        /// <summary>
+        /// 订单详情json
+        /// </summary>
+        public string orderdetailsJson { get; set; }
+        /// <summary>
+        /// 字符串类型返回 json
+        /// </summary>
+        public string otherJson { get; set; }
+    }
+}

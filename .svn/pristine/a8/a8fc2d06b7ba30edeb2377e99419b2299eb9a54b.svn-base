@@ -1,0 +1,1182 @@
+﻿using System;
+using System.Linq;
+using System.Transactions;
+using MltxManager.Data.MethodHepler;
+using MltxManager.Models.DBHelper;
+using MltxManager.Models.DBHelper.Mode;
+using MltxManager.Models.DBModel;
+using Webdiyer.WebControls.Mvc;
+using System.Data.Common;
+using System.Data.Entity.Infrastructure;
+
+namespace MltxManager.Data
+{
+    /// <summary>
+    /// 登入 人员 商品 拦截器 短信 管理
+    /// </summary>
+    public class GetBiz
+    {
+        private readonly MltxDbContext _db = new MltxDbContext();
+
+        #region Home登入
+        /// <summary>
+        /// Home 登入判断
+        /// </summary>
+        /// <param name="username">账号</param>
+        /// <param name="password">密码</param>
+        /// <returns></returns>
+        public Mltx_UserInfo Login(int username, string password)
+        {
+            var re = _db.userinfo.Include("Group").SingleOrDefault(a => a.UserId == username && a.Password == password);
+            return re;
+        }
+        /// <summary>
+        ///  Home 获取模块
+        /// </summary>
+        /// <param name="fenzhu">分组ID</param>
+        /// <returns></returns>
+        public ReturnMsg GetModel(int fenzhu)
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                re.DoubleBases = _db.group_model.Where(a => a.GroupId == fenzhu).Select(a => new DoubleBase
+                {
+                    Val = a.Model.ModelName
+                }).ToList();
+            }
+            catch (Exception e)
+            {
+                re.errmsg = e.Message;
+                re.errcode = -1;
+                MHepler.writelog_err("获取模块：" + e.Message);
+            }
+            re.errcode = 0;
+            return re;
+        }
+        #endregion
+
+        #region 人员管理
+
+        /// <summary>
+        /// 人员管理 获取全部分组
+        /// </summary>
+        /// <returns></returns>
+        public ReturnMsg GetGrouping()
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                re.mltx_userGroup = _db.usergroup.Where(a => a.GroupId != 20150000).ToList();
+            }
+            catch (Exception e)
+            {
+                re.errcode = -1;
+                re.errmsg = e.Message;
+                MHepler.writelog_err("获取全部分组：" + e.Message);
+                return re;
+            }
+            re.errcode = 0;
+            return re;
+        }
+
+        /// <summary>
+        /// 人员管理 无参数获得所有用户
+        /// </summary>
+        /// <param name="id">现在页数</param>
+        /// <param name="kword">查询信息</param>
+        /// <returns></returns>
+        public ReturnMsg GetPersonnel(int id, string kword)
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                re.MltxUserInfos = !string.IsNullOrEmpty(kword) ? _db.userinfo.Include("Group").Where(a => a.UserId != 20158000 && a.UserName.Contains(kword)).OrderByDescending(a => a.UserId).ToPagedList(id, 10) : _db.userinfo.Include("Group").Where(a => a.UserId != 20158000).OrderByDescending(a => a.UserId).ToPagedList(id, 10);
+
+            }
+            catch (Exception e)
+            {
+                re.errcode = -1;
+                re.errmsg = e.Message;
+                MHepler.writelog_err("获取分组人员：" + e.Message);
+                return re;
+            }
+            re.errcode = 0;
+            return re;
+        }
+        /// <summary>
+        /// 人员管理 添加用户
+        /// </summary>
+        /// <param name="name">用户名称</param>
+        /// <param name="fen">用户分组</param>
+        /// <param name="zhuang">用户状态</param>
+        /// <returns></returns>
+        public bool InsertUserName(string name, string fen, int zhuang)
+        {
+            try
+            {
+                var re = new Mltx_UserInfo
+                {
+                    Password = "96E79218965EB72C92A549DD5A33112",
+                    Enable = (Status)zhuang,
+                    GroupId = int.Parse(fen),
+                    UserName = name
+                };
+                _db.userinfo.Add(re);
+                return _db.SaveChanges() > 0;
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("添加用户：" + e.Message);
+                throw;
+            }
+        }
+        /// <summary>
+        /// 人员管理 人员编辑显示 
+        /// </summary>
+        /// <param name="goodId">人员ID</param>
+        /// <returns></returns>
+        public ReturnMsg UpdateUserPage(int goodId)
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                var r = _db.userinfo.Include("Group").SingleOrDefault(a => a.UserId == goodId);
+                if (r != null)
+                {
+                    re.MltxUserInfo = r;
+                    re.mltx_userGroup = _db.usergroup.Where(a => a.GroupId != 20150000).ToList();
+                }
+                else
+                {
+                    re.errcode = -1;
+                    MHepler.writelog_err("人员管理 人员编辑显示  ：" + "用户信息为NULL", false);
+                }
+
+            }
+            catch (Exception e)
+            {
+                re.errcode = -1;
+                re.errmsg = e.Message;
+                MHepler.writelog_err("人员管理 人员编辑显示  ：" + e.Message);
+                return re;
+            }
+            re.errcode = 0;
+            return re;
+        }
+
+        /// <summary>
+        /// 人员管理 用户编辑
+        /// </summary>
+        /// <param name="name">用户名</param>
+        /// <param name="fen">分组</param>
+        /// <param name="zhuang">状态</param>
+        /// <param name="userId">用户ID</param>
+        /// <returns></returns>
+        public bool UpdateUserName(string name, string fen, string zhuang, int userId)
+        {
+            try
+            {
+                var re = _db.userinfo.SingleOrDefault(a => a.UserId == userId);
+                if (re != null)
+                {
+                    re.GroupId = int.Parse(fen);
+                    re.UserName = name;
+                    re.Enable = (Status)int.Parse(zhuang);
+                    return _db.SaveChanges() > 0;
+                }
+                else
+                {
+                    MHepler.writelog_err("人员管理 人员编辑  ：" + "用户信息为NULL", false);
+                    return false;
+                }
+
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("人员管理 人员编辑  ：" + e.Message);
+                throw;
+            }
+        }
+        /// <summary>
+        /// 人员管理 人员注销
+        /// </summary>
+        /// <param name="id">人员ID</param>
+        /// <param name="r">判断类型</param>
+        /// <returns></returns>
+        public bool DeleteUser(int id, int r)
+        {
+            try
+            {
+                var re = _db.userinfo.SingleOrDefault(a => a.UserId == id);
+                if (re != null)
+                {
+                    re.Enable = (r == 0 ? Status.已注销 : Status.可用);
+                    return _db.SaveChanges() > 0;
+                    
+                }
+                else
+                {
+                    MHepler.writelog_err("人员管理 人员注销  ：" + "用户信息为空", false);
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("人员管理 人员注销  ：" + e.Message);
+                throw;
+            }
+        }
+        #endregion
+
+        #region 人员分组
+
+        /// <summary>
+        /// 获取全部分组和模块
+        /// </summary>
+        /// <returns></returns>
+        public ReturnMsg GetAdmin()
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                re.MltxModelBasics = _db.model_basic.Where(a => a.Id != 1 && a.Id != 2).ToList();
+                re.mltx_userGroup = _db.usergroup.Where(a => a.GroupId != 20150000).ToList();
+            }
+            catch (Exception e)
+            {
+                re.errcode = -1;
+                re.errmsg = e.Message;
+                MHepler.writelog_err("获取全部分组和模块:" + e.Message);
+                return re;
+            }
+            re.errcode = 0;
+            return re;
+        }
+        /// <summary>
+        /// 获取某个分组模块的权限
+        /// </summary>
+        /// <param name="fenzhu">分组ID</param>
+        /// <param name="mode">模块ID</param>
+        /// <returns></returns>
+        public ReturnMsg GetModeAuth(string fenzhu, int mode)
+        {
+            var re = new ReturnMsg();
+            if (!string.IsNullOrEmpty(fenzhu))
+            {
+                try
+                {
+                    var fen = int.Parse(fenzhu);
+                    var m = _db.model_auth.Where(a => a.ModelId == mode).Select(a => new DoubleBase
+                    {
+                        Id = a.AuthId,
+                        Name = a.Auth.Quan.ToString(),
+                        Zhuangtai = 0
+                    }).ToList();
+                    var ce =
+                        _db.group_auth.Where(a => a.GroupId == fen && a.MA.ModelId == mode && a.Enable == Enable.激活)
+                            .Select(a => new DoubleBase
+                            {
+                                Id = a.MA.AuthId,
+                            }).ToList();
+                    foreach (var c in from r in ce from c in m where c.Id == r.Id select c)
+                    {
+                        c.Zhuangtai = 1;
+                    }
+                    re.DoubleBases = m;
+                }
+                catch (Exception e)
+                {
+                    re.errcode = -1;
+                    re.errmsg = e.Message;
+                    MHepler.writelog_err("获取某个分组模块的权限（分组不为空）:" + e.Message);
+                    return re;
+                }
+
+            }
+            else
+            {
+                try
+                {
+                    re.DoubleBases = _db.model_auth.Where(a => a.ModelId == mode).Select(a => new DoubleBase
+                    {
+                        Id = a.AuthId,
+                        Name = a.Auth.Quan.ToString(),
+                        Zhuangtai = 0
+                    }).ToList();
+                }
+                catch (Exception e)
+                {
+                    re.errcode = -1;
+                    re.errmsg = e.Message;
+                    MHepler.writelog_err("获取某个分组模块的权限（为空时）:" + e.Message);
+                    return re;
+                }
+            }
+            re.errcode = 0;
+            return re;
+        }
+        /// <summary>
+        /// 更改分组模块权限
+        /// </summary>
+        /// <param name="quanxian">权限ID</param>
+        /// <param name="fenzhu">分组ID</param>
+        /// <param name="mode">模块ID</param>
+        /// <returns></returns>
+        public ReturnMsg UpdateModeAuth(string[] quanxian, string fenzhu, string mode)
+        {
+            var re = new ReturnMsg();
+
+
+            if (!string.IsNullOrEmpty(mode) && !string.IsNullOrEmpty(fenzhu))
+            {
+
+                var shu = 0;
+                using (var transactionScope = new TransactionScope())
+                {
+                    try
+                    {
+                        var fen = int.Parse(fenzhu);
+                        var mo = int.Parse(mode);
+                        var r = _db.group_auth.Where(a => a.GroupId == fen && a.MA.ModelId == mo).ToList();
+                        r.ForEach(a => a.Enable = Enable.未激活);
+                        _db.SaveChanges();
+                        if (quanxian.Length != 1)
+                        {
+                            var fenmo = _db.group_model.SingleOrDefault(a => a.GroupId == fen && a.ModelId == mo);
+                            if (fenmo == null)
+                            {
+                                var fenm = new Mltx_Group_Model
+                                {
+                                    GroupId = fen,
+                                    ModelId = mo
+                                };
+                                _db.group_model.Add(fenm);
+                                _db.SaveChanges();
+                            }
+                        }
+                        else
+                        {
+                            var fenmo = _db.group_model.SingleOrDefault(a => a.GroupId == fen && a.ModelId == mo);
+                            if (fenmo != null)
+                            {
+                                _db.group_model.Remove(fenmo);
+                                _db.SaveChanges();
+                                re.errcode = 0;
+                                return re;
+                            }
+                        }
+
+
+                        for (var i = 0; i < quanxian.Length - 1; i++)
+                        {
+                            var c = int.Parse(quanxian[i]);
+                            var ce = _db.group_auth.SingleOrDefault(a => a.GroupId == fen && a.MA.ModelId == mo && a.MA.AuthId == c);
+                            if (ce != null)
+                            {
+                                ce.Enable = Enable.激活;
+                            }
+                            else
+                            {
+                                var ga = new Mltx_Group_Auth { GroupId = fen };
+                                var sa = _db.model_auth.SingleOrDefault(a => a.AuthId == c && a.ModelId == mo);
+                                if (sa != null)
+                                {
+                                    ga.MA = sa;
+                                    ga.Enable = Enable.激活;
+                                }
+                                else
+                                {
+                                    ga.Enable = Enable.未激活;
+                                }
+                                _db.group_auth.Add(ga);
+                            }
+                            shu = _db.SaveChanges();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        re.errcode = -1;
+                        re.errmsg = e.Message;
+                        MHepler.writelog_err("更改分组模块权限:" + e.Message);
+                        return re;
+                    }
+                    if (shu > 0)
+                    {
+                        transactionScope.Complete();
+                        re.errcode = 0;
+                        return re;
+                    }
+                    else
+                    {
+                        re.errcode = -1;
+                        re.errmsg = "保存数据时失败";
+                        MHepler.writelog_err("更改分组模块权限:" + re.errmsg, false);
+                        return re;
+                    }
+
+                }
+
+
+            }
+            else
+            {
+                re.errcode = -1;
+                re.errmsg = "用户未选择分组或者未选择模块";
+                MHepler.writelog_err("更改分组模块权限:" + re.errmsg, false);
+                return re;
+            }
+        }
+        /// <summary>
+        /// 添加分组
+        /// </summary>
+        /// <param name="name">分组名称</param>
+        /// <returns></returns>
+        public int InsertGrouping(string name)
+        {
+            try
+            {
+                var re = _db.usergroup.SingleOrDefault(a => a.GroupName == name);
+                if (re != null)
+                {
+                    return 1;
+                }
+                else
+                {
+                    var fen = new Mltx_UserGroup
+                    {
+                        GroupName = name
+                    };
+                    _db.usergroup.Add(fen);
+                    return _db.SaveChanges() > 0 ? 0 : -1;
+                   
+                }
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("添加分组：" + e.Message);
+                throw;
+            }
+
+        }
+        /// <summary>
+        /// 读取人员分组局部刷新
+        /// </summary>
+        /// <returns></returns>
+        public ReturnMsg GetYongHuFenZhu()
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                re.DoubleBases = _db.usergroup.Where(a => a.GroupId != 20150000).Select(a => new DoubleBase
+                {
+                    Id = a.GroupId,
+                    Val = a.GroupName
+                }).ToList();
+            }
+            catch (Exception e)
+            {
+                re.errcode = -1;
+                re.errmsg = e.Message;
+                MHepler.writelog_err("更改分组模块权限:" + e.Message);
+                return re;
+            }
+            re.errcode = 0;
+            return re;
+        }
+        /// <summary>
+        /// 人员分组 分组修改
+        /// </summary>
+        /// <param name="id">分组ID</param>
+        /// <param name="name">分组名称</param>
+        /// <returns></returns>
+        public bool UpdateGrouping(int id, string name)
+        {
+            try
+            {
+                var re = _db.usergroup.SingleOrDefault(a => a.GroupId == id);
+                if (re != null)
+                {
+                    re.GroupName = name;
+                    return _db.SaveChanges() > 0;
+                    
+                }
+                else
+                {
+                    MHepler.writelog_err("人员分组 分组修改：没有该分组的信息", false);
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("人员分组 分组修改：" + e.Message);
+                return false;
+            }
+        }
+        #endregion
+
+        #region 商品分组
+        /// <summary>
+        /// 商品分组 商品分组显示
+        /// </summary>
+        /// <returns></returns>
+        public ReturnMsg GetCommodityGrouping()
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                re.MltxGroupFirst = _db.group_first.Where(a => a.Enable == Enable.激活).ToList();
+                re.MltxGroupSecond = _db.group_second.Where(a => a.Enable == Enable.激活).ToList();
+            }
+            catch (Exception e)
+            {
+                re.errcode = -1;
+                re.errmsg = e.Message;
+                MHepler.writelog_err("商品分组显示：" + e.Message);
+                return re;
+            }
+            re.errcode = 0;
+            return re;
+        }
+        /// <summary>
+        /// 添加一级分组
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public bool InsertFirstClassGrouping(string name)
+        {
+            try
+            {
+                var re = new Mltx_Group_first
+                {
+                    GroupName = name,
+                    Enable = Enable.激活
+                };
+                _db.group_first.Add(re);
+                return _db.SaveChanges() > 0;
+               
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("添加一级分组：" + e.Message);
+                return false;
+            }
+
+        }
+        /// <summary>
+        /// 商品一级分组修改
+        /// </summary>
+        /// <param name="name">分组名称</param>
+        /// <param name="id">分组ID</param>
+        /// <returns></returns>
+        public bool UpdateFirstClassGrouping(string name, int id)
+        {
+            try
+            {
+                var re = _db.group_first.SingleOrDefault(a => a.GroupId == id);
+                if (re != null)
+                {
+                    re.GroupName = name;
+                    return _db.SaveChanges() > 0;
+                    
+                }
+                else
+                {
+                    MHepler.writelog_err("商品一级分组修改：未能查出商品分组信息", false);
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("商品一级分组修改：" + e.Message);
+                return false;
+            }
+        }
+        /// <summary>
+        /// 商品一级分组删除
+        /// </summary>
+        /// <param name="id">分组ID</param>
+        /// <returns></returns>
+        public bool DeletFirstClassGrouping(int id)
+        {
+            using (var transactionScope = new TransactionScope())
+            {
+                try
+                {
+                    var re = _db.group_second.Where(a => a.OwnerId == id).ToList();
+                    if (re.Count != 0)
+                    {
+                        foreach (var erji in re)
+                        {
+                            erji.Enable = Enable.未激活;
+                        }
+                    }
+                    var re1 = _db.group_first.SingleOrDefault(a => a.GroupId == id);
+                    if (re1 != null)
+                    {
+                        re1.Enable = Enable.未激活;
+                    }
+                    else
+                    {
+                        MHepler.writelog_err("商品一级分组删除：未能查到要删除的分组", false);
+                        return false;
+                    }
+                    if (_db.SaveChanges() > 0)
+                    {
+                        transactionScope.Complete();
+                        return true;
+                    }
+                    else
+                    {
+                        MHepler.writelog_err("商品一级分组删除：删除分组失败", false);
+                        return false;
+                    }
+                }
+                catch (Exception e)
+                {
+                    MHepler.writelog_err("商品一级分组删除：" + e.Message);
+                    return false;
+                }
+            }
+
+        }
+        /// <summary>
+        /// 二级分组添加
+        /// </summary>
+        /// <param name="yiji">一级ID</param>
+        /// <param name="name">二级名称</param>
+        /// <param name="tupian">二级分组图片地址</param>
+        /// <returns></returns>
+        public bool InsertTwoLevels(int yiji, string name, string tupian)
+        {
+            try
+            {
+                var r = _db.group_first.SingleOrDefault(a => a.GroupId == yiji);
+                if (r != null)
+                {
+                    var re = new Mltx_Group_second
+                    {
+                        OwnerId = yiji,
+                        GroupName = name,
+                        GroupPic = tupian,
+                        Enable = Enable.激活
+                    };
+                    _db.group_second.Add(re);
+                    return _db.SaveChanges() > 0;
+                    
+                }
+                else
+                {
+                    MHepler.writelog_err("商品二级分组添加：查询不到一级分组", false);
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("商品二级分组添加：" + e.Message);
+                return false;
+            }
+        }
+        /// <summary>
+        /// 二级分组删除
+        /// </summary>
+        /// <param name="id">二级ID</param>
+        /// <returns></returns>
+        public bool DeletTwoLevels(int id)
+        {
+            try
+            {
+                var re = _db.group_second.SingleOrDefault(a => a.GroupId == id);
+                if (re != null)
+                {
+                    re.Enable = Enable.未激活;
+                    return _db.SaveChanges() > 0;
+                }
+                else
+                {
+                    MHepler.writelog_err("商品二级分组删除：查询不到二级分组", false);
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("商品二级分组删除：" + e.Message);
+                return false;
+            }
+        }
+        /// <summary>
+        /// 二级分组修改
+        /// </summary>
+        /// <param name="id">二级ID</param>
+        /// <param name="name">修改名称</param>
+        /// <param name="tupian">修改图片</param>
+        /// <returns></returns>
+        public bool UpdateTwoLevels(int id, string name, string tupian)
+        {
+            try
+            {
+                var re = _db.group_second.SingleOrDefault(a => a.GroupId == id);
+                if (re != null)
+                {
+                    re.GroupName = name;
+                    re.GroupPic = tupian;
+                    return _db.SaveChanges() > 0;
+                    
+                }
+                else
+                {
+                    MHepler.writelog_err("商品二级分组修改：查询不到二级分组", false);
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("商品二级分组修改：" + e.Message);
+                return false;
+            }
+        }
+        #endregion
+
+        #region 商品信息管理
+        /// <summary>
+        /// 查询所有商品信息
+        /// </summary>
+        /// <returns></returns>
+        public ReturnMsg GetInformation(int id, string kword)
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                if (!string.IsNullOrEmpty(kword))
+                {
+                    re.MltxGoodsInfoShops =
+                        _db.goodsinfo_shop.Include("Group").Where(a => a.GoodsName.Contains(kword))
+                            .OrderByDescending(a => a.GoodsId)
+                            .ToPagedList(id, 10);
+                }
+                else
+                {
+                    re.MltxGoodsInfoShops = _db.goodsinfo_shop.Include("Group").OrderByDescending(a => a.GoodsId).ToPagedList(id, 10);
+                }
+            }
+            catch (Exception e)
+            {
+                re.errcode = -1;
+                re.errmsg = e.Message;
+                MHepler.writelog_err("查询所有商品信息：" + e.Message);
+                return re;
+            }
+            re.errcode = 0;
+            return re;
+        }
+        /// <summary>
+        /// 取出商品的一级分组
+        /// </summary>
+        /// <returns></returns>
+        public ReturnMsg GetFirstGrouping()
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                re.DoubleBases = _db.group_first.Where(a => a.Enable == Enable.激活).Select(a => new DoubleBase
+                {
+                    Id = a.GroupId,
+                    Val = a.GroupName
+                }).ToList();
+            }
+            catch (Exception e)
+            {
+                re.errcode = -1;
+                re.errmsg = e.Message;
+                MHepler.writelog_err("取出商品的一级分组：" + e.Message);
+                return re;
+            }
+            re.errcode = 0;
+            return re;
+        }
+        /// <summary>
+        /// 取出商品的二级分组
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ReturnMsg GetTwoLevels(int id)
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                re.DoubleBases = _db.group_second.Where(a => a.OwnerId == id && a.Enable == Enable.激活).Select(a => new DoubleBase
+                {
+                    Id = a.GroupId,
+                    Val = a.GroupName
+                }).ToList();
+            }
+            catch (Exception e)
+            {
+                re.errcode = -1;
+                re.errmsg = e.Message;
+                MHepler.writelog_err("取出商品的二级分组：" + e.Message);
+                return re;
+            }
+            re.errcode = 0;
+            return re;
+        }
+        /// <summary>
+        /// 添加商品信息
+        /// </summary>
+        /// <param name="name">商品名称</param>
+        /// <param name="guige">商品规格</param>
+        /// <param name="kuchun">商品库存</param>
+        /// <param name="tupian">商品图片</param>
+        /// <param name="liebiao">商品列表图片</param>
+        /// <param name="fenzu">商品分组ID</param>
+        /// <param name="xiangxi">详细信息</param>
+        /// <param name="fangs">库存计算方式</param>
+        /// <param name="mprice">市场价</param>
+        /// <param name="rprice">销售价</param>
+        /// <param name="jifen">积分计算方式</param>
+        /// <param name="zhuangtai">状态</param>
+        /// <param name="userId">用户ID</param>
+        /// <returns></returns>
+        public int InsertCommodityAdded(string name, string guige, int kuchun, string tupian, string liebiao, int fenzu, decimal rprice, decimal mprice, string xiangxi, int fangs, int jifen, int zhuangtai, int userId)
+        {
+            try
+            {
+                var r = _db.group_second.SingleOrDefault(a => a.GroupId == fenzu);
+                var r1 = _db.userinfo.SingleOrDefault(a => a.UserId == userId);
+                if (r != null && r1 != null)
+                {
+                    var re = new Mltx_GoodsInfo_shop
+                    {
+                        GoodsName = name,
+                        GoodsGuige = guige,
+                        GoodsStock = kuchun,
+                        GoodsPic = tupian,
+                        GoodsListPic = liebiao,
+                        GroupId = fenzu,
+                        Rprice = rprice,
+                        Mprice = mprice,
+                        GoodsInfo = xiangxi,
+                        StockMethod = (StockMethod)fangs,
+                        CTime = DateTime.Now,
+                        ETime = DateTime.Now,
+                        UserId = userId,
+                        Rate = jifen,
+                        Enable = (Added)zhuangtai
+                    };
+                    _db.goodsinfo_shop.Add(re);
+                    return _db.SaveChanges() > 0 ? 0 : -1;
+                   
+                }
+                else
+                {
+                    MHepler.writelog_err("添加商品信息：没有分组,或者用户为NULL", false);
+                    return 1;
+                }
+            }
+            catch (Exception e)
+            {
+
+                MHepler.writelog_err("添加商品信息：" + e.Message);
+                return -1;
+            }
+        }
+
+        /// <summary>
+        /// 删除商品信息
+        /// </summary>
+        /// <param name="i">商品ID</param>
+        /// <param name="r">判断类型</param>
+        /// <returns></returns>
+        public int DeleteCommodity(int i, int r)
+        {
+            try
+            {
+                var re = _db.goodsinfo_shop.SingleOrDefault(a => a.GoodsId == i);
+                if (re != null)
+                {
+                    re.Enable = r == 0 ? Added.下架 : Added.上架;
+                    return _db.SaveChanges() > 0 ? 0 : 1;
+                   
+                }
+                else
+                {
+                    MHepler.writelog_err("删除商品信息：未查询到商品信息", false);
+                    return 1;
+                }
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("删除商品信息：" + e.Message);
+                return 1;
+
+            }
+        }
+        /// <summary>
+        /// 商品修改读取数据
+        /// </summary>
+        /// <param name="goodId">商品ID</param>
+        /// <returns></returns>
+        public ReturnMsg UpdateCommodityPage(int goodId)
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                re.MltxGoodsInfoShop = _db.goodsinfo_shop.Include("Group.Owner").SingleOrDefault(a => a.GoodsId == goodId);
+                re.DoubleBases = _db.group_first.Where(a=>a.Enable==Enable.激活).Select(a => new DoubleBase
+                {
+                    Id = a.GroupId,
+                    Val = a.GroupName
+                }).ToList();
+                if (re.MltxGoodsInfoShop != null)
+                {
+                    re.errcode = 0;
+
+
+                    return re;
+                }
+                else
+                {
+                    re.errcode = -1;
+                    MHepler.writelog_err("商品修改读取数据：未能读取到数据", false);
+                    return re;
+                }
+            }
+            catch (Exception e)
+            {
+                re.errcode = -1;
+                re.errmsg = e.Message;
+                MHepler.writelog_err("商品修改读取数据：" + e.Message);
+                return re;
+            }
+        }
+        /// <summary>
+        /// 商品修改
+        /// </summary>
+        /// <param name="name">商品名称</param>
+        /// <param name="guige">商品规格</param>
+        /// <param name="kuchun">商品库存</param>
+        /// <param name="tupian">商品图片</param>
+        /// <param name="liebiao">商品列表图片</param>
+        /// <param name="fenzu">商品分组ID</param>
+        /// <param name="xiangxi">详细信息</param>
+        /// <param name="mprice">市场价</param>
+        /// <param name="rprice">销售价</param>
+        /// <param name="fangs">库存计算方式</param>
+        /// <param name="jifen">积分计算方式</param>
+        /// <param name="zhuangtai">状态</param>
+        /// <param name="i">用户ID</param>
+        /// <param name="groupId">商品ID</param>
+        /// <returns></returns>
+        public int UpdateCommodityModify(string name, string guige, int kuchun, string tupian, string liebiao, int fenzu, decimal rprice, decimal mprice, string xiangxi, int fangs, int jifen, int zhuangtai, int i, int groupId)
+        {
+            try
+            {
+                var re = _db.goodsinfo_shop.SingleOrDefault(a => a.GoodsId == groupId);
+                if (re != null)
+                {
+                    re.GoodsName = name;
+                    re.GoodsGuige = guige;
+                    re.GoodsStock = kuchun;
+                    re.GoodsPic = tupian;
+                    re.GoodsListPic = liebiao;
+                    re.GroupId = fenzu;
+                    re.Rprice = rprice;
+                    re.Mprice = mprice;
+                    re.GoodsInfo = xiangxi;
+                    re.StockMethod = (StockMethod)fangs;
+                    re.ETime = DateTime.Now;
+                    re.UserId = i;
+                    re.Rate = jifen;
+                    re.Enable = (Added)zhuangtai;
+                    return _db.SaveChanges() > 0 ? 0 : 1;
+                   
+                }
+                else
+                {
+                    MHepler.writelog_err("商品修改：未能读取到数据", false);
+                    return 1;
+                }
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("商品修改：" + e.Message);
+                throw;
+            }
+        }
+        #endregion
+
+        #region 拦截器
+
+        /// <summary>
+        /// 获取用户的分组ID
+        /// </summary>
+        /// <param name="i">用户ID</param>
+        /// <returns></returns>
+        public int GetUser(int i)
+        {
+            try
+            {
+                var re = _db.userinfo.SingleOrDefault(a => a.UserId == i);
+                return re != null ? re.GroupId : 0;
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("读取用户信息：" + e.Message);
+                throw;
+            }
+        }
+        /// <summary>
+        /// 判断某分组对某模块的权限
+        /// </summary>
+        /// <param name="re">分组ID</param>
+        /// <param name="modeId">模块ID</param>
+        /// <param name="quanId">权限ID</param>
+        /// <returns></returns>
+        public bool GetModeAuthority(int re, int modeId, int quanId)
+        {
+            try
+            {
+
+                var r = _db.group_auth.SingleOrDefault(a => a.MA.ModelId == modeId && a.GroupId == re && a.MA.AuthId == quanId && a.Enable == Enable.激活);
+                return r != null;
+            }
+            catch (Exception e)
+            {
+                MHepler.writelog_err("读取用户信息：" + e.Message);
+                throw;
+            }
+
+        }
+        #endregion
+
+        #region 短信验证
+        /// <summary>
+        /// 获取短信验证表
+        /// </summary>
+        /// <returns></returns>
+        public ReturnMsg GetSmsinfo()
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                re.smsinfo = _db.smsinfo.FirstOrDefault();
+                if (re.smsinfo != null)
+                {
+                    re.errcode = 0;
+                    return re;
+                }
+                else
+                {
+                    re.errcode = 1;
+                    return re;
+                }
+            }
+            catch (Exception e)
+            {
+                re.errcode = -1;
+                re.errmsg = e.Message;
+                MHepler.writelog_err("短信验证：" + e.Message);
+                return re;
+            }
+        }
+        /// <summary>
+        /// 短信验证注册
+        /// </summary>
+        /// <param name="serialNo">短信序列号</param>
+        /// <param name="serialpass">密码</param>
+        /// <param name="remark">短信内容</param>
+        /// <returns></returns>
+        public bool InsertSms(string serialNo, string serialpass, string remark)
+        {
+            WebserviceDemo.Webservice.SDKService sdkService = new global::WebserviceDemo.Webservice.SDKService();//亿美短信webservice
+        
+            ErrMsg_info errmsg = new ErrMsg_info();
+            using (var transactionScope = new TransactionScope())
+            {   
+                try
+                {
+                    var re=new Mltx_SmsInfo
+                    {
+                        S_No = serialNo,
+                        S_Key = serialpass,
+                        SmsContent = remark
+                    };
+                    _db.smsinfo.Add(re);
+                    if (_db.SaveChanges() > 0)
+                    {
+                        errmsg.ErrCode = sdkService.registEx(serialNo, serialpass, serialpass);
+                        //errmsg.ErrMsg = db.errmsg.Where(t => t.ErrCode == errmsg.ErrCode).SingleOrDefault().ErrMsg;
+                        if (errmsg.ErrCode != 0)
+                        {
+                            transactionScope.Complete();
+                            return true;
+                        }
+                        else {
+                            MHepler.writelog_err("调用短信注册接口失败", false);
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        MHepler.writelog_err("短信验证注册：添加数据失败" ,false);
+                        return false;
+                    }
+                }
+                catch (Exception e)
+                {
+                    MHepler.writelog_err("短信验证注册：" + e.Message);
+                    return false;
+                }
+            }
+
+        }
+        /// <summary>
+        /// 短信验证删除
+        /// </summary>
+        /// <param name="id">验证ID</param>
+        /// <returns></returns>
+        public bool DeleteSms(int id)
+        {
+            using (var transactionScope = new TransactionScope())
+            {
+                try
+                {
+                    var re = _db.smsinfo.SingleOrDefault(a => a.Id == id);
+                    if (re != null)
+                    {
+                        _db.smsinfo.Remove(re);
+                        if (_db.SaveChanges() > 0)
+                        {
+                            transactionScope.Complete();
+                            return true;
+                        }
+                        else
+                        {
+                            MHepler.writelog_err("短信验证删除：数据删除失败", false);
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        MHepler.writelog_err("短信验证删除：数据未查询到", false);
+                        return false;
+                    }
+                }
+                catch (Exception e)
+                {
+                    MHepler.writelog_err("短信验证删除：" + e.Message);
+                    return false;
+                }
+            }
+        }
+        #endregion
+
+        
+    }
+    class ErrMsg_info
+    {
+        public int ID { get; set; }
+        public int ErrCode { get; set; }
+        public string ErrMsg { get; set; }
+    }
+}

@@ -1,0 +1,5 @@
+﻿@{
+    ViewBag.Title = "CreateiForetaste";
+}
+
+<h2>CreateiForetaste</h2>

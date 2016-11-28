@@ -1,0 +1,27 @@
+﻿using MltxManager.Models.DBHelper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Script.Serialization;
+
+namespace MltxManager.Controllers
+{
+    public class Mltx_SlideController : Controller
+    {
+        JavaScriptSerializer js = new JavaScriptSerializer();
+        ReturnMsg msg = new ReturnMsg();
+        //
+        // GET: /Mltx_Slide/
+
+        public ActionResult Index()
+        {
+            return View();
+        }
+        public ActionResult Slide() {
+
+            return View();
+        }
+    }
+}

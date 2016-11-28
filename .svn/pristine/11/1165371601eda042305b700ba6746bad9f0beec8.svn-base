@@ -1,0 +1,182 @@
+﻿@using Webdiyer.WebControls.Mvc;
+@using MltxManager.Models.DBModel
+@model PagedList<MltxManager.Models.DBModel.Mltx_UserInfo>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="/assets/plugins/jquery-1.10.2.min.js"></script>
+<script src="/Scripts/jquery-1.8.2.js"></script>
+
+<link href="/css/box.css" rel="stylesheet" />
+<script src="/Scripts/box.js"></script>
+<div class="container-fluid" id="gaodu">
+    <div class="rule">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <h3 class="titles" style="margin: 0px; margin-bottom: 10px;">管理 <small>人员管理</small>
+                </h3>
+                <ul class="page-breadcrumb breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="@Url.Content("~/Global/Index")">首页</a>
+                    </li>
+                    <i class="icon-angle-right"></i>
+                    <li>
+                        <a href="#">人员管理</a>
+                    </li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <div class="page-breadcrumb ">
+                    <a href="/Mltx_Authority/SelectClass" class="btn default"><i class="icon-plus"></i>添加</a>
+                </div>
+            </div>
+            <div class="col-md-5" style="padding-bottom: 1%;">
+                <div class="from-group">
+                     @using (Html.BeginForm("Index", "Mltx_Authority", new RouteValueDictionary { { "id", "" } }, FormMethod.Get))
+                     {
+                         <div class="col-md-12" style="margin-left: 26%;">
+                             <input type="text" name="kword" value="@Request.QueryString["kword"]" id="nav-search-input" style="width: 300px;" class="form-control" placeholder="人员名称搜索">
+                         </div>
+                     }
+                </div>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped table-bordered table-advance table-hover">
+                    <thead>
+                        <tr>
+                            <th>人员编号</th>
+                            <th>人员名称</th>
+                            <th>人员分组</th>
+                            <th>是否注销</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @r.UserId
+                                </td>
+                                <td>
+                                    @r.UserName
+                                </td>
+                                @*<td>
+                        @Html.DisplayFor(modelItem => item.Real_Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Goods_Stock)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Goods_Sales)
+                    </td>*@
+                                <td>
+                                    @r.Group.GroupName
+                                </td>
+                                @*  <td>
+                        @Html.DisplayFor(modelItem => item.STime)
+                    </td>*@
+                                <td>
+                                    
+                                    @if (r.Enable == Status.可用)
+                                    {
+                                        <div class="make-switch switch-mini has-switch on" onclick="changeState(this,@r.UserId);">
+                                            <div class="switch-on switch-animate">
+                                                <input type="checkbox" checked="" class="toggle"><span class="switch-left switch-mini">可用</span><label class="switch-mini">&nbsp;</label><span class="switch-right switch-mini">注销</span></div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="make-switch switch-mini has-switch off" onclick="changeState(this,@r.UserId);">
+                                            <div class="switch-off switch-animate">
+                                                <input type="checkbox" checked="" class="toggle"><span class="switch-left switch-mini">可用</span><label class="switch-mini">&nbsp;</label><span class="switch-right switch-mini">注销</span></div>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    <a class="blue" href="/Mltx_Authority/UpdateUserPage?goodId=@r.UserId">
+                                        <i class="icon-pencil bigger-130"></i>
+                                    </a>&nbsp;
+					    <a class="red" href="#" onclick="del(@r.UserId);">
+                            <i class="icon-trash bigger-130"></i>
+                        </a>
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+                 <footer style="text-align:center">
+                         @Html.Pager(Model, new Webdiyer.WebControls.Mvc.PagerOptions { PageIndexParameterName = "id" })
+                     </footer> 
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var cmd = parent.document.getElementById("win");
+    cmd.height = $("#gaodu").height();
+    //用户注销
+    //修改启用状态
+    function changeState(obj, kid) {
+        if (obj.getAttribute("class").indexOf("off") > 0) {
+            $.get("/Mltx_Authority/DeleteUser", { id: kid, r: '1' }, function (r) {
+                if (r == "ajaxerror") {
+                    box.alert("对不起,你的权限不够", "error");
+                } else if (r == 0) {
+                    box.alert("激活成功");
+                    obj.className = obj.className.replace("off", "on");
+                    obj.getElementsByTagName("div").item(0).className = "switch-on switch-animate";
+                } else {
+                    box.alert("激活失败，请重新选择", "error");
+                }
+
+            });
+
+        } else {
+            $.get("/Mltx_Authority/DeleteUser", { id: kid, r: '0' }, function (r) {
+                if (r == "ajaxerror") {
+                    box.alert("对不起,你的权限不够", "error");
+                } else if (r == 0) {
+                    box.alert("注销成功");
+                    obj.className = obj.className.replace("on", "off");
+                    obj.getElementsByTagName("div").item(0).className = "switch-off switch-animate";
+                   
+                } else {
+                    box.alert("注销失败，请重新选择", "error");
+                }
+
+            });
+
+
+        }
+
+    }
+    function del(e) {
+        var r = confirm("确定要注销此用户？");
+        if (r == true) {
+            $.get("/Mltx_Authority/DeleteUser", { id: e }, function (r) {
+                if (r == "ajaxerror") {
+                    box.alert("权限未通过", "error");
+                }
+                else if (r == 0) {
+                    box.alert("注销成功,1秒后刷新");
+                    setTimeout(function () { location.href = "/Mltx_Merchandise/Index" }, 1000);
+                } else {
+                    box.alert("注销失败", "error");
+                }
+            });
+        }
+    }
+</script>

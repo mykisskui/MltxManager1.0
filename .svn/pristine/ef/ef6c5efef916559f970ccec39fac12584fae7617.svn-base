@@ -1,0 +1,45 @@
+﻿using MltxManager.Models.DBModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace MltxManager.Controllers
+{
+    public class Mltx_TemplateController : Controller
+    {
+
+        private MltxDbContext db = new MltxDbContext();
+        /// <summary>
+        /// 首页
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Index()
+        {
+            IEnumerable<Mltx_Slide> slides = null;
+            IEnumerable<Mltx_Menu> menus = null;
+            try {
+                slides = db._slide.OrderBy(f => f.sort);//所有幻灯片数据
+                menus = db._menu.OrderBy(f => f.Sort);//所有菜单数据
+            }
+            catch {
+
+            }
+            ViewBag.slides = slides;
+            ViewBag.menus = menus;
+            return View();
+        }
+        /// <summary>
+        /// 搜索
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult search()
+        {
+            try { }
+            catch { }
+            return View();
+        }
+
+    }
+}

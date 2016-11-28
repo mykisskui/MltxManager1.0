@@ -1,0 +1,106 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using MltxManager.Data.MethodHepler;
+using MltxManager.Models.DBHelper;
+using MltxManager.Models.DBHelper.Mode;
+using MltxManager.Models.DBModel;
+using Webdiyer.WebControls.Mvc;
+
+namespace MltxManager.Data
+{
+
+    public class ForetasteDate
+    {
+        private readonly MltxDbContext _db = new MltxDbContext();
+        #region 试吃商品
+        /// <summary>
+        /// 读取所有试吃商品
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="kword"></param>
+        /// <returns></returns>
+        public ReturnMsg GetForetaste(int id, string kword)
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(kword))
+                {
+                    re.Foretastes = _db.foretaste.Include("Goods").Where(a => a.Goods.GoodsName.Contains(kword))
+                        .OrderByDescending(a => a.Id)
+                        .Select(a => new Foretaste
+                        {
+                            ETime = a.ETime,
+                            GoodsId = a.Goods.GoodsId,
+                            Name = a.Goods.GoodsName,
+                            Sort = a.Sort,
+                            States = a.State
+                        }).ToPagedList(id, 10);
+                }
+                else
+                {
+                    re.Foretastes = _db.foretaste.Include("Goods").OrderByDescending(a => a.Id)
+                        .Select(a => new Foretaste
+                        {
+                            ETime = a.ETime,
+                            GoodsId = a.Goods.GoodsId,
+                            Name = a.Goods.GoodsName,
+                            Sort = a.Sort,
+                            States = a.State
+                        }).ToPagedList(id, 10);
+                }
+            }
+            catch (Exception e)
+            {
+                re.errcode = -1;
+                re.errmsg = e.Message;
+                MHepler.writelog_err("读取所有试吃商品：" + e.Message);
+                return re;
+            }
+            re.errcode = 0;
+            return re;
+        }
+        /// <summary>
+        /// 读取上架商品
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="kword"></param>
+        /// <returns></returns>
+        public ReturnMsg GetForetasteCommodity(int id, string kword)
+        {
+            var re = new ReturnMsg();
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(kword))
+                {
+                    re.MltxGoodsInfoShops =
+                        _db.goodsinfo_shop.Where(a => a.Enable == Added.上架 && a.GoodsName.Contains(kword))
+                            .OrderByDescending(a => a.GoodsId)
+                            .ToPagedList(id, 10);
+                }
+                else
+                {
+                    re.MltxGoodsInfoShops =
+                        _db.goodsinfo_shop.Where(a => a.Enable == Added.上架)
+                            .OrderByDescending(a => a.GoodsId)
+                            .ToPagedList(id, 10);
+                }
+            }
+            catch (Exception e)
+            {
+
+                re.errcode = -1;
+                re.errmsg = e.Message;
+                MHepler.writelog_err("读取上架商品：" + e.Message);
+                return re;
+            }
+            re.errcode = 0;
+            return re;
+        }
+        #endregion
+
+
+    }
+}

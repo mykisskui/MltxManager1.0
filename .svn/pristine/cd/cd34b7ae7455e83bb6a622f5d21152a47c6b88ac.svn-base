@@ -1,0 +1,82 @@
+﻿@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>搜索</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+        <link href="/assets/plugins/font-awesome/css/font-awesome.min.css"  rel="stylesheet" type="text/css"/><script src="~/Scripts/iScroll-4.2.5.js"></script>    <link href="/css/search.css" rel="stylesheet" />    <script>
+        var winheight;
+        var defaultParentNodeResult = true;
+        var _translate = null;
+        var _distX = 0;
+        var whiles = true;
+        var winwidth = window.innerWidth;
+        function load() {
+            var _height = window.innerHeight;
+            var _width = window.innerWidth >= 640 ? 640 : window.innerWidth;
+            var headerHeight;
+            var FloatHeight;
+            try{
+                FloatHeight = -1;
+                headerHeight = document.getElementsByClassName('search_header').item(0).clientHeight;
+            } catch (e) {
+                //false
+                FloatHeight = 0;
+            }
+            winheight = _height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2)) + 'px';
+            console.log(_height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2)) + 'px');
+            page_scroll_0.style.height = _height - headerHeight - (FloatHeight == 0 ? 50 : (FloatHeight + 2)) + 'px';
+            page_scroll_0.style.width = _width + 'px';
+            myscroll = new iScroll("page_scroll_0", {
+                vScroll: true,
+                vScrollbar: false,
+                vScrollbar: false,
+                bounce: false,
+                lockDirection: true,
+                onBeforeScrollStart: function () {
+                }
+                      ,
+                onScrollMove: function (e) {
+
+                },
+                onBeforeScrollMove: function (e) {
+                 
+                },
+                onBeforeScrollEnd: function () {
+
+                }
+
+            });
+            document.body.ontouchmove = function (event) {
+
+                event.preventDefault();
+
+            }
+        }
+        window.addEventListener('load', load, false);
+
+    </script>    </head>        <body>
+            <div class="search_header">
+                    <div>
+                        <input type="text" value="" />
+                        <i class="icon-search"></i>
+                    </div>
+                    <div>
+                        <a>取消</a>
+                    </div>
+            </div>
+             <div class="search_0" id="page_scroll_0">
+                       <div style="overflow:hidden;">
+                            
+                       </div>
+                 </div>
+        </body>
+    </html>

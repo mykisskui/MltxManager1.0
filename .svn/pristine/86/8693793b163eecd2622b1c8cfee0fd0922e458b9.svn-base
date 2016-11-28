@@ -1,0 +1,44 @@
+﻿using MltxManager.Models.DBHelper;
+using MltxManager.Models.DBModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using Webdiyer.WebControls.Mvc;
+
+namespace MltxManager.Data
+{
+    public class Slide
+    {
+
+        MltxDbContext db = new MltxDbContext();
+        ReturnMsg msg = new ReturnMsg();
+        /// <summary>
+        /// 幻灯片列表
+        /// </summary>
+        /// <returns></returns>
+        public ReturnMsg SlideIndex(int page = 1) {
+
+            try {
+                 msg.slides = db._slide.OrderByDescending(f => f.sort).ToPagedList(10, page);
+
+            }
+            catch { }
+            return msg;
+        }
+        /// <summary>
+        /// 幻灯片添加and编辑
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ReturnMsg SlideAddEditList(int id = 0) {
+            msg.slide = new Mltx_Slide();
+            try {
+                msg.slide = db._slide.Where(f => f.Id == id).FirstOrDefault();
+            }
+            catch { }
+            return msg;
+
+        }
+    }
+}

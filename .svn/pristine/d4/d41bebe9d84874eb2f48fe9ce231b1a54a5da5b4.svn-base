@@ -1,0 +1,597 @@
+﻿using MltxManager.Models.DBHelper;
+using MltxManager.Models.DBHelper.Mode;
+using MltxManager.Models.DBModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace MltxManager.Data
+{
+    //接口程序数据获取方法
+    public class InterfaceData
+    {
+        #region 商品信息
+        /// <summary>
+        /// 根据商品id获取商品信息
+        /// </summary>
+        /// <param name="goodsid"></param>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        public ReturnMsg _getGoodsinfobyGid(int goodsid, string tag)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    if (tag == "0")
+                    {
+                        Mltx_GoodsInfo_shop ginfo_s = db.goodsinfo_shop.Where(g => g.GoodsId == goodsid).SingleOrDefault();
+
+                        rmsg.errcode = 0;
+                        rmsg.MltxGoodsInfoShop = ginfo_s;
+                    }
+                    else
+                    {
+                        Mltx_GoodsInfo_fresh ginfo_f = db.goodsinfo_fresh.Where(g => g.GoodsId == goodsid).SingleOrDefault();
+
+                        rmsg.errcode = 0;
+                        rmsg.MltxGoodsInfoFresh = ginfo_f;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("接口-根据gid获取商品信息时异常:" + ex.Message);
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+       
+        /// <summary>
+        /// 根据分组id获取商品信息 分页
+        /// </summary>
+        /// <param name="groupid">分组id</param>
+        /// <param name="page">第几页</param>
+        /// <param name="num">每页条数</param>
+        /// <param name="orderbyway">排序 0 价格降序 1 价格升序</param>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        public ReturnMsg _getGoodsinfoListByGroupid(string groupid, string page, string num, string orderbyway,string tag)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+            int n = int.Parse(num);//每页数据条数
+            int p = int.Parse(page);//页数
+            int cnt = n * p;//跳过数据条数
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    List<GoodsBase> list = new List<GoodsBase>();
+                    IQueryable<Mltx_GoodsInfo_shop> list_s;
+                    IQueryable<Mltx_GoodsInfo_fresh> list_f; 
+                    if(tag == "0")//商城
+                    {
+                        if (!string.IsNullOrEmpty(groupid))//按分组查
+                        {
+                            int gid = int.Parse(groupid);
+                            list_s = db.goodsinfo_shop.Where(g => g.GroupId == gid);
+                        }
+                        else//查询全部
+                        {
+                            list_s = db.goodsinfo_shop;                           
+                        }
+                        //排序
+                        if (orderbyway == "0")
+                        {
+                            list_s = list_s.OrderByDescending(l => l.Rprice);
+                        }
+                        else if (orderbyway == "1")
+                        {
+                            list_s = list_s.OrderBy(l => l.Rprice);
+                        }
+
+                        list = list_s.Skip(cnt).Take(n).Select(a => new GoodsBase
+                        {
+                            GoodsId = a.GoodsId,
+                            GoodsName = a.GoodsName,
+                            GoodsPic = a.GoodsListPic,
+                            GoodsGuige = a.GoodsGuige,
+                            Rprice = a.Rprice
+                        }).ToList();
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(groupid))//按分组查
+                        {
+                            int gid = int.Parse(groupid);
+                            list_f = db.goodsinfo_fresh.Where(g => g.GroupId == gid);
+
+                        }
+                        else
+                        {
+                            list_f = db.goodsinfo_fresh;                            
+                        }
+
+                        //排序
+                        if (orderbyway == "0")
+                        {
+                            list_f = list_f.OrderByDescending(l => l.Rprice);
+                        }
+                        else if(orderbyway == "1")
+                        {
+                            list_f = list_f.OrderBy(l => l.Rprice);
+                        }
+
+                        list = list_f.Skip(cnt).Take(n).Select(a => new GoodsBase
+                        {
+                            GoodsId = a.GoodsId,
+                            GoodsName = a.GoodsName,
+                            GoodsPic = a.GoodsListPic,
+                            GoodsGuige = a.GoodsGuige,
+                            Rprice = a.Rprice
+                        }).ToList();
+                    }
+
+                    rmsg.errcode = 0;
+                    rmsg.goodsbaseList = list;
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("接口-根据分组id获取商品信息 分页:" + ex.Message);
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+
+        #endregion
+
+        #region 订单信息
+        /// <summary>
+        /// 根据订单号获取订单详情
+        /// </summary>
+        /// <param name="orderid"></param>
+        /// <returns></returns>
+        public ReturnMsg _getOrderdetailsByoid(string orderid)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    List<Mltx_Order_sub> orderlist = db.order_s.Where(o => o.OrderId_id == orderid).ToList();
+
+                    rmsg.errcode = 0;
+                    rmsg.mltx_order_sub = orderlist;
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("接口-根据订单id获取订单详情时异常:" + ex.Message);
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+        
+        /// <summary>
+        /// 根据订单状态获取
+        /// </summary>
+        /// <param name="state">状态 0 已完成 1 未完成 -1取消 2 待评价</param>
+        /// <returns></returns>
+        public ReturnMsg _getOrderListByState(int state)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+            IQueryable<Mltx_Order_main> list_m;
+         
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    switch (state)
+                    {
+                        case 0: list_m = db.order_m.Where(o => o.State == State.完成 || o.State == State.待评价).OrderByDescending(o=>o.OrderTime); break;
+                        case 1: list_m = db.order_m.Where(o => o.State == State.待发货 || o.State == State.等待自提 || o.State == State.发货中 || o.State == State.货到付款但未预付款 || o.State == State.货到付款已预付款 || o.State == State.未付款).OrderByDescending(o=>o.OrderTime);break;
+                        case -1: list_m = db.order_m.Where(o => o.State == State.取消).OrderByDescending(o=>o.OrderTime); break;
+                        case 2: list_m = db.order_m.Where(o =>o.State == State.待评价).OrderByDescending(o => o.OrderTime); break;
+                        default: list_m = db.order_m.OrderByDescending(o => o.OrderTime); break;
+                    }
+
+                    List<OrderBase> list = list_m.Select(a => new OrderBase
+                    {
+                        OrderId = a.OrderId,
+                        GoodsCnt = a.GoodsCnt,
+                        OrderTotals = a.OrderTotals,
+                        State = (int)a.State,
+                        GoodsPic = db.order_s.Where(s => s.OrderId_id == a.OrderId).FirstOrDefault().GoodsPic,
+                        GoodsName = db.order_s.Where(s => s.OrderId_id == a.OrderId).FirstOrDefault().GoodsName,
+                    }).ToList();
+
+                    rmsg.errcode = 0;
+                    rmsg.orderbaseList = list;
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("接口-获取订单列表异常:" + ex.Message);
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+        #endregion
+
+        #region 会员登录 信息
+        /// <summary>
+        /// 登陆app 
+        /// </summary>
+        /// <param name="tel"></param>
+        /// <param name="pwd"></param>
+        /// <returns></returns>
+        public string _loginApp(string tel, string pwd)
+        {
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    Mltx_MemberInfo info = db.memberinfo.SingleOrDefault(m => m.Tel == tel);
+                    if (info == null)
+                    {
+                        return "1";//没有注册信息
+                    }
+                    else
+                    {
+                        if (Data.MethodHepler.MHepler.GetMD5(pwd) == info.Password)
+                            return "0";//登陆成功
+                        else
+                            return "2";//密码错误
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("接口-登陆app时异常:" + ex.Message);
+                    return "-1";
+                }
+            }
+        }
+
+        /// <summary>
+        /// 修改完善用户信息
+        /// </summary>
+        /// <param name="membername"></param>
+        /// <param name="tel"></param>
+        /// <param name="sex"></param>
+        /// <param name="birthday"></param>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        public string _modifyuserinfo(string membername, string tel, int sex, DateTime birthday, string address)
+        {
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    Mltx_MemberInfo minfo = db.memberinfo.SingleOrDefault(m => m.Tel == tel);
+                    if (string.IsNullOrEmpty(membername))
+                    {
+                        minfo.MemberName = tel;
+                    }
+                    else
+                    {
+                        minfo.MemberName = membername;
+                    }
+                    minfo.sex = sex;
+                    minfo.Birthday = birthday;
+                    minfo.Address = address;
+                    minfo.UserPic = "/";//默认头像
+
+                    db.Entry(minfo).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+
+                    return "0";
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("接口-修改完善用户资料时异常:" + ex.Message);
+                    return "-1";
+                }
+            }
+        }
+
+        /// <summary>
+        /// 根据tel获取用户信息
+        /// </summary>
+        /// <param name="tel"></param>
+        /// <returns></returns>
+        public ReturnMsg _getUserinfoBytel(string tel)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    MemberBase minfo = db.memberinfo.Where(m => m.Tel == tel).Select(m => new MemberBase
+                    {
+                        MemberName = m.MemberName,
+                        Tel = m.Tel,
+                        sex = m.sex,
+                        UserPic = m.UserPic,
+                        Rank = m.RankId,
+                        Integral = m.Integral,
+                        Birthday = m.Birthday
+                    }).SingleOrDefault();
+
+                    rmsg.errcode = 0;
+                    rmsg.userbaseinfo = minfo;
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("接口-根据电话获取用户信息异常:" + ex.Message);
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+
+        /// <summary>
+        /// 根据电话获取会员等级信息 消费金额 次数
+        /// </summary>
+        /// <param name="tel">电话号码</param>
+        /// <returns></returns>
+        public ReturnMsg _getMemberRankByTel(string tel)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    MemberRankBase info = db.memberinfo.Where(m => m.Tel == tel).Select(m => new MemberRankBase {
+                        Consume =m.Consume,
+                        Consumenumber = m.Consumenumber,
+                        Rank = m.RankId
+                    }).SingleOrDefault();
+
+                    rmsg.errcode = 0;
+                    rmsg.memberrankinfo = info;
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("接口-根据电话获取会员等级消费信息异常:" + ex.Message);
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+
+        #endregion
+
+        #region 商品分组信息
+        /// <summary>
+        /// 获取分组信息 
+        /// </summary>
+        /// <param name="type">类型 0 商城 1 鲜果</param>
+        /// <returns></returns>
+        public ReturnMsg _getGroupList(string type)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    if (type == "0")
+                    {
+                        List<Mltx_Group_first> list_f = db.group_first.ToList();
+                        List<ShopGroupData> list1 = new List<ShopGroupData>();
+                        List<SecondGroupData> list2 = new List<SecondGroupData>();
+
+                        foreach (Mltx_Group_first item in list_f)//一级分组
+                        {
+                            List<Mltx_Group_second> list_s = db.group_second.Where(g => g.OwnerId == item.GroupId).ToList();
+                            ShopGroupData data_f = new ShopGroupData();
+                            foreach (Mltx_Group_second item1 in list_s)//二级分组
+                            {
+                                SecondGroupData data_s = new SecondGroupData();
+                                data_s.secondId = item1.GroupId;
+                                data_s.secondName = item1.GroupName;
+                                data_s.picpath = item1.GroupPic;
+                                list2.Add(data_s);
+                            }
+
+                            data_f.firstId = item.GroupId;
+                            data_f.firstName = item.GroupName;
+                            data_f.secondData = list2;
+
+                            list1.Add(data_f);
+                        }
+
+                        rmsg.errcode = 0;
+                        rmsg.shopgroupdata = list1;
+                    }
+                    else//获取鲜果单数据
+                    {
+                        List<Mltx_Group_fresh> list = db.group_fresh.ToList();
+                        rmsg.errcode = 0;
+                        rmsg.MltxGroupFreshes = list;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("接口-获取分组信息时异常:" + ex.Message);
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        } 
+        #endregion
+
+        #region 地址库信息
+
+        /// <summary>
+        /// 根据电话tel获取地址库信息
+        /// </summary>
+        /// <param name="tel"></param>
+        /// <returns></returns>
+        public ReturnMsg _getAddressInfoByTel(string tel)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    List<Mltx_Address> list = db.address.Where(a => a.Tel == tel).ToList();
+
+                    rmsg.errcode = 0;
+                    rmsg.addressList = list;
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("接口-获取地址库时异常:" + ex.Message);
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+        #endregion
+
+        #region 首页部分信息
+
+        /// <summary>
+        /// 获取幻灯片列表
+        /// </summary>
+        /// <param name="tag">标识 1表示鲜果幻灯片 null或者0 表示商城</param>
+        /// <returns></returns>
+        public ReturnMsg _getSlideinfo(string tag)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+
+            if(string.IsNullOrEmpty(tag))
+            {
+                tag = "0";
+            }
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    int t = int.Parse(tag);
+                    List<SlideBase> list = db._slide.Where(s => s.Location == t).Select(s => new SlideBase
+                    {
+                        Id = s.Id,
+                        Img = s.Img,
+                        SlideCls = s.SlideCls,
+                        sort = s.sort,
+                        Type = s.Type,
+                        URL = s.URL,
+                        Value = s.Value
+                    }).ToList();
+
+                    rmsg.errcode = 0;
+                    rmsg.slidebaseList = list;
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("接口-获取幻灯片列表异常:" + ex.Message);
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+
+        }
+
+        /// <summary>
+        /// 获取首页菜单列表
+        /// </summary>
+        /// <param name="tag">标识 0 底部浮动菜单 1或null 顶部商城 2 顶部鲜果</param>
+        /// <returns></returns>
+        public ReturnMsg _getMenuInfo(string tag)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+
+            if (string.IsNullOrEmpty(tag))
+            {
+                tag = "1";//默认查询商城
+            }
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    Location t =(Location) int.Parse(tag);
+                    List<MenuBase> list = db._menu.Where(m => m.Location == t).Select(m => new MenuBase { 
+                    
+                        Img = m.Img,
+                        MenuCls = m.MenuCls,
+                        Name = m.Name,
+                        Sort = m.Sort,
+                        Type = m.Type,
+                        URL = m.URL,
+                        Value = m.Value
+                    }).ToList();
+
+                    rmsg.errcode = 0;
+                    rmsg.menubaseList = list;
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("接口-获取菜单列表异常:" + ex.Message);
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+
+        /// <summary>
+        /// 获取首页模块列表 
+        /// </summary>
+        /// <param name="tag">标识 0或null 商城 1 鲜果</param>
+        /// <returns></returns>
+        public ReturnMsg _getIndexModule(string tag)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+
+            if (string.IsNullOrEmpty(tag))
+            {
+                tag = "0";
+            }
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    int t = int.Parse(tag);
+                    List<Mltx_IndexModule> list = db.index_m.Where(m => m.IndexCls == t).ToList();
+
+                    rmsg.errcode = 0;
+                    rmsg.indexmodleBaselist = list;
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("接口-获取首页模块列表异常:" + ex.Message);
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+
+        #endregion
+
+    }
+}

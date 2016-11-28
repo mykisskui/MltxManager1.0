@@ -1,0 +1,908 @@
+﻿@using Webdiyer.WebControls.Mvc;
+
+@model IEnumerable<MltxManager.Models.DBModel.Mltx_Menu>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<style>
+    .floatbutfindbutton {
+        background-color: #28b779 !important;
+        border-color: #d5d5d5;
+        float: left;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        width: 100px;
+        text-align: center;
+        padding: 10px 0;
+        border: 1px solid #d5d5d5;
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .dropzone .dz-preview {
+        width: 100px!important;
+        margin: -81px 0 0 0!important;
+    }
+
+    .dz-message {
+        display: none!important;
+    }
+
+    .dz-image {
+        width: 99px!important;
+        height: 100px!important;
+    }
+
+        .dz-image > img {
+            width: 100px!important;
+            height: 100px!important;
+        }
+
+    .dz-remove {
+        width: 100px;
+        background-color: #28b779 !important;
+        color: #fff;
+        padding: 5px;
+    }
+
+    .dz_remove:hover {
+        cursor: pointer!important;
+        text-decoration: none!important;
+    }
+
+    .imageshow {
+        margin: 2px 0 0 0;
+        width: 100px;
+        height: 100px;
+        background-color: #28b779 !important;
+        line-height: 100px;
+        text-align: center;
+        color: #fff;
+    }
+
+    #upload {
+        width: 100px;
+        position: absolute;
+    }
+
+    .imageupbutton {
+        height: 30px;
+        width: 100px;
+        margin: 2px 0;
+        background-color: #28b779 !important;
+    }
+
+    .image_cancel, .image_sub {
+        float: left;
+        width: 49px;
+        text-align: center;
+        color: #fff;
+        line-height: 30px;
+    }
+
+        .image_cancel, .image_sub:hover {
+            cursor: pointer;
+        }
+
+    .image_border {
+        border: 1px solid #FFF;
+        height: 20px;
+        float: left;
+        margin: 5px 0;
+    }
+    .menuinfoclass {
+    line-height: 30px;
+    width: 440px;
+    border: 1px solid #d5d5d5;
+    margin: 5px 0;
+}
+    .menudelete, .menuupdate {
+        font-size:16px;
+        line-height:33px;
+        color:#616161;
+        cursor:pointer;
+    }
+    .floatmenuShow:hover {
+       background-color:#e2e2e2;
+    }
+    .menuinput {
+    border: 1px solid #d5d5d5;
+    font-size: 14px;
+    color: #858585;
+    padding: 5px 4px;
+    line-height: 1.2;
+    outline: none;
+    margin-bottom: 10px;
+    width: 163px;
+    margin-left: 15px;
+}
+    .IndexMenuSub {
+            background-color: #28b779 !important;
+    color: #fff;
+    height: 35px;
+    }
+    .APPInput {
+        display:none;
+    }
+</style>
+<script>
+
+</script>
+<link href="~/css/ImageBank.css" rel="stylesheet" />
+<div class="container-fluid">
+    <div class="rule">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <h3 class="titles" style="margin: 0px; margin-bottom: 10px;">首页菜单 <small>首页菜单设置</small>
+                </h3>
+                <ul class="page-breadcrumb breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="JavaScript:location.reload()">首页菜单</a>
+                    </li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+
+        @* 菜单 *@
+        <div style="border: 1px solid #e7e7e7; padding: 15px; float: left; width: 100%;">
+
+
+            <div style="margin-bottom: 15px; float: left; width: 100%; margin-top: 15px; padding-bottom: 15px; border-bottom: 1px dotted #d5d5d5;">
+                <label style="width: 17%; text-align: right; float: left; color: #717171; padding: 0 15px 0 0;">浮动菜单</label>
+                <div data-id="0" data-mid="" class="floatbutfindbutton">首页</div>
+                <div data-id="1" data-mid="" class="floatbutfindbutton">购物车</div>
+                <div data-id="2" data-mid="" class="floatbutfindbutton">分类</div>
+                <div data-id="3" data-mid="" class="floatbutfindbutton">我的信息</div>
+
+                          <div style="float:left;width:100%;margin:30px 0 0 17%;" class="floatMenu">
+
+                            <ul id="naviselectid" style="list-style-type: none; padding: 0;">
+                                @{
+                                    try{
+                                        if(Model.Count() == 0){
+                                            
+                                            
+                                        }else{
+                                        
+                                        foreach(var item in Model.Where(f=>f.Location == 0).Take(5)){
+                                               string Li = string.Format("MenuFloatLi{0}",item.Id);
+                                               int location = (int)item.Location;
+                                            
+                                    <li id="@Li" class="menuinfoclass navimark FloatMenuList">
+                                        <div class="floatmenuShow" style="padding: 5px 10px; border-radius: 5px;">
+                                                <img src="@item.Img" style="height: 32px; width: 32px; margin-right: 7px;">
+                                                <span class="menutitle" style="color:#7c9eb2;">@item.Name</span>
+                                                <span style="float: right; height: 30px; width: 30px;text-align:center;">
+                                                    <i class="icon-trash menudelete" data-my="myDropzone" data-id="@item.Id" data-location="@location"></i>
+                                                </span>
+                                                <span style="float: right; margin-right: 10px; height: 30px; width: 30px;text-align:center;">
+                                                    <i class="icon-edit menuupdate" data-my="myDropzone" data-id="@item.Id"  data-location="@location"></i>
+                                                </span>
+                                        </div>
+                                    </li>
+                                            }
+                                       }
+                                        }
+                                        catch(Exception e)
+                                        {
+                                            
+                                        }
+                                }
+                            </ul>
+                        </div>
+            </div>
+
+
+            @* 首页菜单 *@
+            <div style="margin-bottom: 15px; float: left; width: 100%; margin-top: 15px; padding-bottom: 15px;">
+                <label style="width: 17%; text-align: right; float: left; color: #717171; padding: 0 15px 0 0;">首页菜单</label>
+                        <ul style="display:-webkit-box;list-style-type:none;padding:0;width:500px;">
+                            <li style="-webkit-box-flex:1;width:250px;">
+                                <input class="menuinput" type="text" id="IndexMenuName" placeholder="菜单名称">
+                                 <input class="menuinput" type="text" id="IndexMenuURL" placeholder="菜单路径">
+                                  <input class="menuinput" type="text" id="IndexMenuSort" placeholder="菜单排序">
+                                           <label name="urllabel" style="height:25px;padding-left: 15px;color:#717171;padding-right:28px">
+                       <div class="radio"><span class="checked"><input type="radio" name="URLType" data-id="1" checked="checked"></span></div>微信
+                </label>
+                                    <label name="urllabel" style="height:25px;margin-right:15px;padding-left: 15px;color:#717171;">
+                       <div class="radio"><span><input type="radio" name="URLType" data-id="2"></span></div>安卓
+                </label> 
+                                 <input class="menuinput APPInput" type="text" id="IndexMenuType" placeholder="菜单类型">
+                                  <input class="menuinput APPInput" type="text" id="IndexMenuValue" placeholder="菜单编号">
+                                  <label style="height:25px;padding-left: 15px;color:#717171;">
+                       <div class="radio"><span class="checked"><input type="radio" name="position" data-id="1" checked="checked"></span></div>商城菜单
+                </label>
+                                    <label style="height:25px;margin-right:15px;padding-left: 15px;color:#717171;">
+                       <div class="radio"><span><input type="radio" name="position" data-id="2"></span></div>鲜果菜单
+                </label>
+                                <div style="width:163px;margin-left:15px;margin-bottom: 10px;">
+
+                         <input class="menuinput IndexMenuSub" style="margin:0;width:79px;" type="button" value="保存" id="IndexMenuSub" >
+                         <input class="menuinput IndexMenuEM" style="margin:0;width:79px;    padding: 8.5px 4px;" type="button" value="清空" id="IndexMenuEM" >      
+                                </div>
+
+                            </li>
+                            <li style="-webkit-box-flex:1;width:250px;">
+                                <div id="upload_1" data-action="/Mltx_Menu/MenuAddEdit" style="display: block;">
+                                <div style="display: block;" class="imageup">
+                                    <form action="/Mltx_Merchandise/FigureUploadedFile" method="post" enctype="multipart/form-data" class="dropzone dz-clickable dz-started MyDro" id="mydroIndexMenu"
+                                        style="width: 100px; min-height: 130px!important; height: 130px!important; padding: 10px 0; background-color: #28b779 !important; border: 0; color: #fff; padding: 45px 0; text-align: center;">
+                                        选择图片100x100
+                                                        <input type="hidden" name="shumu" value="1" />
+                                    </form>
+                                </div>
+</div>
+                            </li>
+                         
+                        </ul>
+                               
+
+                          <div style="float:left;width:100%;margin:-15px 0 0 5%; height:300px;" class="floatMenu">
+                            <ul id="naviselectid1" style="list-style-type: none;float: left; padding: 0; min-width:440px; margin-right:15px;">
+                                           @{
+                                    try{
+                                        
+                                            string result = string.Empty;
+                                        if(Model.Count() == 0){
+                                            
+                                            
+                                        }else{
+                                        
+                                        foreach(var item in Model.Where(f=>(int)f.Location == 1).OrderBy(f=>f.Sort).Take(5)){
+                                               string Li = string.Format("MenuFloatLi{0}",item.Id);
+                                               int location = (int)item.Location;
+                                               System.Web.Script.Serialization.JavaScriptSerializer js = new System.Web.Script.Serialization.JavaScriptSerializer();
+                                                result = js.Serialize(Model.Where(f => (int)f.Location == 1).OrderBy(f => f.Sort).Take(5));
+                                           
+                                    <li id="@Li" class="menuinfoclass navimark FloatMenuList">
+                                        <div class="floatmenuShow" style="padding: 5px 10px; border-radius: 5px;">
+                                                <img src="@item.Img" style="height: 32px; width: 32px; margin-right: 7px;">
+                                                <span class="menutitle" style="color:#7c9eb2;">@item.Name</span>
+                                                <span style="float: right; height: 30px; width: 30px;text-align:center;">
+                                                    <i class="icon-trash menudelete" data-my="mydroIndexMenu" data-id="@item.Id" data-location="@location"></i>
+                                                </span>
+                                                <span style="float: right; margin-right: 10px; height: 30px; width: 30px;text-align:center;">
+                                                    <i class="icon-edit menuupdate" data-my="mydroIndexMenu" data-id="@item.Id"  data-location="@location"></i>
+                                                </span>
+                                        </div>
+                                    </li>
+                                               
+                                           
+                                            }
+                                                 <script>
+                                                     Location_1 = '@Html.Raw(HttpUtility.HtmlDecode(result))';
+
+                                                </script>
+                                       }
+                                        }
+                                        catch(Exception e)
+                                        {
+                                            
+                                        }
+                                }
+                            </ul>
+                              <ul id="naviselectid2" style="list-style-type: none;float: left; padding: 0;">
+                                           @{
+                                    try{
+
+                                        string result = string.Empty;
+                                        if(Model.Count() == 0){
+                                            
+                                            
+                                        }else{
+                                        
+                                        foreach(var item in Model.Where(f=>(int)f.Location == 2).OrderBy(f=>f.Sort).Take(5)){
+                                               string Li = string.Format("MenuFloatLi{0}",item.Id);
+                                               int location = (int)item.Location;
+                                               System.Web.Script.Serialization.JavaScriptSerializer js = new System.Web.Script.Serialization.JavaScriptSerializer();
+                                                result = js.Serialize(Model.Where(f => (int)f.Location == 2).OrderBy(f => f.Sort).Take(5));
+                                            
+                                    <li id="@Li" class="menuinfoclass navimark FloatMenuList">
+                                        <div class="floatmenuShow" style="padding: 5px 10px; border-radius: 5px;">
+                                                <img src="@item.Img" style="height: 32px; width: 32px; margin-right: 7px;">
+                                                <span class="menutitle" style="color:#7c9eb2;">@item.Name</span>
+                                                <span style="float: right; height: 30px; width: 30px;text-align:center;">
+                                                    <i class="icon-trash menudelete" data-my="mydroIndexMenu" data-id="@item.Id" data-location="@location"></i>
+                                                </span>
+                                                <span style="float: right; margin-right: 10px; height: 30px; width: 30px;text-align:center;">
+                                                    <i class="icon-edit menuupdate" data-my="mydroIndexMenu" data-id="@item.Id"  data-location="@location"></i>
+                                                </span>
+                                        </div>
+                                    </li>
+                                            }
+                                               <script>
+                                                    Location_2 = '@Html.Raw(HttpUtility.HtmlDecode(result))';
+
+                                                </script>
+                                       }
+                                        }
+                                        catch(Exception e)
+                                        {
+                                            
+                                        }
+                                }
+                            </ul>
+                        </div>
+            </div>
+            @* 首页菜单 *@
+        </div>
+        @* 菜单 *@
+
+    </div>
+</div>
+<!-- 浮动项 -->
+<div id="upload" data-action="/Mltx_Menu/MenuFloatAddEdit" style="display: none;">
+    <div style="display: block;" class="imageup">
+        <form action="/Mltx_Merchandise/FigureUploadedFile" method="post" enctype="multipart/form-data" class="dropzone dz-clickable dz-started MyDro" id="myDropzone"
+            style="width: 100px; min-height: 130px!important; height: 130px!important; padding: 10px 0; background-color: #28b779 !important; border: 0; color: #fff; padding: 45px 0; text-align: center;">
+            选择图片100x100
+                            <input type="hidden" name="shumu" value="1" />
+        </form>
+    </div>
+
+    <div class="imageupbutton">
+        <div class="image_cancel">取消</div>
+        <div class="image_border"></div>
+        <div class="image_sub">保存</div>
+    </div>
+</div>
+<!-- 浮动项 -->
+<style>
+    .IndexMenuImageTemplate {
+         width:100px;
+         height:130px;
+         display:none;
+    }
+    .IndexMenuImageTemplate_img {
+        width:100px;
+        height:100px;
+    }
+    .IndexMenuImageTemplate_button {
+        width:100px;
+        height:30px;
+            font-size: 14px;
+    text-align: center;
+    display: block;
+    cursor: pointer;
+    border: none;
+    background-color: #28b779 !important;
+    color: #fff;
+    padding: 5px;
+    }
+</style>
+<div class="IndexMenuImageTemplate" id="IndexMenuImageTemplateId">
+        <img class="IndexMenuImageTemplate_img" src="" />
+    <div class="IndexMenuImageTemplate_button" id="IndexMenuImageTemplate_button">删除</div>
+</div>
+<!---View-->
+<div class="modal fade in" id="basic" tabindex="-1" role="basic" aria-hidden="true">
+    <div class="modal-dialog modal-basic">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3 class="modal-title" style="font-family: 'Microsoft YaHei'; font-weight: 500; font-size: 20px;">修改订单价格<small style="color: red"> 输入的数值可正可负，正数表示加价，负数表示减价</small></h3>
+            </div>
+            <div class="modal-body" id="" style="height: 100px">
+                <div class="form-group">
+                    <label class="col-md-2 control-label">修改值</label>
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" id="OtherAdjust" name="OtherAdjust" value=""></input>
+                        <input type="hidden" name="orderid" id="orderid" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn green" onclick="Do();" data-dismiss="modal">确定</button>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+<!-- /.View -->
+
+<div class="modal fade in" id="full" tabindex="-1" role="full" aria-hidden="true">
+    <div class="modal-dialog modal-full">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3 class="modal-title" style="font-family: 'Microsoft YaHei'; font-weight: 500; font-size: 20px;">修改订单价格<small style="color: red"> 输入的数值可正可负，正数表示加价，负数表示减价</small></h3>
+            </div>
+            <div class="modal-body" id="" style="height: 100px">
+                <div class="form-group">
+                    <label class="col-md-2 control-label">修改值</label>
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" id="OtherAdjust" name="OtherAdjust" value=""></input>
+                        <input type="hidden" name="orderid" id="orderid" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn green" onclick="Do();" data-dismiss="modal">确定</button>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<link href="~/Scripts/dropzone/dropzone.css" rel="stylesheet" />
+<script src="~/Scripts/dropzone/dropzone.js"></script>
+<script src="/assets/plugins/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<link href="~/css/box.css" rel="stylesheet" />
+<script src="~/Scripts/box.js"></script>
+<script src="/Scripts/_config.js"></script>
+
+
+<script>
+    var menu_id = [];
+    menu_id[3] = -1;
+    $("input[name=URLType]").click(function () {
+        var _TypeId = $(this).attr('data-id');
+        var _AppInput = $('.APPInput');
+        _TypeId == Number(2) ? (_AppInput.show(),menu_id[4] = 0): (_AppInput.hide(),menu_id[4] = -1);
+   });
+    Dropzone.options.mydroIndexMenu = {
+        //指定上传图片的路径
+        url: "/Mltx_Merchandise/FigureUploadedFile",
+
+        //添加上传取消和删除预览图片的链接，默认不添加
+        addRemoveLinks: true,
+        //关闭自动上传功能，默认会true会自动上传
+        //也就是添加一张图片向服务器发送一次请求
+        autoProcessQueue: false,
+        //允许上传多个照片
+        uploadMultiple: true,
+
+        //每次上传的最多文件数，经测试默认为2，坑啊
+        //记得修改web.config 限制上传文件大小的节
+        parallelUploads: 10,
+        
+        init: function () {
+            mydroIndexMenu = this; // closure
+            this.on("addedfile", function () {
+                $("#mydroIndexMenu").find('.dz-remove').text('删除');
+            });
+            var MenuName, MenuURL, MenuSort,MenuType,MenuImage,MenuAppType,MenuAppValue,MenuWebApp;
+            $("#IndexMenuSub").click(function () {
+                 MenuName= IndexMenuName;
+                 var rs = /[A-Za-z0-9\u4e00-\u9fa5]$/;
+                if (!rs.test(MenuName.value)) {
+                    box.alert('菜单名称格式错误', 1);
+                    return false;
+                }
+                 MenuURL = IndexMenuURL;
+                if (MenuURL.value.trim() == '') {
+                    box.alert('菜单路径不可为空', 1);
+                    return false;
+                }
+                 MenuSort = IndexMenuSort;
+                if (isNaN(MenuSort.value) || MenuSort.value.trim() == '') {
+                    box.alert('菜单排序必须为整数', 1);
+                    return false;
+                }
+                MenuAppType = IndexMenuType;
+                MenuAppValue = IndexMenuValue;
+                switch (menu_id[4]) {
+                    case 0:
+                        
+                        if (MenuAppType.value.trim() == '') {
+                            box.alert('菜单类型不可为空', 1);
+                            return false;
+                        }
+                   
+                        if (MenuAppValue.value.trim() == '') {
+                            box.alert('菜单编号不可为空', 1);
+                            return false;
+                        }
+
+                        MenuWebApp = menu_id[4];
+                        break;
+                    case -1:
+                        //    false
+                        MenuWebApp = menu_id[4];
+                        break;
+                }
+                if (mydroIndexMenu.files.length == 0 && menu_id[3] == -1) {
+                    box.alert('请选择图片', 1);
+                    return false;
+                }
+                MenuType = $("input[name=position]:checked");
+                menu_id[3] == 0 ? Location_1_2AddEdit(MenuWebApp, MenuAppType,MenuAppValue, MenuName, MenuURL, MenuSort, MenuType, $('.IndexMenuImageTemplate_img').attr('src')) : mydroIndexMenu.processQueue();
+               
+            });
+            this.on("complete", function (data) {
+                if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                    try {
+
+                        if (data.xhr.status == 200) {
+                            var response = JSON.parse(data.xhr.response);
+                        } else {
+                            box.alert('上传失败,请刷新重试', 1);
+                            img_remove("mydroIndexMenu");
+                            return false;
+                        }
+                    } catch (e) {
+                        box.alert('上传失败,请重新登录', 1);
+                        img_remove("mydroIndexMenu");
+                        return false;
+                    }
+                    //string Name,string URL,string Sort,string Type,string Mid
+                    if (response.Result) {
+                        //Location_1_2AddEdit
+                        MenuImage = response.mingcheng;
+                        Location_1_2AddEdit(MenuWebApp, MenuAppType, MenuAppValue, MenuName, MenuURL, MenuSort, MenuType, MenuImage);
+                        
+                    } else {
+                        //  response.response;
+                    }
+                }
+            });
+        }
+    }
+    function Location_1_2AddEdit(MenuWebApp, MenuAppType, MenuAppValue, MenuName, MenuURL, MenuSort, MenuType, MenuImage) {
+        console.log(MenuWebApp + ":" + MenuAppType + ":" + MenuAppValue + ":" + MenuName + ":" + MenuURL + ":" + MenuSort);
+        $.ajax({
+            url: authcode.dom.getElementById('upload_1').getAttribute('data-action'),
+            type: 'post',
+            data: {AppType:MenuAppType.value,AppValue:MenuAppValue.value, Name: MenuName.value, URL: MenuURL.value, Image: MenuImage, Sort: MenuSort.value, Type: MenuType.attr('data-id'), Mid: menu_id[2],Class:MenuWebApp },
+            dataType: 'json',
+            beforeSend: function () {
+                /*  
+                    提示
+                */
+            },
+            async: false,
+            success: function (data) {
+                if (data.errcode == 0) {
+                    box.alert(data.errmsg);
+                    MenuType.attr('data-id') == "1" ? (Location_1 = JSON.stringify(data.menus)) : (Location_2 = JSON.stringify(data.menus));
+
+                    MenuDataoutput("mydroIndexMenu", data.menus, MenuType.attr('data-id'));
+                    mydroIndexMenu.files.length = 0;
+                    img_remove("mydroIndexMenu");
+                    IndexMenuImageTemplate(authcode.dom.getElementById('mydroIndexMenu'), null, 1);
+                    //
+                } else {
+                    box.alert(data.errmsg, 1);
+                }
+            }, error: function (e) {
+            }
+        })
+
+        menu_id[2] = '';
+    }
+
+
+    Dropzone.options.myDropzone = {
+        //指定上传图片的路径
+        url: "/Mltx_Merchandise/FigureUploadedFile",
+
+        //添加上传取消和删除预览图片的链接，默认不添加
+        addRemoveLinks: true,
+        //关闭自动上传功能，默认会true会自动上传
+        //也就是添加一张图片向服务器发送一次请求
+        autoProcessQueue: false,
+        //允许上传多个照片
+        uploadMultiple: true,
+
+        //每次上传的最多文件数，经测试默认为2，坑啊
+        //记得修改web.config 限制上传文件大小的节
+        parallelUploads: 10,
+
+        init: function () {
+            myDropzone = this; // closure
+            var l;
+            this.on("addedfile", function () {
+                $("#myDropzone").find('.dz-remove').text('删除');
+            });
+            $(".image_sub").click(function () {
+
+                if (myDropzone.files.length == 0) {
+                    box.alert('请选择图片', 1);
+                } else {
+                    myDropzone.processQueue();
+                }
+            });
+            $('.image_cancel').click(function () {
+                try {
+                    img_remove("myDropzone");
+                    myDropzone.files.length = 0;
+                } catch (e) { }
+            });
+
+            //当上传完成后的事件，接受的数据为JSON格式
+            this.on("complete", function (data) {
+                if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                    try {
+
+                        if (data.xhr.status == 200) {
+                            var response = JSON.parse(data.xhr.response);
+                        } else {
+                            box.alert('上传失败,请刷新重试', 1);
+                            img_remove("myDropzone");
+                            return false;
+                        }
+                    } catch (e) {
+                        box.alert('上传失败,请重新登录', 1);
+                        img_remove("myDropzone");
+                        return false;
+                    }
+                    if (response.Result) {
+                        $.ajax({
+                            url: authcode.dom.getElementById('upload').getAttribute('data-action'),
+                            type: 'post',
+                            data: { mid: menu_id[1], id: menu_id[0], image: response.mingcheng },
+                            dataType: 'json',
+                            beforeSend: function () {
+                                /*  
+                                    提示
+                                */
+                            },
+                            async: false,
+                            success: function (data) {
+                                if (data.errcode == 0) {
+                                    MenuDataoutput("myDropzone", data.menus);
+                                    box.alert(data.errmsg);
+                                    img_remove("myDropzone");
+                                    //
+                                } else {
+                                    box.alert(data.errmsg, 1);
+                                }
+                            }
+                        })
+                    } else {
+                        //  response.response;
+                    }
+                }
+            });
+
+            //删除图片的事件，当上传的图片为空时，使上传按钮不可用状态
+            this.on("removedfile", function () {
+            });
+        }
+    };        /*        输出菜单数据        @@param a 编号        @@param b 数据        @@param c 类型    */    function MenuDataoutput(a,b,c) {
+        var dataresult = '';
+        var _obj;
+        switch (a) {
+            case "myDropzone":
+                /*
+                    浮动菜单
+                */
+                _obj = naviselectid;
+
+                break;
+            case "mydroIndexMenu":
+                if (c == Number(1)) {
+                    _obj = naviselectid1;
+                } else {
+                    _obj = naviselectid2;
+                }
+                break;
+
+        }
+        for (var i = 0; i < b.length; i++) {
+            var _MenuFloatLi = 'MenuFloatLi' + b[i].Id;
+            dataresult += '<li id="' + _MenuFloatLi + '" class="menuinfoclass navimark FloatMenuList">' +
+                     '<div class="floatmenuShow" style="padding: 5px 10px; border-radius: 5px;">' +
+                            '<img src="' + b[i].Img + '" style="height: 32px; width: 32px; margin-right: 7px;">' +
+                            '   <span class="menutitle" style="color:#7c9eb2;">' + b[i].Name + '</span>' +
+                             '      <span style="float: right; height: 30px; width: 30px;text-align:center;">' +
+                              '          <i class="icon-trash menudelete" data-my="' + a + '" data-id="' + b[i].Id + '" data-location="' + b[i].Location + '"></i>' +
+                               '           </span>' +
+                                '            <span style="float: right; margin-right: 10px; height: 30px; width: 30px;text-align:center;">' +
+                                 '               <i class="icon-edit menuupdate" data-my="' + a + '" data-id="' + b[i].Id + '" data-location="' + b[i].Location + '"></i>' +
+                                  '          </span>' +
+                                   ' </div>' +
+                                '</li>';
+        }
+        _obj.innerHTML = dataresult;
+    }
+    $(".menudelete,.menuupdate").live('click', function () {
+        var _self = this;
+        var data_id = _self.getAttribute('data-id');
+        var data_location = _self.getAttribute('data-location');
+        var data_my = _self.getAttribute('data-my');
+        switch (_self.className) {
+            case "icon-trash menudelete":
+                //删除
+                $.ajax({
+                    url: '/Mltx_Menu/MenuRemove',
+                    type: 'get',
+                    data: { id:data_id,lid:data_location },
+                    async: false,
+                    dataType:'json',
+                    success: function (data) {
+                        if (data.errcode == 0) {
+                            box.alert(data.errmsg);
+                            MenuDataoutput(data_my, data.menus, data_location);
+                        } else {
+                            box.alert(data.errmsg, 1);
+                        }
+                    }
+
+                })
+                break;
+            case "icon-edit menuupdate":
+                //编辑
+                //menutitle
+                var self_parent = $(_self).parent().parent();
+                var _MenuTitle = self_parent.find('.menutitle').text();
+                switch (Number(data_location)) {
+                    case 0:
+                        //浮动菜单
+                       var FloatMenuButton = $('.floatbutfindbutton');
+                       for (var i = 0; i < FloatMenuButton.length; i++) {
+                           if (FloatMenuButton.eq(i).text() == _MenuTitle) {
+                               FloatMenuButton = FloatMenuButton.eq(i);
+                               break;
+                           }
+                       }
+                       FloatMenuTempalte_0(FloatMenuButton[0]);
+                       menu_id[1] = data_id;
+                       break;
+                    case 1:
+                        IndexMenuFormData(0, data_my, data_location, data_id);
+                        break;
+                    case 2:
+                        IndexMenuFormData(0, data_my, data_location, data_id);
+                        break;
+                }
+                break;
+                
+        }
+    });
+
+    $('.floatbutfindbutton').click(function () {
+        FloatMenuTempalte_0(this);
+     //   menu_id[1] = self.getAttribute('data-mid');
+
+    });
+    $("#IndexMenuEM").click(function () {
+        IndexMenuFormData(1, 'mydroIndexMenu');
+    });
+
+    function IndexMenuFormData(a,b,c,d) {
+        var MenuName = IndexMenuName;
+        var MenuURL = IndexMenuURL;
+        var MenuSort = IndexMenuSort;
+        var MenuType = IndexMenuType;
+        var MenuValue = IndexMenuValue;
+        //URLType
+        var _result;
+        switch (a) {
+            case 0:
+                switch (Number(c)) {
+                    case 1:
+                        _result = JSON.parse(Location_1);
+                        break;
+                    case 2:
+                        _result = JSON.parse(Location_2);
+                        break;
+                }
+                var _checked;
+                var _Input_checked = authcode.dom.getElementsByName('position');
+                for (var i = 0; i < _Input_checked.length; i++) {
+
+                    _checked = _Input_checked.item(i);
+                    if (_checked.getAttribute('data-id') == c) {
+
+                        _checked.checked = true;
+                        _checked.parentNode.className = 'checked';
+                    } else {
+                        _checked.chcked = false;
+                        _checked.parentNode.className = '';
+                    }
+                }
+                var _AppWeb_checked = authcode.dom.getElementsByName('URLType');
+                console.log(_result);
+                for (var i = 0; i < _result.length; i++) {
+                    if (_result[i].Id == d) {
+                  
+                        MenuName.value = _result[i].Name;
+                        MenuURL.value = _result[i].URL;
+                        MenuSort.value = _result[i].Sort;
+                        menu_id[2] = _result[i].Id;
+                        _Input_checked = authcode.dom.getElementsByName('URLType');
+                        var _resultMenuclass = _result[i].MenuCls == 1 ? 2 : 1;
+                        for (var is = 0; is < _Input_checked.length; is++) {
+                            _checked = _Input_checked.item(is);
+                            if (_checked.getAttribute('data-id') == _resultMenuclass) {
+                                _checked.checked = true;
+                                _checked.parentNode.className = 'checked';
+                            } else {
+                                _checked.chcked = false;
+                                _checked.parentNode.className = '';
+                            }
+                        }
+                        if (_result[i].MenuCls == 1) {
+                            _result[i].Type = _result[i].Type == null ? '' : _result[i].Type;
+                            _result[i].Value = _result[i].Value == null ? '' : _result[i].Value;
+                            MenuType.value = _result[i].Type;
+                            MenuValue.value = _result[i].Value;
+                            $('.APPInput').show();
+                            menu_id[4] = 0;
+                        } else {
+                            $('.APPInput').hide();
+                            menu_id[4] = -1;
+                            MenuType.value = '';
+                            MenuValue.value = '';
+                        }
+                        IndexMenuImageTemplate(authcode.dom.getElementById('mydroIndexMenu'), _result[i].Img,0);
+                    }
+                }
+
+
+                break;
+            case 1:
+                MenuName.value = '';
+                MenuURL.value = '';
+                MenuSort.value = '';
+                MenuType.value = '';
+                MenuValue.value = '';
+                img_remove(b);
+                break;
+        }
+     
+
+    }
+    authcode.dom.getElementById('IndexMenuImageTemplate_button').onclick = function () {
+        IndexMenuImageTemplate(authcode.dom.getElementById('mydroIndexMenu'), null, 1);
+    }
+    /*
+        @@param a 对象
+        @@param b 图片路径
+        @@param c 
+    */
+    function IndexMenuImageTemplate(a, b,c) {
+
+        var _template = authcode.dom.getElementById('IndexMenuImageTemplateId');
+        switch(c){
+            case 0:
+                var self = a;
+                var top = self.offsetTop;
+                var left = self.offsetLeft;
+                var height = self.offsetHeight;
+                _template.style.cssText = 'display:block;position:absolute;top:' + (top) + 'px;left:' + left + 'px;';
+                _template.getElementsByTagName('img').item(0).setAttribute('src', b);
+                menu_id[3] = 0;
+                break;
+            case 1:
+                _template.style.cssText = 'display:none;';
+                _template.getElementsByTagName('img').item(0).setAttribute('src','');
+                menu_id[3] = -1;
+                break;
+    }
+    }
+    function FloatMenuTempalte_0(a) {
+        var self = a;
+        var top = self.offsetTop;
+        var left = self.offsetLeft;
+        var height = self.offsetHeight;
+        authcode.dom.getElementById('upload').style.cssText = 'display:block;top:' + (top + height + 1) + 'px;left:' + left + 'px;';
+
+        menu_id[0] = self.getAttribute('data-id');
+    }
+    function img_remove(a) {
+        $("#"+a).find('.dz-message').remove();
+        $("#" + a).find('.dz-image-preview').remove();
+        if (a == "myDropzone") {
+            $('#upload').hide();
+        }
+    }
+
+   
+
+
+</script>

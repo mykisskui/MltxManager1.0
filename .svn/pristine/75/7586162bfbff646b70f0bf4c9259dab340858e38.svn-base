@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace MltxManager.Controllers
+{
+    public class Mltx_ForetasteController : Controller
+    {
+        //
+        // GET: /Mltx_Foretaste/
+        #region 试吃商品
+        /// <summary>
+        /// 试吃商品
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Index()
+        {
+            return View();
+        }
+        #endregion
+    }
+}

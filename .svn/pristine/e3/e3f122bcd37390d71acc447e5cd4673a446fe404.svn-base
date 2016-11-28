@@ -1,0 +1,119 @@
+﻿
+
+var fruitcookieMain = {
+    initData: [],
+    init: [{ id: 0, count: 0, type: 0 }],
+    /*
+        @param a cookie名称
+        @param b 商品编号
+        @param c 商品数量
+        @param d 商品分类
+        @param e 操作  0 +, 1 - 
+    */
+    Add: function (a, b, c, d,e) {
+        var _getCookie = getCookie(a);
+        var _data;
+        var _dataEncode
+        if (_getCookie != '') {
+            _data = JSON.parse(getCookie(a));
+            fruitcookieMain.initData = _data;
+            _data = fruitcookieMain.Data(b, c, e, fruitcookieMain.initData, d);
+        } else {
+            _data = fruitcookieMain.Data(b, c, e, fruitcookieMain.init, d);
+        }
+        _data.sort();
+        _dataEncode = JSON.stringify(_data);
+        console.log(_dataEncode);
+        if (_dataEncode.indexOf('null') != -1) {
+            _dataEncode = _dataEncode.replace(',null', '');
+        }
+        if (_dataEncode == '[null]') {
+            _dataEncode = _dataEncode.replace('[null]', '');
+        }
+        console.log(_dataEncode);
+        setCookie(a, _dataEncode);
+    },
+    /*
+        数据处理
+        @param a 商品编号
+        @param b 商品数量
+        @param c 操作类型 0 + ,1 -
+        @param d 数据 false
+        @param e 商品分类
+    */
+    Data: function (a, b, c, d, e) {
+        var _exist = fruitcookieMain.exist(a, e, d);
+
+        console.log(_exist);
+        _exist.id = a;
+        if (c == 0) {
+            _exist.count += b;
+        } else if(c== 1) {
+            _exist.count -= b;
+        }
+                _exist.type = e;
+        if (_exist.count <= 0) {
+            for (var i = 0; i < fruitcookieMain.initData.length; i++) {
+                if (fruitcookieMain.initData[i].id == _exist.id && fruitcookieMain.initData[i].type == _exist.type) {
+                    delete fruitcookieMain.initData[i];
+                }
+            }
+        }
+        return fruitcookieMain.initData;
+    },
+    /*
+       验证是否存在,返回数据
+       @param a 编号
+       @param b 分类
+       @param c 数据
+    */
+    exist: function (a,b,c) {
+        for (var i = 0; i < c.length; i++) {
+            if (c[i].id == a && c[i].type == b) {
+                return c[i];
+            }
+        }
+        if (fruitcookieMain.initData.length > 0) {
+            fruitcookieMain.init[0].id = 0;
+            fruitcookieMain.init[0].count = 0;
+            fruitcookieMain.init[0].type = 0;
+            fruitcookieMain.initData[fruitcookieMain.initData.length] = fruitcookieMain.init[0];
+            return fruitcookieMain.initData[fruitcookieMain.initData.length - 1];
+        } else {
+            fruitcookieMain.initData[0] = fruitcookieMain.init[0];
+            return fruitcookieMain.initData[0];
+        }
+    }
+}
+
+
+function setCookie(name, value) {
+    var Days = 3;//保存3天
+
+    var exp = new Date();
+    exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+    document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString() + ";path=/";
+}
+
+function getCookie(name) {
+    if (document.cookie.length > 0) {
+        start = document.cookie.indexOf(name + "=");
+
+        if (start != -1) {
+            start = start + name.length + 1;
+            end = document.cookie.indexOf(";", start);//当indexOf()带2个参数时，第二个代表其实位置，参数是数字，这个数字可以加引号也可以不加（最好还是别加吧）
+            if (end == -1) end = document.cookie.length;
+            return unescape(document.cookie.substring(start, end));
+        }
+    }
+    return "";
+}
+
+//清除cookie
+function clearCookie(name) {
+    var cvalue = '';
+    var d = new Date();
+    d.setTime(d.getTime() + (-1 * 24 * 60 * 60 * 1000));
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = name + "=" + cvalue + "; " + expires+";path=/";
+}

@@ -1,0 +1,167 @@
+﻿@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>index</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/css/Index.css" rel="stylesheet" type="text/css" media="screen and (max-width:539px )" />
+        <link href="/assets/plugins/font-awesome/css/font-awesome.min.css"  rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+    <div class="body">
+        
+        <!-- 商城start -->
+                <div class="index_0">
+
+                    <!-- 头部start  search-->
+                <div class="index_0_header">
+                            @*<div class="icon-map-marker"></div>*@
+                                <div class="index_0_header_top">
+                                    <ul>
+                                        <li>
+                                            <i class="icon-map-marker"></i>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <div class="indexbutton indexbutton_on">生鲜</div>
+                                                <div class="indexbutton indexbutton_off">下午茶</div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <i class="icon-search"></i>
+                                        </li>
+                                    </ul>
+                                </div>
+                </div>
+                    <!-- 头部end -->
+                    <!-- 幻灯片start -->
+                    <div class="index_0_slide">
+                                <div class="index_0_slide_div">
+                                        <!-- 幻灯片图片 -->   
+                                </div>
+                    </div>
+                    <!-- 幻灯片start -->
+                    <!-- indexMenuStart -->
+                            <div class="index_0_Menu">
+                                <div class="index_0_Menu_div">
+                                       <ul>
+                                            <li>
+                                                <div>
+                                                         <img src="#" />
+                                                    <div>
+                                                        免费试吃
+                                                    </div>
+                                                </div>
+                                            </li>
+                                                <li>
+                                                <div>
+                                                         <img src="#" />
+                                                    <div>
+                                                        免费试吃
+                                                    </div>
+                                                </div>
+                                            </li>
+                                                <li>
+                                                <div>
+                                                         <img src="#" />
+                                                    <div>
+                                                        免费试吃
+                                                    </div>
+                                                </div>
+                                            </li>
+                                                <li>
+                                                <div>
+                                                         <img src="#" />
+                                                    <div>
+                                                        免费试吃
+                                                    </div>
+                                                </div>
+                                            </li>
+                                                <li>
+                                                <div>
+                                                         <img src="#" />
+                                                    <div>
+                                                        免费试吃
+                                                    </div>
+                                                </div>
+                                            </li>
+                                                <li>
+                                                <div>
+                                                         <img src="#" />
+                                                    <div>
+                                                        免费试吃
+                                                    </div>
+                                                </div>
+                                            </li>
+                                             <li>
+                                                <div>
+                                                    <img src="#" />
+                                                    <div>
+                                                        免费试吃
+                                                    </div>
+                                                </div>
+                                            </li>
+                                             <li>
+                                                <div>
+                                                    <img src="#" />
+                                                    <div>
+                                                        免费试吃
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                </div>
+                            </div>
+                    <!-- indexMenuEnd -->
+
+                    <!-- indexModuleStart -->
+                    <div class="index_0_Module">
+                            
+                    </div>
+                    <!-- indexModuleEnd -->
+                    <div class="index_0_FloatMenu">
+
+                    </div>
+                </div>
+        <!-- 商城end -->
+
+
+        <!-- 鲜果start  暂时不涉及鲜果-->
+                <div class="index_1">
+
+                </div>
+        <!-- 鲜果end -->
+    
+    </div>
+
+
+    <script>
+
+        var arr = [];
+        window.onload = function () {
+            var imageonload = document.getElementsByTagName('img');
+            var _imagelen = imageonload.length;
+            for (var i = 0; i < imageonload.length; i++) {
+                    var _width = imageonload.item(i).clientWidth;
+                    var _height = imageonload.item(i).clientHeight;
+                    var _parent = imageonload.item(i).parentNode;
+                    console.log(_parent);
+                    arr[i] = _parent;
+            }
+            for (var i = 0; i < arr.length; i++) {
+                arr[i].innerHTML = '<div style="margin:auto;background-color:#ccc;height:' + _height + 'px;width:' + _width + 'px;border-radius: 15px;"></div>'+
+                '<div>免费试吃</div>';
+            }
+        }
+    </script>
+</body>
+</html>
