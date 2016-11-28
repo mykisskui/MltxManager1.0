@@ -1,0 +1,80 @@
+﻿body {
+    font-family:'Microsoft YaHei'
+}
+#clsmenu {
+    float:left;
+    width:35%
+}
+    #clsmenu ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+        #clsmenu ul li {
+            height: 45px;
+            line-height: 45px;
+            font-size: 16px;
+            border-bottom:1px solid #ccc;
+            color:#666
+        }
+
+                #clsmenu ul li div img {
+                    height:90px;
+                }
+            #clsmenu ul li:nth-child(1) {
+                background-color:#eee;
+            }
+           #clsmenu ul li div {
+                position:absolute;
+                left:0px;
+                width:5px;
+                background-color:#64a786;
+                height:45px;
+                display:none;
+            }
+            #clsmenu ul  li:nth-child(1) div {
+                display:block;
+            }
+#clscontent {
+    float: left;
+    width: 65%;
+    background-color: #eee;
+}
+    #clscontent div {
+        display:none;
+    }
+        #clscontent div:nth-child(1){
+            display:block;
+        }
+
+        #clscontent div ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+.cls_pic {
+    overflow: hidden;
+    text-align:center;
+    float: left;
+    width: 44%;
+    margin: 3%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #ABD27D;
+}
+    .cls_pic img {
+        width:85%;
+        height:auto;
+    }
+    .cls_pic span {
+        font-size:16px;
+        color:#64a786
+    }
+.init_div {    
+         overflow: hidden;
+        transition-property: transform;
+         transform-origin: 0px 0px 0px; 
+         transform: translate(0px, 0px) scale(1) translateZ(0px);
+}

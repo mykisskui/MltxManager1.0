@@ -1,0 +1,393 @@
+﻿@model IList<MltxManager.Models.DBHelper.Mode.DoubleBase>
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+<link href="/css/box.css" rel="stylesheet" />
+<script src="/Scripts/box.js"></script>
+<script src="~/Content/umeditor1_2_2-utf8-net/third-party/jquery.min.js"></script>
+<link href="~/Content/umeditor1_2_2-utf8-net/themes/default/css/umeditor.css" rel="stylesheet" />
+<link href="~/Scripts/dropzone/dropzone.css" rel="stylesheet" />
+<script src="~/Scripts/dropzone/dropzone.js" charset="utf-8"></script>
+<script src="~/Content/umeditor1_2_2-utf8-net/umeditor.config.js"></script>
+<script src="~/Content/umeditor1_2_2-utf8-net/umeditor.min.js"></script>
+<script src="~/Content/umeditor1_2_2-utf8-net/lang/zh-cn/zh-cn.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.metadata.js"></script>
+<script src="/assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+   <script src="/assets/plugins/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js" type="text/javascript" ></script>
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/assets/plugins/select2/select2_metro.css" />
+<style>
+    .dropzone .dz-preview {
+        margin: 5px;
+    }
+    #edui-dialog-image {
+        margin-top: 700px;
+    }
+     #edui-dialog-image .edui-image-dragTip {
+         text-shadow:0px 2px 3px #ffffff;
+     }
+</style>
+<div class="container-fluid">
+    <div class="rule">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <h3 class="titles" style="margin: 0px; margin-bottom: 10px;">添加 <small>添加商品信息</small>
+                    <a href="/Mltx_Merchandise/Information" class="btn default" style="float: right;"><i class="icon-arrow-left"></i>返回</a>
+                </h3>
+
+                <ul class="page-breadcrumb breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="/Global/Index">首页</a>
+                    </li>
+                    <i class="icon-angle-right"></i>
+                    <li><a href="/Mltx_Merchandise/Information">商品管理</a></li>
+                    <i class="icon-angle-right"></i>
+                    <li><a href="#">添加商品信息</a></li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN DASHBOARD STATS -->
+        <div class="row  col-md-12" style="padding-left: 10%;">
+            <div class="portlet-body form ">
+                <div class="form-horizontal">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">商品名称</label>
+                            <div class="col-md-5">
+
+                                <input type="text" id="name" minlength="1" class="form-control {required:true}" placeholder="商品名称" />
+                                <span class="span-point">*</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">商品规格</label>
+                            <div class="col-md-5">
+
+                                <input type="text" id="guige" class="form-control" placeholder="商品规格"/>
+                                <span class="span-point">*</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">商品销售价</label>
+                            <div class="col-md-5">
+
+                                <input type="text" id="Rprice" class="form-control" placeholder="商品销售价" />
+                                <span class="span-point">*</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">商品市场价</label>
+                            <div class="col-md-5">
+
+                                <input type="text" id="Mprice" min="0" class="form-control digits required" placeholder="商品市场价" />
+                                <span class="span-point">*</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">商品库存</label>
+                            <div class="col-md-5">
+
+                                <input type="text" id="kuchun" min="0" class="form-control digits required" placeholder="商品库存" />
+                                <span class="span-point">*</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">商品图片</label>
+                            <div class="col-md-5">
+                                <form action="/" method="post" enctype="multipart/form-data" class="dropzone dz-clickable dz-started myDropzone" id="myDropzone" style="border: 2px dashed #0087F7; border-radius: 5px; padding: 5px 5px; width: 664px; height: 311px">
+                                    <input type="hidden" name="shumu" value="0" />
+                                </form>
+                                <input type="hidden" id="tupian" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">上传按钮</label>
+                            <div class="col-md-5">
+                                <button type="submit" class="btn green" id="shangchuan">上传</button>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">列表图片</label>
+                            <div class="col-md-5">
+                                <form action="~/Mltx_Merchandise/FigureUploadedFile" method="post" enctype="multipart/form-data" class="dropzone dz-clickable dz-started" id="myDropzone1" style="border: 2px dashed #0087F7; border-radius: 5px; padding: 5px 5px; width: 140px; height: 170px">
+                                    <input type="hidden" name="shumu" value="1" />
+                                </form>
+                                <input type="hidden" id="liebiao" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">选择分组</label>
+                            <div class="col-md-5">
+                                <button type="submit" class="btn green " id="fenzu" data-toggle="modal" onclick="xuanzhe()" data-target="#basic">选择分组</button>
+                                <input type="hidden" name="name" id="fenzuid" value="" />
+                                <span id="fenzux" style="font-size: 14px; color: red"></span>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">详细信息</label>
+                            <div class="col-md-5">
+                                <script type="text/plain" id="myEditor" style="width: 600px; height: 300px; max-height: 300px;"></script>
+                            </div>
+                        </div>
+                        <div class="form-group" id="Isenable1">
+                            <label class="col-md-2 control-label">库存计算方式</label>
+                            <div class="col-md-5">
+
+                                <div class="radio-list">
+                                    <label class="radio-inline">
+                                        <span class="quanzi">
+                                            <input type="radio" name="kuchunjisuan" class="zhuangtai" value="0" checked>
+                                            下单减</span>
+                                    </label>
+                                    <label class="radio-inline">
+                                        <span class="baohan">
+                                            <input type="radio" name="kuchunjisuan" class="zhuangtai" value="1">
+                                            支付减</span>
+                                    </label>
+
+                                </div>
+
+                            </div>
+                            <!--隐藏域，保存状态值--->
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">积分比率</label>
+                            <div class="col-md-5">
+
+                                <input type="text" id="jifen" min="0" class="form-control required number" placeholder="添1表示1倍积分" />
+                                <span class="span-point">*</span>
+                            </div>
+                        </div>
+                        <div class="form-group" id="Isenable">
+                            <label class="col-md-2 control-label">上架状态</label>
+                            <div class="col-md-5">
+                                
+                                <div class="radio-list">
+                                    <label class="radio-inline">
+                                        <span class="quanzi">
+                                            <input type="radio" name="shangjia" class="zhuangtai" value="0" checked>
+                                            上架</span>
+                                    </label>
+                                    <label class="radio-inline">
+                                        <span class="baohan">
+                                            <input type="radio" name="shangjia" class="zhuangtai" value="1">
+                                            下架</span>
+                                    </label>
+
+                                </div>
+
+                            </div>
+                            <input type="hidden" value="1" id="video_state" name="video_state" />
+                            <!--隐藏域，保存状态值--->
+                        </div>
+
+
+                        <div class="form fluid">
+
+                            <div class="col-md-offset-2 col-md-5">
+                                <button type="submit" class="btn green" id="btngreen">保存</button>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END DASHBOARD STATS -->
+    </div>
+</div>
+
+<!---View-->
+<div class="modal fade in" id="basic" tabindex="-1" role="basic" aria-hidden="true">
+    <div class="modal-dialog modal-basic" style="padding-top: 650px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3 class="modal-title" style="font-family: 'Microsoft YaHei'; font-weight: 500; font-size: 20px;">分组选择</h3>
+            </div>
+            <div class="modal-body" id="neirong" style="min-height: 280px;">
+                <div class="col-md-6" style="margin-bottom: 5px;">
+                    <select multiple="multiple" style="min-height: 250px; width: 200px" id="se1" name="first" class="form-control select2me">
+                        @foreach (var item in Model)
+                        {
+                            <option value="@item.Id">@item.Val</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <select multiple="multiple" style="min-height: 250px; width: 200px" id="se2" name="first1" class="form-control select2me">
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn green" id="Insert" data-dismiss="modal">确定</button>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+<!-- /.View -->
+<script>
+    $(function () {
+        //点击分组一时返回分组二的数据
+        $("#se1").change(function () {
+            $.get("/Mltx_Merchandise/GetTwoLevels", { id: $(this).val().toString() }, function (r) {
+                $("#se2").html(null);
+                $("#se2").append(r);
+            });
+        });
+        //保存分组数据
+        $("#Insert").click(function () {
+            $("#fenzux").html($("#se1").find("option:selected").text() + ">" + $("#se2").find("option:selected").text());
+            $("#fenzuid").val($("#se2").val())
+        });
+        //商品规格 guige
+        //商品库存 kuchun
+        //商品图片 tupian
+        //列表图片 liebiao
+        //选择分组 fenzuid
+        //详细信息 UM.getEditor('myEditor').getContent()
+        //库存计算方式 $('input[name="kuchunjisuan"]:checked').val()
+        //积分比率 jifen
+        //上架状态 $('input[name="shangjia"]:checked').val()
+        $("#btngreen").click(function () {
+            if ($("#name").val() != "") {
+                if ($("#fenzuid").val().toString() != "") {
+                    if ($("#kuchun").val().toString() != "") {
+                        if ($('input[name="kuchunjisuan"]:checked').val().toString() != "") {
+                            if ($("#jifen").val().toString() != "") {
+                                $.post("/Mltx_Merchandise/InsertCommodityAdded", {
+                                    name: $("#name").val(),
+                                    guige: $("#guige").val().toString(),
+                                    kuchun: $("#kuchun").val().toString(),
+                                    tupian: $("#tupian").val().toString(),
+                                    liebiao: $("#liebiao").val().toString(),
+                                    fenzu: $("#fenzuid").val().toString(),
+                                    rprice: $("#Rprice").val().toString(),
+                                    mprice: $("#Mprice").val().toString(),
+                                    xiangxi: UM.getEditor('myEditor').getContent().toString(),
+                                    fangs: $('input[name="kuchunjisuan"]:checked').val().toString(),
+                                    jifen: $("#jifen").val().toString(),
+                                    zhuangtai: $('input[name="shangjia"]:checked').val().toString()
+                                }, function (r) {
+                                    if (r == "ajaxerror") {
+                                        box.alert("对不起,你的权限不够", "error");
+                                    } else if (r == 0) {
+                                        box.alert("添加成功,1秒后刷新");
+                                        setTimeout(function () {location.href = "/Mltx_Merchandise/Information"}, 1000);
+                                    } else {
+                                        box.alert("添加失败，请重新添加", "error");
+                                    }
+                                })
+                            } else {
+                                box.alert("积分比率不可为空", "error");
+                            }
+
+
+                        } else {
+                            box.alert("库存计算方式不能为空", "error");
+                        }
+                    } else {
+                        box.alert("库存不能为空", "error");
+                    }
+                } else {
+                    box.alert("请选择分组", "error");
+                }
+
+
+            } else {
+                box.alert("名称不可以为空", "error");
+            }
+
+
+        })
+    });
+
+    //Dropzone的初始化，myDropzone为form的id
+    Dropzone.options.myDropzone = {
+        //指定上传图片的路径
+        url: "@Url.Action("FigureUploadedFile", "Mltx_Merchandise")",
+
+        //添加上传取消和删除预览图片的链接，默认不添加
+        addRemoveLinks: true,
+        //关闭自动上传功能，默认会true会自动上传
+        //也就是添加一张图片向服务器发送一次请求
+        autoProcessQueue: false,
+        //允许上传多个照片
+        uploadMultiple: true,
+
+        //每次上传的最多文件数，经测试默认为2，坑啊
+        //记得修改web.config 限制上传文件大小的节
+        parallelUploads: 10,
+
+        init: function () {
+            var submitButton = document.querySelector("#shangchuan")
+            myDropzone = this; // closure
+
+            //为上传按钮添加点击事件
+            submitButton.addEventListener("click", function () {
+                //手动上传所有图片
+                myDropzone.processQueue();
+            });
+
+            //当添加图片后的事件，上传按钮恢复可用
+            this.on("addedfile", function () {
+                $("#shangchuan").removeAttr("disabled");
+            });
+
+            //当上传完成后的事件，接受的数据为JSON格式
+            this.on("complete", function (data) {
+                if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                    var res = eval('(' + data.xhr.responseText + ')');
+                    if (res.Result) {
+                       
+                        $("#tupian").val(res.mingcheng);
+                    } else {
+                        box.alert("图片上传失败", "error");
+                    }
+                }
+            });
+
+            //删除图片的事件，当上传的图片为空时，使上传按钮不可用状态
+            this.on("removedfile", function () {
+                if (this.getAcceptedFiles().length === 0) {
+                    $("#shangchuan").attr("disabled", true);
+                }
+            });
+        }
+    };
+    Dropzone.options.myDropzone1 = {
+        //添加上传取消和删除预览图片的链接，默认不添加
+        url: "@Url.Action("FigureUploadedFile", "Mltx_Merchandise")",
+        addRemoveLinks: true,
+        init: function () {
+            this.on("complete", function (data) {
+                if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                    var res = eval('(' + data.xhr.responseText + ')');
+                    if (res.Result) {
+                        $("#liebiao").val(res.mingcheng);
+                    }
+                    else {
+                        box.alert("图片上传失败", "error");
+                    }
+                }
+            });
+        }
+    };
+</script>
+<script type="text/javascript">
+    var um = UM.getEditor('myEditor').setHeight(300).setWidth(600);
+
+</script>

@@ -1,0 +1,199 @@
+﻿@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>@ViewBag.listtitle</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/css/Index.css" rel="stylesheet" type="text/css" @*media="screen and (max-width:539px )"*@ />
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/assets/plugins/jquery-1.10.2.min.js"></script>
+    <link href="~/css/mallList.css" rel="stylesheet" />
+    <script src="~/Scripts/loading.js"></script>
+    <script src="~/Scripts/iScroll-4.2.5.js"></script>
+    <script>
+        var myscroll;
+        function load() {
+            var _height = window.innerHeight;
+            var headerHeight = document.getElementsByClassName('index_0_header').item(0).clientHeight + document.getElementsByClassName("listclassy").item(0).clientHeight + 5;
+            
+            var FloatHeight = 0;
+            page_scroll_0.style.height = _height - headerHeight - (FloatHeight == 0 ? 0 : (FloatHeight + 2)) + 'px';
+            myscroll = new iScroll("page_scroll_0", {
+                vScroll: true,
+                vScrollbar: false,
+                vScrollbar: false,
+                bounce: true,
+                lockDirection: true,
+                checkDOMChanges: true,
+                onBeforeScrollStart: function () {
+                }
+            });
+            document.body.ontouchmove = function (event) {
+                event.preventDefault();
+            }
+        }
+        window.addEventListener('load', load, false);
+    </script>
+
+    
+</head>
+<body>
+    <script>
+        var groupid = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.groupid))';
+        var userid = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.userid))';
+        var goodsData = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.goodsData))';
+        var listtitle = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.listtitle))';
+    </script>
+    <div class="body">
+        <!-- 头部start  search-->
+        <div class="index_0_header">
+            <div class="index_0_header_top">
+                <ul>
+                    <li ontouchstart="history.go(-1)">
+                        <i class="icon-angle-left" ></i>
+                    </li>
+                    <li>
+                        <div style="background-color: #fff; color: #64a786; font-size: 16px">
+                             @ViewBag.listtitle
+                        </div>
+                    </li>
+                    
+                    <li style="position:relative">
+                        
+                           <a href="@Url.Content("/Mltx_MallClass/MallShopCar")" style="color: #64a786; text-decoration: none">
+                        <i class="icon-shopping-cart">
+                            </i>
+
+                        <div class="header_right_shopcarcount" id="header_right_shopcarcount">0</div>
+                               
+                           </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 头部end -->
+        
+        <!--列表分类排序 start-->
+        <div class="listclassy">
+                <div ontouchstart="sortList(this,1)" data-cls="chose">新品</div>
+                <div ontouchstart="sortList(this,2)" data-cls="nochose">热卖</div>
+                <div ontouchstart="sortList(this,3)" data-cls="nochose">价格</div>
+        </div>        
+        <!--列表分类排序 end-->
+
+        <!-- 列表start -->
+        <div  id="page_scroll_0">
+            <div id="divlist" style="overflow: hidden">
+               <ul>
+                    加载中...
+               </ul>
+             
+            </div>
+        </div>
+        <!-- 列表end -->
+
+    </div>
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/list/jquery.lazyload.js"></script>
+    <script src="~/Scripts/cookiedata.js"></script>
+    <script>
+
+        var detailsdata = ''; var d_gt = '', listdetailsb = false;
+        window.onload = function () {
+            initList(goodsData);//初始化页面,
+            cookieInit();//带入cookie
+        }
+        
+
+        $(document).ready(function () {
+            //图片延迟加载
+            $("img.lazy").lazyload();
+        });
+
+        function sortList(e, flag) {
+            //修改样式
+            var ajax_ext = true;
+            if ($(e).attr("data-cls") == "chose") {
+                ajax_ext = false;
+            }
+            var divlist = document.getElementsByClassName("listclassy")[0].children;
+            var group_id = '';
+            for (var i = 0; i < divlist.length; i++) {
+                if (divlist[i] == e) {
+                    $(e).css("background-color", "#fff");
+                    $(e).css("color", "#64a786");
+                    $(e).attr("data-cls", "chose");
+                }
+                else {
+                    $(divlist[i]).css("background-color", "#64a786");
+                    $(divlist[i]).css("color", "#fff");
+                    $(divlist[i]).attr("data-cls", "nochose");
+                }
+            }
+            if (groupid == "alllist") {
+                group_id = '';
+            }
+            else {
+                group_id = groupid;
+            }
+
+            if (ajax_ext) {
+                $.ajax({
+                    url: "/Mltx_MallClass/Sort",
+                    type: "post",
+                    data: { title: listtitle, groupid: group_id, tag: flag },
+                    beforeSend: function () {
+                    },
+                    success: function (data) {
+                        if (data === 'error') {
+                            //数据错误了
+                        } else {
+                            initList(data);
+                            cookieInit();
+                        }
+                    }
+                });
+            }
+         
+        }
+
+        function initList(gData)
+        {
+            ///数据初始化
+            var json = eval("(" + gData + ")");
+            var ul = divlist.getElementsByTagName("ul")[0];
+            var url_details = '';
+            var str = '';
+
+            for (var i = 0; i < json.length; i++) {
+                url_details = '/Mltx_MallClass/MallDetails?goodid=' + json[i].gid;
+                str += '<li><div class="divimg"><a href="' + url_details + '"><img src="' + json[i].gpic + '" data-original ="' + json[i].gpic + '"/></a></div>' +
+                    '<div class="divcontent">' +
+                           '<div class="divname">' + json[i].gname + '</div><div class="divguige">' + json[i].guige + '</div><div class="divprice">￥' + json[i].rprice + '</div>' +
+                '</div>' +
+                 '<div class="divend"><div style="display:block;height:70px"></div>' +
+                     '<div class="divshoping">' +
+                        '<span class="span_jian" id="jian' + json[i].gid + '"  data-id="' + json[i].gid + '" ontouchstart="shop_jian(this)">-</span>' +
+                         '<span class="span_value" id="span' + json[i].gid + '">0</span>' +
+                         '<span class="span_jia" data-id="' + json[i].gid + '" ontouchstart="shop_jia(this)">+</span>' +
+                    '</div></div></li>';
+            }
+
+            ul.innerHTML = str;
+        }
+        
+    </script>
+
+
+</body>
+
+</html>
+

@@ -1,0 +1,173 @@
+﻿@model MltxManager.Models.DBModel.Mltx_ShopInfo
+@{
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}  
+    <link href="/css/box.css" rel="stylesheet" />
+    <link href="/uploadify/uploadify.css" rel="stylesheet" />
+    <script src="/Scripts/jquery-1.8.2.js"></script>
+    <script src="/Scripts/box.js"></script>
+    <script src="/assets/scripts/region_select.js"></script> 
+    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
+    <script>
+        var markersArray = [];
+        var geocoder, map, marker = null;
+
+        function init() {
+            var center = new qq.maps.LatLng(36.07685, 120.37723);
+            map = new qq.maps.Map(document.getElementById('container'), {
+                center: center,
+                zoom: 15
+            });
+
+            geocoder = new qq.maps.Geocoder({
+                complete: function (result) {
+                    map.setCenter(result.detail.location);
+                    var marker = new qq.maps.Marker({
+                        map: map,
+                        position: result.detail.location
+                    });
+                    markersArray.push(marker);
+                }
+            });
+
+            qq.maps.event.addListener(map, 'click', function (event) {
+                clearOverlays();
+                var marker = new qq.maps.Marker({
+                    position: event.latLng,
+                    map: map
+                });
+                markersArray.push(marker);
+                var latLng = event.latLng,
+                    lat = latLng.getLat().toFixed(5),
+                    lng = latLng.getLng().toFixed(5);
+                document.getElementById("latLng").value = lat;
+                document.getElementById("lngLng").value = lng;
+            });
+
+            citylocation = new qq.maps.CityService({
+                complete: function (result) {
+                    map.setCenter(result.detail.latLng);
+                }
+            });
+            citylocation.searchLocalCity();
+        }
+
+        function clearOverlays() {
+            if (markersArray) {
+                for (i in markersArray) {
+                    markersArray[i].setMap(null);
+                }
+            }
+        }
+        function codeAddress() {
+            var address = document.getElementById("address").value;
+            geocoder.getLocation(address);
+        }
+</script>
+
+  <div class="container-fluid" >
+    <div class="rule">  
+         <!-- BEGIN PAGE HEADER-->
+         <div class="row">
+            <div class="col-md-12">
+               <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+               <h3 class="titles" style="margin:0px;margin-bottom:10px;">
+                  添加门店 <small>设置门店信息</small>
+               </h3>
+               <ul class="page-breadcrumb breadcrumb">
+                  <li>
+                     <i class="icon-home"></i>
+                  <a href="/MltxShop/Index"> 门店信息</a>
+                   <i class="icon-angle-right"></i>
+                  <a href="#"> 添加门店信息复</a>
+
+                  </li>
+               </ul>
+               <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+         </div>
+      
+         <!-- END PAGE HEADER-->
+         <!-- BEGIN DASHBOARD STATS -->
+         <div class="row  col-md-12" style="padding-left:10%;">
+              <div class="portlet-body form ">
+                <form class="form-horizontal" role="form" method="post">
+                    <input type="hidden" value="@Model.ShopId" name="Shopid" />
+                     <div class="form-body">
+                         <div class="form-group">
+                            <label class="col-md-2 control-label">门店名称</label>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control" id="ShopName" name="ShopName" placeholder="">
+                                <span class="span-point">*</span>
+                            </div>                              
+                        </div>  
+                         <div class="form-group">
+                            <label class="col-md-2 control-label">门店电话</label>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control" id="ShopTel" name="ShopTel" placeholder="">
+                                <span class="span-point">*</span>
+                            </div>                              
+                        </div>
+                         <div class="form-group">
+                            <label class="col-md-2 control-label">门店地址</label>
+                            <div class="col-md-5">
+                                 <select name="location_p" id="location_p" class="input-small" style="height: 30px;"></select>
+                                 <select name="location_c" id="location_c" class="input-small" style="height: 30px;"></select>
+                                 <select name="location_a" id="location_a" class="input-small" style="height: 30px;"></select>
+                                 <script type="text/javascript">
+                                    new PCAS('location_p', 'location_c', 'location_a', '山东省', '青岛市', '市南区');
+                                </script> 
+                                <br />
+                                <input type="text" style="margin-top:1%" class="form-control" id="ShopAddr" name="ShopAddr" placeholder="">
+                                <span class="span-point">*</span>
+                            </div>                              
+                        </div>
+                     
+                         <div class="form-group">
+                            <label class="col-md-2 control-label">门店地点</label>
+                            @Html.Partial("_Map")
+                         </div>
+                     </div>
+                    <div class="form fluid">
+                        <div class="col-md-offset-2 col-md-9 left">
+                            <button class="btn  green" id="submit_btn" onclick="return submitShop();">保存</button>
+                        </div>
+                    </div>
+                </form>
+              </div>
+         </div>
+         <!-- END DASHBOARD STATS -->   
+        </div>
+    </div>
+<script>
+    function submitShop() {
+        var $name = $("#ShopName");
+        var $HotelAddress = $("#ShopAddr");
+        var $HotelTelephone = $("#ShopTel");
+        var $latLa = $("#lngLng");
+        var $lngLn = $("#latLng");
+
+        if ($name.val() == "") {
+            box.alert("请添加门店名称.", "error")
+            $name.focus();
+            return false;
+        }
+
+        if ($HotelAddress.val() == "") {
+            box.alert("请添加门店地址.", "error")
+            $HotelAddress.focus();
+            return false;
+        }
+        if ($HotelTelephone.val() == "") {
+            box.alert("请添加门店电话.", "error")
+            $HotelTelephone.focus();
+            return false;
+        }
+        if ($lngLn.val() == "" && $lngLn.val() == "") {
+            box.alert("请选择门店地点.", "error")
+            return false;
+        }
+        $("#submit_btn").submit();
+    }
+  
+</script>

@@ -1,0 +1,18 @@
+﻿@using MltxManager.Models.DBModel
+@model IList<Mltx_Group_fresh>
+@foreach (var item in Model)
+                {
+                    <ul>
+                        <li>
+                            <input type="hidden" id="@item.GroupId" class="@item.GroupId" value="@item.GroupName"/>
+                            <span class="sp"><i class="icon-folder-open"></i>@item.GroupName</span>
+                           
+                            <a class="blue" href="#" data-toggle="modal" onclick="updateYiji('@item.GroupId', '@item.GroupName')" data-target="#basic">
+                                <i class="icon-pencil bigger-130"></i>
+                            </a>
+                            <a class="red" href="#" id="bootbox-confirm" onclick="Delete(@item.GroupId)">
+                                <i class="icon-trash bigger-130"></i>
+                            </a>
+                        </li>
+                    </ul>
+                }

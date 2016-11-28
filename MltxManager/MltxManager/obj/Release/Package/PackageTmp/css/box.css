@@ -1,0 +1,110 @@
+﻿     .fixed {
+position: fixed;
+top: 0px;
+left: 30%;
+width: 350px;
+height: 40px;
+border: 1px solid #44b549;
+background: #44b549;
+z-index: 10000;
+display: none;
+line-height: 40px;
+text-align: center;
+color: #fff;
+font-size:14px;
+font-family:'Microsoft YaHei';
+        }
+
+     /*提示框*/
+.loadingalert {
+    padding: 25px;
+width: 200px;
+background: rgba(12, 12, 12, 0.62);
+margin: auto;
+height: 100px;
+border-radius: 10px;
+}
+.alertInnerHTML {
+    text-align:center;
+    color:#fff;
+    font-size:16px;
+}
+.alertButton {
+    display: table-cell;
+color: #fff;
+font-size: 16px;
+width: 85px;
+text-align: center;
+padding: 15px;
+}
+     /*加载动画*/
+.loadingback {
+  padding: 25px;
+width: 80px;
+background: rgba(12, 12, 12, 0.62);
+margin: auto;
+height: 80px;
+border-radius:10px;
+}
+.position {
+  position: absolute;
+width: 100%;
+top: 35%;
+}
+.spin {
+    -webkit-transform: rotate(360deg);
+    -webkit-animation: spin 1s linear infinite; 
+}
+@-webkit-keyframes spin {
+    from {-webkit-transform: rotate(0deg);}
+      to {-webkit-transform: rotate(360deg);}
+}
+.spin {
+    transform: rotate(360deg);
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    from {transform: rotate(0deg);}
+      to {transform: rotate(360deg);}
+}
+
+/* 隐藏Hack元素 */
+.hack { position: absolute; visibility: hidden; }
+/* IE6-IE9实现 */
+.loading {
+   background-color: #fff;
+width: 15px;
+height: 15px;
+border-radius: 100%;
+margin: 2px;
+-webkit-animation-fill-mode: both;
+animation-fill-mode: both;
+border: 2px solid #fff;
+border-bottom-color: transparent;
+height: 25px;
+width: 25px;
+background: transparent !important;
+display: inline-block;
+/*-webkit-animation: rotate 0.75s 0s linear infinite;*/
+}
+/* IE10+以及其他或骚或帅之流 */
+.hack:valid ~ .loading {
+    background: none;
+    text-align: left;
+}
+.hack:valid ~ .loading::before {
+    content: '';
+    width: 3px; height: 3px;
+    margin-left: 14.5px; margin-top: 14.5px;  /* 居中显示 */
+    border-radius: 100%;                      /* 圆角 */
+    box-shadow: 0 -10px 0 1px #333,           /* 上, 1px 扩展 */
+                10px 0px #333,                /* 右 */    
+                0 10px #333,                  /* 下 */
+                -10px 0 #333,                 /* 左 */
+                              
+                -7px -7px 0 .5px #333,        /* 左上, 0.5px扩展 */
+                7px -7px 0 1.5px #333,        /* 右上, 1.5px扩展 */                    
+                7px 7px #333,                 /* 右下 */
+                -7px 7px #333;                /* 左下 */
+    position: absolute;
+}

@@ -1,0 +1,148 @@
+﻿@using MltxManager.Models.DBModel
+@model MltxManager.Models.DBHelper.ReturnMsg
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/css/box.css" rel="stylesheet" />
+<script src="/Scripts/box.js"></script>
+
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="/assets/plugins/select2/select2_metro.css" />
+<!-- END THEME STYLES -->
+<div class="container-fluid">
+    <div class="rule">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <h3 class="titles" style="margin: 0px; margin-bottom: 10px;">人员修改 <small>修改用户信息</small>
+                    <a href="/Mltx_Authority/Index" id="cmd" class="btn default" style="float: right;"><i class="icon-arrow-left"></i>返回</a>
+                </h3>
+
+                <ul class="page-breadcrumb breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="/Global/Index">首页</a>
+                    </li>
+                    <i class="icon-angle-right"></i>
+                    <li><a href="/Mltx_Authority/Index">人员管理</a></li>
+                    <i class="icon-angle-right"></i>
+                    <li><a href="#">修改用户信息</a></li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN DASHBOARD STATS -->
+        <div class="row  col-md-12" style="padding-left: 10%;">
+
+            <div class="portlet-body form ">
+                <div class="form-horizontal">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">用户名</label>
+                            <div class="col-md-5">
+
+                                <input type="text" id="name" value="@Model.MltxUserInfo.UserName" class="form-control" placeholder="用户名"/>
+                                <span class="span-point">*</span>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">选择分组</label>
+                            <div class="col-md-5">
+
+                                <select id="se1" name="first" class="form-control select2me">
+                                    @foreach (var r in Model.mltx_userGroup)
+                                    {
+                                        if (r.GroupId == Model.MltxUserInfo.GroupId)
+                                        {
+                                        <option value="@r.GroupId" selected="selected">@r.GroupName</option>
+                                        }
+                                        else
+                                        {
+                                        <option value="@r.GroupId">@r.GroupName</option>
+                                        }
+                                    }
+                                </select>
+                                <span class="span-point">*</span>
+                            </div>
+
+                        </div>
+                        <div class="form-group" id="Isenable">
+                            <label class="col-md-2 control-label">用户状态</label>
+                            <div class="col-md-5">
+
+                                <div class="radio-list">
+                                    @if (Model.MltxUserInfo.Enable == Status.可用)
+                                    {
+                                        <label class="radio-inline">
+                                            <span class="baohan">
+                                                <input type="radio" name="optionsRadios" class="zhuangtai" value="0" checked>可用
+                                            </span>
+                                        </label>
+                                        <label class="radio-inline">
+                                            <span class="baohan">
+                                                <input type="radio" name="optionsRadios" class="zhuangtai" value="1">注销</span>
+                                        </label>
+                                    }
+                                    else
+                                    {
+                                        <label class="radio-inline">
+                                            <span class="baohan">
+                                                <input type="radio" name="optionsRadios" class="zhuangtai" value="0">可用</span>
+
+                                        </label>
+                                        <label class="radio-inline">
+                                            <span class="baohan">
+                                                <input type="radio" name="optionsRadios" class="zhuangtai" value="1" checked>注销</span>
+                                        </label>
+                                    }
+                                </div>
+
+                            </div>
+                            <input type="hidden" value="1" id="video_state" name="video_state" />
+                            <!--隐藏域，保存状态值--->
+                        </div>
+
+                        <div class="form fluid">
+
+                            <div class="col-md-offset-2 col-md-5">
+                                <input type="hidden" value="@Model.MltxUserInfo.UserId" id="bian" name="bian"/>
+                                <button class="btn green" id="btngreen">修改</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END DASHBOARD STATS -->
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script>
+
+    $(function () {
+        //修改用户信息
+        $("#btngreen").click(function () {
+            $.get("/Mltx_Authority/UpdateUserName", { name: $("#name").val(), fen: $("#se1").val(), zhuang: $('input[name="optionsRadios"]:checked').val(), userId: $("#bian").val() }, function (r) {
+                if (r == "ajaxerror") {
+                    box.alert("权限未通过", "error");
+                }
+                else if (r == "0") {
+
+                    box.alert("编辑成功,1秒后刷新");
+                    setTimeout(function(){location.href = "/Mltx_Authority/Index"}, 1000);
+
+
+                } else {
+                    box.alert("编辑失败", "error");
+                }
+            });
+        });
+    })
+</script>

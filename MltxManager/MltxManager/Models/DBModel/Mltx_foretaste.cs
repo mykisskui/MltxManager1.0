@@ -1,0 +1,49 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Web;
+
+namespace MltxManager.Models.DBModel
+{
+    /// <summary>
+    /// 试吃商品表
+    /// </summary>
+    public class Mltx_foretaste
+    {
+        /// <summary>
+        /// 主键
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
+        /// 商品id 外键 关联商城商品表商品id
+        /// </summary>
+        public int GroupId { get; set; }
+        /// <summary>
+        /// 商城商品表商品id
+        /// </summary>
+        [ForeignKey("GroupId")]
+        public Mltx_GoodsInfo_shop Goods { get; set; }
+
+        /// <summary>
+        /// 试吃结束时间
+        /// </summary>
+        public DateTime ETime { get; set; }
+        /// <summary>
+        /// 试吃状态 0 正在试吃 1 往期试吃
+        /// </summary>
+        public States State { get; set; }
+        /// <summary>
+        /// 试吃期数 默认从1开始，后台添加数据自动添加
+        /// </summary>
+        public int Sort { get; set; }
+    }
+    /// <summary>
+    /// 试吃状态泛型
+    /// </summary>
+    public enum States  : byte
+    {
+        正在试吃=0,
+        往期试吃=1
+    }
+}

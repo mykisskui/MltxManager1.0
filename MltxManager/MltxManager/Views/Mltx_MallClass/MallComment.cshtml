@@ -1,0 +1,231 @@
+﻿@model MltxManager.Models.DBModel.Mltx_GoodsInfo_shop
+@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>评论</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/css/Index.css" rel="stylesheet" type="text/css" @*media="screen and (max-width:539px )"*@ />
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/assets/plugins/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/iScroll-4.2.5.js"></script>
+    <link href="~/css/mallcomment.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/loading.js"></script>
+    <script>
+        var  myscroll;
+        var pageskip = 0;//全局 初始页数
+        var ajax_flag = false;//ajax执行完成标识
+        //var offset_height = 0
+        function load() {
+
+            pullUpEl = document.getElementById('pullUp');
+            pullUpOffset = pullUpEl.offsetHeight;
+            var _height = window.innerHeight;
+            var headerHeight = document.getElementsByClassName('index_0_header').item(0).clientHeight;
+            page_scroll_0.style.height = _height - headerHeight + 'px';
+      
+
+            myScroll = new iScroll('page_scroll_0', {
+                useTransition: true,
+                topOffset: 0,
+                vScroll: true,
+                vScrollbar: false,
+                vScrollbar: false,
+                bounce: true,
+                momentum: true,
+                checkDOMChanges: true,
+                onRefresh: function () {
+                    if (pullUpEl.className.match('loading')) {
+                        pullUpEl.className = '';
+                    }
+                },
+                onScrollMove: function () {
+                    console.log("y:" + this.y);
+                    console.log("max:" + this.maxScrollY);
+                    if (this.y < (this.maxScrollY - 10) && !pullUpEl.className.match('flip')) {
+                        pullUpEl.className = 'flip';
+                        if (ul_list.clientHeight >= page_scroll_0.clientHeight) {
+                            pullUpEl.style.display = "block";
+                        }
+                        this.maxScrollY = this.maxScrollY;
+                    } else if (this.y > (this.maxScrollY + 10) && pullUpEl.className.match('flip')) {
+                        pullUpEl.className = '';
+                        //this.maxScrollY = pullUpOffset;
+                    }
+                },
+                onScrollEnd: function () {
+                    console.log(pullUpEl.className);
+                    if (pullUpEl.className.match('flip')) {
+                        pullUpEl.className = 'loading';
+                        var h = 0;
+                        var old_h = ul_list.clientHeight;//获取加载新数据前的高度
+                        console.log(ul_list.clientHeight);
+                        console.log(page_scroll_0.clientHeight);
+                        if (ul_list.clientHeight >= page_scroll_0.clientHeight) {
+                            pageskip++;//增加页数
+                            console.log(pageskip);
+                            pullUpAction(pageskip);
+                        }
+
+                        
+                        //if (ajax_flag) {
+
+
+                        //    //var new_h = ul_list.clientHeight;//获取加载数据后的高度
+                        //    //h = new_h - old_h;//需要滚动的距离高度
+                        //    //if (h != 0) {
+                        //    //    //myScroll.scrollTo(0, 40, 500, true);//500ms滚动对应的高度
+                        //    //}
+                        //    ajax_flag = false;
+                        //}
+                    }
+                }
+            });
+      
+            setTimeout(function () { document.getElementById('page_scroll_0').style.left = '0'; }, 800);
+        }
+        document.addEventListener('touchmove', function (e) {  e.preventDefault(); }, false);
+        document.addEventListener('DOMContentLoaded', function () { setTimeout(load, 200); }, false);
+        
+      
+        function pullUpAction(pageskip) {
+            if (spanUp.innerText != '没有更多内容了！') {
+                Ajax(pageskip); //获取数据
+            }
+            myScroll.refresh();// 
+        }
+        function Ajax(p){ // ajax后台交互获取数据
+            $.ajax({
+                type: "post",
+                async:true,
+                url: "/Mltx_MallClass/getMoreComments", // 你请求的地址
+                data: {
+                    'goodid': goodid,'skip':p  // 传过去的页码
+                },
+                beforeSend: function () {
+                    showLoading();
+                },
+                success: function (data) {
+                    if (data == "error") {
+                        //参数缺失
+                    } else if (data == "exception") {
+                        //异常错误
+                    } else if (data == "nodata") {
+                        spanUp.innerText = '没有更多内容了！';
+                        pageskip--;
+                    }
+                    else {
+                        InitData(comdata, 'add');
+                        myScroll.scrollTo(0, 40, 200, true);//100ms往下滚动40的高度
+                        pullUpEl.style.display = "none";
+                    }
+
+                },
+                complete: function () {
+                    removeLoading();
+                }
+               
+                
+            });
+        
+        }
+        
+
+    </script>
+</head>
+<body>
+    <script>
+        var comdata = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.comData))';
+        var goodid = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.goodid))';
+    </script>
+
+    <div id="div_loading"></div>
+    <div class="body" id="comm_div">
+        <!-- 头部start  search-->
+        <div class="index_0_header">
+            <div class="index_0_header_top">
+                <ul>
+                    <li ontouchstart="history.go(-1)">
+                        <i class="icon-angle-left" ></i>
+                    </li>
+                    <li>
+                        <div style="background-color: #fff; color: #64a786; font-size: 16px">
+                           评论信息
+                        </div>
+                    </li>
+                    <li>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 头部end -->
+        
+<!-- 详情start -->  
+        <div  id="page_scroll_0">
+            <div style="overflow: hidden">
+              <ul id="ul_list">
+                 
+              </ul>
+                
+             <div id="pullUp" >
+                <span id="spanUp">上拉加载更多…</span>
+             </div>
+            </div>
+        </div>
+<!--详情end -->
+
+    </div>
+
+    <script>
+        window.onload = function () {
+            InitData(comdata, '');
+        }
+
+        //初始化数据
+        function InitData(cdata,tag) {
+            var json = eval("(" + cdata + ")");
+            var ul = document.getElementById("ul_list");
+            var str = '';
+
+            if (json.length < 10)//条数少于10条说明没有新的数据了
+            {
+                spanUp.innerText = '没有更多内容了！';
+            }
+
+            for (var i = 0; i < json.length; i++) {
+                
+                var star = '';
+                var cust = json[i].customer;
+                cust = cust.substring(0, cust.length - 4) + "****";
+                for (var j = 0; j < json[i].star; j++)
+                {
+                    star += "★";
+                }
+                str += '<li><div class="div_star"><div>' + star + '</div><div>' + cust + '</div><div>' + json[i].c_time + '</div></div>' +
+                     '<div class="div_content">' + json[i].comments + '</div>' +
+                     '<div class="div_img"></div></li>';
+            }
+
+            if (tag == "add")//表示追加
+            {
+                $("#ul_list").append(str);
+            }
+            else {
+                ul.innerHTML = str;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
+

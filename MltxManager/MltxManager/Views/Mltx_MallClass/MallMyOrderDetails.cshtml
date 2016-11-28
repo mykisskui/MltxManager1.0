@@ -1,0 +1,308 @@
+﻿
+@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>订单详情</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/css/Index.css" rel="stylesheet" type="text/css" @*media="screen and (max-width:539px )"*@ />
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/mallList.css" rel="stylesheet" />
+    <link href="~/css/mallorder.css" rel="stylesheet" />
+    <script src="~/assets/plugins/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/iScroll-4.2.5.js"></script>
+    <script src="~/Scripts/loading.js"></script>
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/cookiedata.js"></script>
+    <link href="~/css/weixin/example.css" rel="stylesheet" />
+    <link href="~/css/weixin/weui.css" rel="stylesheet" />
+    <script src="~/Scripts/weixin/zepto.min.js"></script>
+    <script src="~/Scripts/weixin/example.js"></script>
+    <script src="/assets/scripts/region_select.js"></script> 
+    
+    <script>
+        var myscroll;
+        function load() {
+            var _height = window.innerHeight;
+            console.log(_height);
+            var headerHeight = document.getElementsByClassName('index_0_header').item(0).clientHeight;
+            var divheaderHeight = document.getElementsByClassName('div_header_num').item(0).clientHeight;
+            var shopcarHeight = document.getElementById('shopcar_float').clientHeight;
+            page_scroll_0.style.height = _height - headerHeight - divheaderHeight - shopcarHeight- 1 + 'px';//多减1表示shopcar_float的border-top
+            console.log(divheaderHeight);
+
+            myscroll = new iScroll("page_scroll_0", {
+                vScroll: true,
+                vScrollbar: false,
+                vScrollbar: false,
+                bounce: true,
+                momentum: true,
+                onBeforeScrollStart: function () {
+                }
+            });
+
+            document.body.ontouchmove = function (event) {
+                event.preventDefault();
+            }
+        }
+        window.addEventListener('load', load, false);
+    </script>
+
+</head>
+<body>
+    <script>
+        var orderdetailsJson = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.orderdetailsJson))';
+        var payprice = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.PayPrice))'; 
+    </script>
+    
+    <div id="div_loading"></div>
+<!---订单确定页div_body-->
+    <div class="body" id="body_order">
+        <!-- 头部start  search-->
+        <div class="index_0_header">
+            <div class="index_0_header_top">
+                <ul>
+                    <li ontouchstart="history.go(-1)">
+                        <i class="icon-angle-left" ></i>
+                    </li>
+                    <li>
+                        <div style="background-color: #fff; color: #64a786; font-size: 16px">
+                            订单详情
+                        </div>
+                    </li>
+                    <li >
+                        <i class=""></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 头部end -->  
+
+        <div class="div_header_num">
+            <div id="details_oid_header"></div>
+            <div id="details_state_header"></div>
+        </div>
+
+        <!-- 品类start -->
+        <div  id="page_scroll_0" style="background-color:#eee">
+            <div id="divlist" style="overflow: hidden">
+
+                <!--地址start-->
+            
+                <div class="address_details" >
+                        <div>收货地址</div>
+                        <div style="margin-left:20%" id="details_customerAddr"></div>
+                        <div style="float:right" id="details_customerInfo"></div>
+                </div>
+                
+                
+                <!--地址end-->
+
+                <!--支付方式-->
+                <div class="div_payment">
+                   <div class="weui_cells" style="margin-top:0;font-size:0.9em">
+                        <div class="weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>支付金额</p>
+                            </div>
+                            <div class="weui_cell_ft" style="color:#64a786" id="details_totals_payment"></div>
+                        </div> 
+                       <div class="weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>支付方式</p>
+                            </div>
+                            <div class="weui_cell_ft" style="color:#000" id="details_payment"></div>
+                        </div>
+                        <div class="weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>支付状态</p>
+                            </div>
+                            <div class="weui_cell_ft" style="color:#000" id="details_state_payment"></div>
+                        </div>
+                       <div class="weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>下单时间</p>
+                            </div>
+                            <div class="weui_cell_ft" style="color:#000" id="details_time_payment"></div>
+                        </div>
+                    </div>
+                </div>
+                <!--支付方式end-->
+                
+                <!--订单列表-->
+              <ul style="margin-top:10px">
+
+                </ul>
+                <!--订单列表end-->
+                
+                <!--订单总价 优惠 运费-->
+               <div class="div_info" >
+                    <div class="weui_cells" style="margin-top:0;font-size:0.9em">
+                        <div class="weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>商品总价</p>
+                            </div>
+                            <div class="weui_cell_ft" style="color:#64a786" id="details_totals_info"></div>
+                        </div>
+                        <div class="weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>运费</p>
+                            </div>
+                            <div class="weui_cell_ft" style="color:#64a786" id="details_yunfei_info"></div>
+                        </div>
+                        <div class="weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>价格调整</p>
+                            </div>
+                            <div class="weui_cell_ft" style="color:#000" id="details_tiaozheng_info"></div>
+                        </div>
+                        <div class="weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>优惠</p>
+                            </div>
+                            <div class="weui_cell_ft" style="color:#000" id="details_youhui_info"></div>
+                        </div>
+                         <div class="weui_cell"><div class="weui_cell_bd weui_cell_primary">
+                                <p></p>
+                            </div>
+                            <div style="float:right;font-size: 1.3em;">实付金额：<span style="color:#64a786" id="details_spantotal_info"></span></div>
+                        </div>
+                    </div>
+              </div>
+                <!--订单总价 优惠 运费end-->
+              
+
+            </div>
+        </div>
+        <!-- 品类end -->
+
+        <!--购物车结算start-->
+        <div class="shopcar_float_details" id="shopcar_float">
+            <div onclick="_cancel(this)" data-oid="" id="btncancel_o">取消订单</div>
+            <div onclick="_pay(this)" id="btn_pay" data-oid="">立即支付</div>
+        </div>
+        <!--购物车结算end-->
+
+    </div>
+<!---订单确定页div_body-->
+
+
+    
+    
+    <script src="~/Scripts/weixin/confirm_self.js"></script>
+    <script>
+        $(document).ready(function () {
+            InitData();
+        });
+
+        function InitData() {
+
+            var json = eval('(' + orderdetailsJson + ')');
+            var ul = divlist.getElementsByTagName("ul")[0];
+            var str = '';
+            var totals = "￥" + json.ordertotals;
+            if (json.state == '未付款' || json.state == '未预付款')
+            {
+                $("#shopcar_float").css("display", "-webkit-box");                
+            }
+            if (json.state == '未预付款' || json.state == "货到付款") {
+                totals = "￥" + payprice + "(预付款)";
+            }
+
+            btn_pay.setAttribute("data-oid", json.oid);
+            btncancel_o.setAttribute("data-oid", json.oid);
+            details_oid_header.innerHTML = '订单编号：' + json.oid;
+            details_state_header.innerHTML = json.state;
+            details_customerAddr.innerHTML = json.addr;
+            details_customerInfo.innerHTML = json.customer + ',' + json.tel;
+            details_totals_payment.innerHTML = totals;
+            details_payment.innerHTML = json.payment;
+            details_state_payment.innerHTML = json.state;
+            details_time_payment.innerHTML = json.otime;
+            details_totals_info.innerHTML = "￥" + json.goodstotals;
+            details_yunfei_info.innerHTML = "￥" + json.yunfei;
+            if (Number(json.tiaozheng) >= 0) {
+                details_tiaozheng_info.innerHTML = "￥" + json.tiaozheng;
+            } else {
+                details_tiaozheng_info.innerHTML = "-￥" + Math.abs(json.tiaozheng).toFixed(2);
+            }
+            details_youhui_info.innerHTML = "-￥" + Math.abs(json.youhui).toFixed(2);
+            details_spantotal_info.innerHTML = totals;
+
+            for (var i = 0 ; i < json.details.length; i++)
+            {
+                str +='   <li style="background-color:#fff">'+
+                      '<div class="divimg"><img src="'+json.details[i].gpic+'"></div>'+
+                      '<div class="divcontent_order"><div class="divname">'+json.details[i].gname+'</div>'+
+                      '<div class="divguige">'+json.details[i].guige+'</div>'+
+                      '<div class="divprice">￥'+json.details[i].gprice+'</div></div>'+
+                      '<div class="divend_order"><span>X'+json.details[i].gcount+'</span></div> </li>';
+            }
+
+            ul.innerHTML = str;
+            
+        }
+
+        ///取消订单
+        function _cancel(e) {
+            var oid = $(e).attr("data-oid");
+            var _cancel_ok = function () {
+                $.ajax({
+                    url: "/Mltx_MallClass/_cancelOrder",
+                    type: "post",
+                    data: { oid: oid },
+                    beforeSend: function () {
+                        showLoading();
+                    },
+                    success: function (data) {
+                        if (data === '-1') {
+                            //数据异常
+                        } else if (data == '-2') {
+                            //参数缺失
+                        }
+                        else {
+                            location.reload();
+                        }
+                    },
+                    complete: function () {
+                        removeLoading();
+                    }
+                });
+            }
+            dialog.comfirm("确定要取消订单吗？", _cancel_ok, "");
+
+        }
+
+        //支付订单
+        function _pay(e) {
+            //去支付 
+            showLoading();
+            var oid = $(e).attr("data-oid");
+            if (oid == "") {
+                location.href = "/ToOtherPage/WebappErrorPage?errmsg=没有查到订单";
+            } else {
+                var login_id = getCookie("mltxuserid");
+                if (login_id == '') {
+                    //登陆信息已失效，去登陆页
+                    location.href = "/Mltx_MallClass/MallLogin";
+                }
+                location.href = "/Mltx_MallClass/_wxpay?loginid=" + login_id + "&order=" + oid;
+            }
+        }
+        
+       
+    </script>
+
+
+</body>
+
+</html>
+

@@ -1,0 +1,583 @@
+﻿@model MltxManager.Models.DBModel.Mltx_Slide
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .floatbutfindbutton {
+        background-color: #28b779 !important;
+        border-color: #d5d5d5;
+        float: left;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        width: 100px;
+        text-align: center;
+        padding: 10px 0;
+        border: 1px solid #d5d5d5;
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .dropzone .dz-preview {
+        width: 382px!important;
+        margin: -78px 0 0 0!important;
+    }
+
+    .dz-message {
+        display: none!important;
+    }
+
+    .dz-image {
+        width: 100%!important;
+        height: 100px!important;
+    }
+
+        .dz-image > img {
+            width: 100%!important;
+            height: 100px!important;
+        }
+
+    .dz-remove {
+        width: 100%;
+        background-color: #28b779 !important;
+        color: #fff;
+        padding: 5px;
+    }
+
+    .dz_remove:hover {
+        cursor: pointer!important;
+        text-decoration: none!important;
+    }
+
+    .imageshow {
+        margin: 2px 0 0 0;
+        width: 100px;
+        height: 100px;
+        background-color: #28b779 !important;
+        line-height: 100px;
+        text-align: center;
+        color: #fff;
+    }
+
+    #upload {
+        width: 100px;
+        position: absolute;
+    }
+
+    .imageupbutton {
+        height: 30px;
+        width: 100px;
+        margin: 2px 0;
+        background-color: #28b779 !important;
+    }
+
+    .image_cancel, .image_sub {
+        float: left;
+        width: 49px;
+        text-align: center;
+        color: #fff;
+        line-height: 30px;
+    }
+
+        .image_cancel, .image_sub:hover {
+            cursor: pointer;
+        }
+
+    .image_border {
+        border: 1px solid #FFF;
+        height: 20px;
+        float: left;
+        margin: 5px 0;
+    }
+
+    .menuinfoclass {
+        line-height: 30px;
+        width: 440px;
+        border: 1px solid #d5d5d5;
+        margin: 5px 0;
+    }
+
+    .menudelete, .menuupdate {
+        font-size: 16px;
+        line-height: 33px;
+        color: #616161;
+        cursor: pointer;
+    }
+
+    .floatmenuShow:hover {
+        background-color: #e2e2e2;
+    }
+
+    .menuinput {
+        border: 1px solid #d5d5d5;
+        font-size: 14px;
+        color: #858585;
+        padding: 5px 4px;
+        line-height: 1.2;
+        outline: none;
+        margin-bottom: 10px;
+        width: 163px;
+        margin-left: 15px;
+    }
+
+    .IndexMenuSub {
+        background-color: #28b779 !important;
+        color: #fff;
+        height: 35px;
+    }
+
+    .APPInput {
+        display: none;
+    }
+
+    .ss {
+        
+    }
+    /**----------------*/
+    .Module {
+        width: 100px;
+        height: 35px;
+        text-align: center;
+        line-height: 35px;
+        background-color: #eeeeee;
+        float: left;
+        margin-right: 5px;
+        color: #636363;
+        font-size: 14px;
+    }
+
+    .Module_Template, .ModuleWechat {
+        width: 100px;
+        height: 35px;
+        text-align: center;
+        line-height: 35px;
+        background-color: #eeeeee;
+        float: left;
+        margin-right: 5px;
+        color: #636363;
+        font-size: 14px;
+    }
+
+    .Module:hover {
+        cursor: pointer;
+        background-color: #D4D4D4;
+        color: #fff;
+    }
+
+    .ModuleWechat:hover {
+        cursor: pointer;
+        background-color: #D4D4D4;
+        color: #fff;
+    }
+
+    .Module_Template:hover {
+        cursor: pointer;
+        background-color: #D4D4D4;
+        color: #fff;
+    }
+
+    .Module_on {
+        background-color: #28b779 !important;
+        color: #fff;
+    }
+
+    .ModuleTemplate {
+    }
+
+    .ModuleWechat:nth-child(2) {
+        margin: 0;
+    }
+
+    .ModuleTemplatediv {
+        margin-bottom: 5px;
+    }
+
+    .WebApp {
+        display: none;
+    }
+    .input_on {
+        border: 1px solid #DA9494;
+    }
+</style>
+    <script>
+    </script>
+    <div class="container-fluid" >
+    <div class="rule">  
+         <!-- BEGIN PAGE HEADER-->
+         <div class="row">
+            <div class="col-md-12">
+               <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+               <h3 class="titles">
+                  幻灯片编辑 <small>幻灯片编辑</small>
+                  <a href="javascript:history.go(-1);location.reload()" class="btn default" style="float:right;"><i class="icon-arrow-left"></i> 返回</a>
+               </h3>
+        
+               <ul class="page-breadcrumb breadcrumb">
+                  <li>
+                     <i class="icon-home"></i>
+                     <a href="/Mltx_Slide/Slide">幻灯片</a>
+                  </li> <i class="icon-angle-right"></i> 
+                  <li><a href="JavaScript:location.reload()">幻灯片编辑</a></li>
+               </ul>
+            </div>
+         </div>
+
+        @{
+                    
+            
+            int location = 0;
+            string Title = string.Empty;
+            string URL = string.Empty;
+            string Image = string.Empty;
+            int Id = 0;
+            int AddAndEdit = 0;
+            int slideclass = 0;
+            MltxManager.Models.DBModel.Mltx_Slide slide = null;
+            try{
+               slide = Model;
+                location = Model.Location;
+                slideclass = Model.SlideCls;
+                Image = Model.Img;
+                Id = Model.Id;
+            }catch(Exception e){
+                slide = new MltxManager.Models.DBModel.Mltx_Slide();
+                AddAndEdit = 1;
+            }        
+         }
+      <div class="row  col-md-12" style="padding-left:10%;">
+              <div class="portlet-body form ">
+                <div class="form-horizontal" role="form" data-action="/Mltx_Member/IndexEdit" id="form" method="post">
+                      <div class="form-body">
+                             <div class="form-group">
+                                  <label class="col-md-2 control-label">标题</label>
+                                  <div class="col-md-5">
+                                     <input type="text" class="form-control" value="@slide.Title" " id="Title" name="">
+                                  </div>
+                           </div>
+                           <div class="form-group">
+                                  <label class="col-md-2 control-label">路径</label>
+                                  <div class="col-md-5">
+                                     <input type="text" class="form-control" value="@slide.URL" id="URLValue" name="" placeholder="">
+                                      <span class="span-point">*</span>
+                                  </div>
+                           </div>
+                          <div class="form-group">
+                            <label class="col-md-2 control-label">类型</label>
+                            <div class="col-md-5">
+                                <div class="@(location == 0 ? "Module_Template Module_on" : "Module_Template")" data-class="0">商城</div>
+                                <div class="@(location == 1 ? "Module_Template Module_on" : "Module_Template")" data-class="1">鲜果</div>
+                            </div>
+                        </div>
+                             <div class="form-group">
+                                  <label class="col-md-2 control-label">图片</label>
+                                  <div class="col-md-5">
+                                    <form action="/Mltx_Merchandise/FigureUploadedFile" method="post" enctype="multipart/form-data" class="dropzone dz-clickable dz-started ModuleUpload" id="myDropzone"
+                                        style="min-height: 130px!important; height: 130px!important; font-size: 20px; background-color: #28b779 !important; border: 0; color: #fff; padding: 50px 0; text-align: center;">
+                                        选择图片
+                                        <input type="hidden" name="shumu" value="1" />
+                                    </form>
+                                  </div>
+                           </div>
+                             <div class="form-group">
+                            <label class="col-md-2 control-label">幻灯片跳转类型</label>
+                            <div class="col-md-5">
+                                <div class="@(slideclass == 0 ? "Module_Template Module_on" : "Module_Template")" data-class="2">微信</div>
+                                <div class="@(slideclass == 1 ? "Module_Template Module_on" : "Module_Template")" data-class="3">安卓</div>
+                            </div>
+                        </div>
+                            <div class="form-group WebAndApp WebApp">
+                                  <label class="col-md-2 control-label">安卓类型</label>
+                                  <div class="col-md-5">
+                                     <input type="text" class="form-control" value="@slide.Type" id="Type" name="Type" placeholder="">
+                                      <span class="span-point">*</span>
+                                  </div>
+                           </div>
+                            <div class="form-group WebAndApp WebApp">
+                                  <label class="col-md-2 control-label">安卓参数</label>
+                                  <div class="col-md-5">
+                                     <input type="text" class="form-control" value="@slide.Value" id="Value" name="Value" placeholder="">
+                                      <span class="span-point">*</span>
+                                  </div>
+                           </div>
+                            <div class="form-group">
+                                  <label class="col-md-2 control-label">排序</label>
+                                  <div class="col-md-5">
+                                     <input type="text" class="form-control" value="@slide.sort" id="sort" name="sort" placeholder="">
+                                      <span class="span-point">*</span>
+                                  </div>
+                           </div>
+
+                          <style>
+                              .rankselect {
+                               
+                                  text-align:center!important;
+                                  padding:3px!important;
+                                  line-height:20px;
+                                  margin-right:5px!important;
+                                  margin-top:3px!important;
+                                  font-size:12px;
+                              }
+                              .rankselecttrue {
+                                  background:#28b779!important;
+                                  color:#fff!important;
+                              }
+                              .rankselectfalse {
+                                  background:#efefef !important;
+                                  color:#818181!important;
+                              }
+
+    .IndexMenuImageTemplate {
+    width: 100px;
+    height: 130px;
+    display: none;
+}
+    .IndexMenuImageTemplate_img {
+}
+    .IndexMenuImageTemplate_button {
+    width: 100px;
+    height: 30px;
+    font-size: 14px;
+    text-align: center;
+    display: block;
+    cursor: pointer;
+    border: none;
+    background-color: #28b779 !important;
+    color: #fff;
+    padding: 5px;
+}
+                          </style>
+                        </div>
+                    <input type="hidden" value="" id="jsonsid" name="jsonsid" />
+                    <input type="hidden" value="rankselect0," id="rankselectid" name="rankselectid" />
+                    <input type="hidden" value="" id="ranki" name="ranki" />
+                      <div class="form fluid">
+                           <div class="col-md-offset-2 col-md-5">
+                              <button type="button" class="btn green" id="submit" onclick="">保存</button>
+                           </div>
+                        </div>
+                  </div>
+              </div>
+         </div>
+        </div>  
+        </div>
+<div class="IndexMenuImageTemplate" id="IndexMenuImageTemplateId" style="display: none; position: absolute;">
+        <img class="IndexMenuImageTemplate_img" src="">
+    <div class="IndexMenuImageTemplate_button" id="IndexMenuImageTemplate_button">删除</div>
+</div>
+<link href="/css/box.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<link href="~/Scripts/dropzone/dropzone.css" rel="stylesheet" />
+<script src="~/Scripts/dropzone/dropzone.js"></script>
+<script src="/assets/plugins/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+    <script src="/Scripts/box.js"></script>
+<script src="/Scripts/_config.js"></script>
+
+<script>
+
+    var SlideData = [];
+    SlideData[0] = @location;
+    SlideData[1] = @slideclass;
+    SlideData[2] = -1;
+    SlideData[3] = @AddAndEdit;
+    SlideData[4] = @Id;
+    $('.Module_Template').click(function () {
+        var _dataClass = Number($(this).attr('data-class'));
+        /*
+            0 微信
+            1 安卓
+            2 商城
+            3 鲜果
+        */
+        if($(this).attr('class').indexOf('Module_on') != -1) {return false;}
+        switch (_dataClass) {
+            case 0:
+                Selects(this,0,0);
+                break;
+            case 1:
+                Selects(this,0,1);
+                break;
+            case 2:
+                Selects(this,1,0);
+                break;
+            case 3:
+                Selects(this,1,1);
+                break;
+        }
+    });
+    $(function(){
+
+        if(SlideData[3] == 1){return false;}
+        IndexMenuImageTemplate(myDropzone,'@Image',0);
+        //IndexMenuImageTemplate
+        if(SlideData[1] == 1){
+            var _frame = window.parent.document.getElementById('win');
+            $('.WebAndApp').removeClass('WebApp');
+            _frame.style.height = (_frame.clientHeight + 100) + 'px';
+        }
+
+
+    }());
+    /*
+        @@param a对象
+        @@param b类型    0  微信and安卓   1 商城and鲜果
+    */
+    function Selects(a, b, c, d) {
+        var h  = 'Module_on';
+        $(a).parent().find('div').removeClass(h);
+        switch(b){
+            case 0:
+                SlideData[0] = c;
+                break;
+            case 1:
+                SlideData[1] = c;
+                var _frame = window.parent.document.getElementById('win');
+                c == 1 ? ($('.WebAndApp').removeClass('WebApp'),_frame.style.height = (_frame.clientHeight + 100) + 'px') : ($('.WebAndApp').addClass('WebApp'),_frame.style.height = (_frame.clientHeight - 100) + 'px');
+                break;
+        }
+        
+        $(a).addClass(h);
+    }
+    $('#IndexMenuImageTemplate_button').click(function(){
+        IndexMenuImageTemplate('','',1);
+    });
+    /*
+      @@param a 对象
+      @@param b 图片路径
+      @@param c 
+  */
+    function IndexMenuImageTemplate(a, b,c) {
+
+        var _template = authcode.dom.getElementById('IndexMenuImageTemplateId');
+        switch(c){
+            case 0:
+                var self = a;
+                var top =  $(self).offset().top;
+                var left =  $(self).offset().left;
+                var height = self.offsetHeight;
+                var width = self.offsetWidth;
+                _template.style.cssText = 'display:block;height:'+height+'px;width:'+width+'px; position:absolute;top:' + (top) + 'px;left:' + left + 'px;';
+                _template.getElementsByTagName('img').item(0).style.cssText = 'height:100px;width:'+width+'px;';
+                _template.getElementsByTagName('div').item(0).style.cssText=  'width:'+width+'px;';
+                _template.getElementsByTagName('img').item(0).setAttribute('src', b);
+                SlideData[2] = 0;
+                break;
+            case 1:
+                _template.style.cssText = 'display:none;';
+                _template.getElementsByTagName('img').item(0).setAttribute('src','');
+                SlideData[2] = -1;
+                break;
+        }
+    }
+    $('#submit').on('click',function(){
+        //
+        if(Title.value.trim() ==''){
+            box.alert('请填写标题',1);
+            return false;
+        }else if(URLValue.value ==''){
+            box.alert('请填写路径',1);
+            return false;
+        }else if(sort.value.trim() == ''){
+            box.alert('请填写排序',1);
+            return false;
+        }else if(myDropzone.files.length == 0 && SlideData[2] == -1){
+            box.alert('请选择图片',1);
+            return false;
+        }else if(SlideData[1] == 1){
+            if(Type.value.trim() == ''){
+                box.alert('请填写安卓类型',1);
+                return false;
+            }else if(Value.value.trim() == ''){
+                box.alert('请填写安卓参数',1);
+                return false;
+            }
+        }
+        SlideData[2] == 0 ? SubmitAction($('.IndexMenuImageTemplate_img').eq(0).attr('src')) : myDropzone.processQueue();
+    });
+
+    function SubmitAction(image){
+        $.ajax({
+            url:'/Mltx_Slide/SlideAddEditAction',
+            type:'post',
+            data:{Id:SlideData[4],Title:Title.value,URL:URLValue.value,Img:image,SlideCls:SlideData[1],location:SlideData[0],Type:Type.value,Value:Value.value,Sort:sort.value},
+            dataType:'json',
+            success:function(data){
+                if(data.errcode ==0){
+                    box.alert(data.errmsg);
+                }else{
+                    box.alert(data.errmsg,1);
+                }
+                setTimeout(function(){
+
+                    location.reload();
+                },1500);
+            }
+        })
+    }
+
+    $('#myDropzone').dropzone({
+        //指定上传图片的路径
+        url: "/Mltx_Merchandise/FigureUploadedFile",
+
+        //添加上传取消和删除预览图片的链接，默认不添加
+        addRemoveLinks: true,
+        //关闭自动上传功能，默认会true会自动上传
+        //也就是添加一张图片向服务器发送一次请求
+        autoProcessQueue: false,
+        //允许上传多个照片
+        uploadMultiple: true,
+
+        //每次上传的最多文件数，经测试默认为2，坑啊
+        //记得修改web.config 限制上传文件大小的节
+        parallelUploads: 10,
+
+        init: function () {
+           myDropzone = this; // closure
+            var l;
+            this.on("addedfile", function () {
+                //添加图片
+            });
+
+            $('.image_cancel').click(function () {
+                try {
+                    img_remove("myDropzone");
+                    myDropzone.files.length = 0;
+                } catch (e) { }
+            });
+
+            //当上传完成后的事件，接受的数据为JSON格式
+            this.on("complete", function (data) {
+
+
+                if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                    try {
+
+                        if (data.xhr.status == 200) {
+                            var response = JSON.parse(data.xhr.response);
+                        } else {
+                            box.alert('上传失败,请刷新重试', 1);
+                            Modules[4] = false;
+                            return false;
+                        }
+                    } catch (e) {
+                        box.alert('上传失败,请重新登录', 1);
+                        Modules[4] = false;
+                        return false;
+                    }
+                    if (response.Result) {
+                        ///success
+                        SlideData[2] = 0;
+                        SubmitAction(response.mingcheng);
+                    } else {
+                        ModuleTemplateDataAddEdit(_data_form, 'image', '');
+                    }
+                }
+            });
+            //删除图片的事件，当上传的图片为空时，使上传按钮不可用状态
+            this.on("removedfile", function () {
+                var _data_form = this.element.getAttribute('data-form').replace('Files', '');
+                ModuleTemplateDataAddEdit('', 'image', '');
+
+            });
+        }
+    });
+</script>

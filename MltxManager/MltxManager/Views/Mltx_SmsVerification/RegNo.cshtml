@@ -1,0 +1,97 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/css/box.css" rel="stylesheet" />
+<script src="/Scripts/box.js"></script>
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+
+<div class="container-fluid">
+    <div class="rule">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <h3 class="titles" style="margin: 0px; margin-bottom: 10px;">注册短信序列号 <small>用于把短信序列哈注册到后台以激活序列号</small>
+                    <a href="/Mltx_SmsVerification/Index" class="btn default" style="float: right;"><i class="icon-arrow-left"></i>返回</a>
+                </h3>
+                <ul class="page-breadcrumb breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="/Global/Index">首页</a>
+                    </li>
+                    <i class="icon-angle-right"></i>
+                    <li><a href="#">注册短信序列号</a></li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN DASHBOARD STATS -->
+        <div class="row  col-md-12" style="padding-left: 10%;">
+            <div class="form-horizontal">
+                <div class="portlet-body form ">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">软件序列号</label>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control" id="SerialNo" name="SerialNo" placeholder="" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">密码</label>
+                            <div class="col-md-5">
+                                <input type="password" class="form-control" id="serialpass" name="serialpass" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">短信内容</label>
+                            <div class="col-md-5">
+                                <textarea class="form-control" id="Remark" name="Remark" placeholder="备案的短信格式中的验证码部分用'{验证码}'表示"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form fluid">
+                        <div class="col-md-offset-2 col-md-5">
+                            <input type="hidden" value="" name="weid" id="weid" />
+                            <button class="btn submit green" onclick="return yanzheng(this);">注册</button>
+                            @*<button type="button" class="btn default">取消</button>    *@
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- END DASHBOARD STATS -->
+    </div>
+</div>
+
+<script>
+    function yanzheng(check) {
+        var SerialNo = $("#SerialNo").val().trim();
+        var serialpass = $("#serialpass").val().trim();
+        if (SerialNo == "") {
+            box.alert("请输入序列号", "error");
+            $("#SerialNo").focus();
+            return false;
+
+        } else if (serialpass == "") {
+            box.alert("请输入密码", "error");
+            $("#serialpass").focus();
+            return false;
+        }
+        else {
+            $.post("/Mltx_SmsVerification/InsertSms", { serialNo: $("#SerialNo").val(), serialpass: $("#serialpass").val(), remark: $("#Remark").val() }, function (r) {
+                if (r == "ajaxerror") {
+                    box.alert("对不起,你的权限不够", "error");
+                } else if (r == 0) {
+                    box.alert( "添加成功,1秒后返回")
+                    setTimeout(function () { location.href = "/Mltx_SmsVerification/Index" }, 1000);
+                } else {
+                    box.alert( "失败", "error");
+                }
+            });
+        }
+    };
+</script>

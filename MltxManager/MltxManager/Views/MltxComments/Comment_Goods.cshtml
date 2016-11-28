@@ -1,0 +1,113 @@
+﻿@using Webdiyer.WebControls.Mvc;
+@model PagedList<MltxManager.Models.DBModel.Mltx_Comments>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/box.css" rel="stylesheet" />
+<script src="~/Scripts/box.js"></script>
+<div class="container-fluid" >
+    <div class="rule">    
+         <!-- BEGIN PAGE HEADER-->
+         <div class="row">
+            <div class="col-md-12">
+               <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+               <h3 class="titles" style="margin:0px;margin-bottom:10px;">
+                单品评论信息 <small>@ViewBag.gname</small>
+               </h3>
+               <ul class="page-breadcrumb breadcrumb">
+                 <li>
+                     <i class="icon-home"></i>
+                     <a href="#"> @ViewBag.gname </a> 
+                  </li> 
+               </ul>
+               <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+          </div>     
+        
+        <div class="row">
+            <div class="col-md-12">
+               <!-- BEGIN SAMPLE TABLE PORTLET-->
+               <div class="portlet">
+                  <div class="portlet-body" style="display: block;">
+                     <div class="table-responsive">
+                        <table class="table  table-bordered table-advance table-hover" style="border:0px">
+                           <thead>
+                              <tr>
+                                 <th>评价内容</th>
+                                 <th>评价时间</th>
+                                  <th>评星</th>
+                                 <th>买家姓名</th>
+                                  <th>操作</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                               @foreach(var item in Model)
+                               {
+                                   var trid = "tr" + @item.Id;
+                                <tr id="@trid" style="border:0">
+                              
+                                 <td class="highlight" style="height:70px;width:50%;padding:1%;line-height:30px;border-top:0;border-left:0;border-right:0">
+                                  @item.Comments
+                                 </td>
+                                 <td class=""  style="padding:1%;line-height:30px;border-top:0;border-left:0;border-right:0;color:#999">
+                                    @item.CommentTime
+                                 </td>
+                                  <td  style="padding:1%;line-height:30px;border-top:0;border-left:0;border-right:0">
+                                      @for (var j = 0; j < item.CommentStar;j++ )
+                                      {
+                                      <span style="color:#ffd800;font-size:15px;border-top:0;border-left:0;border-right:0">★</span>
+                                      }
+                                  </td>
+                                    <td  style="padding:1%;line-height:30px;border-top:0;border-left:0;border-right:0">
+                                        @item.Customer
+                                        </td>
+                                    <td  style="padding:1%;line-height:30px;border-top:0;border-left:0;border-right:0">   
+                                        <a href="#" onclick="del(@item.Id);" style="background-color:transparent" class="btn default btn-xs black" title="删除"><i class="icon-trash"></i> </a>
+                                 </td>
+                                 
+                              </tr>
+                               }
+                         
+                           </tbody>
+                        </table>  
+                         <footer style="text-align:center">
+                         @Html.Pager(Model, new Webdiyer.WebControls.Mvc.PagerOptions { PageIndexParameterName = "id" })
+                     </footer> 
+                     </div>
+                  </div>
+               </div>
+               <!-- END SAMPLE TABLE PORTLET-->
+            </div>
+         <!-- END PAGE CONTENT--> 
+            </div>
+     </div>
+</div>
+
+<script>
+    function del(id) {
+        if (confirm("确认删除吗")) {
+            $.ajax({
+                type: "get",
+                async: true,
+                url: "/MltxComments/delcomments",
+                data: "id=" + id,
+                success: function (msg) {
+                    if (msg == "error") {
+                        box.alert("删除失败", "error");
+                    }
+                    else if (msg == "ajaxerror") {
+                        box.alert("抱歉，您没有权限删除评论", "error");
+                    }
+                    else {
+                        box.alert("删除成功");
+                        var tr_id = "tr" + id;
+                        $("#" + tr_id).remove();
+                    }
+                }
+            });
+        }
+        else {
+            return;
+        }
+    }
+</script>

@@ -1,0 +1,14 @@
+﻿<div class="col-md-5">
+    <div class="input-group input-large margin-top-10" style="margin-bottom:1%">
+        <input type="text" id="address" class="form-control col-md-15">        
+        <span class="input-group-btn">
+        <button class="btn green" onclick="codeAddress()" type="button">搜索</button>
+        </span>
+    </div>
+    <div>
+    <span style="height:30px;display:none" id="city"></span>
+    <div style="width:403px;height:300px" id="container"></div>
+    <input type="text" style="border:1px solid #ddd" readonly id="latLng" name="Shop_x" value="@ViewBag.la"/>
+    <input type="text" style="border:1px solid #ddd" readonly id="lngLng" name="Shop_y" value="@ViewBag.ln"/>
+    </div>
+</div>

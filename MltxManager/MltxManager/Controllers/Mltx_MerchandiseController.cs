@@ -1,0 +1,386 @@
+﻿using System;
+using System.IO;
+using System.Web;
+using System.Web.Mvc;
+using MltxManager.Data;
+using MltxManager.Data.MethodHepler;
+using MltxManager.Models.DBHelper.Mode;
+using MltxManager.Models.DBModel;
+
+namespace MltxManager.Controllers
+{
+    [SigninAuthority]
+    public class Mltx_MerchandiseController : Controller
+    {
+        //
+        // GET: /Mltx_Merchandise/
+
+        #region 商品分组
+        /// <summary>
+        /// 商品分组页面显示
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Index()
+        {
+            return View();
+
+        }
+
+        public ActionResult GroupingLocal()
+        {
+            var re = new GetBiz().GetCommodityGrouping();
+            if (re.errcode == 0)
+            {
+                return PartialView(re);
+            }
+            else
+            {
+                return RedirectToAction("ErrorPage", "ToOtherPage", new { errmsg = "程序发生异常，请稍候重试！！" });
+            }
+        }
+        /// <summary>
+        /// 添加一级分组
+        /// </summary>
+        /// <param name="name">一级分组名称</param>
+        /// <returns></returns>
+        [PageAuthority(ModeId = Modular.分组信息, QuanId = Quanxian.增加, Leixing = false)]
+        public int InsertFirstClassGrouping(string name)
+        {
+            var re = new GetBiz().InsertFirstClassGrouping(name);
+            return re ? 0 : 1;
+        }
+
+        /// <summary>
+        /// 商品一级分组修改
+        /// </summary>
+        /// <param name="name">分组名称</param>
+        /// <param name="id">分组ID</param>
+        /// <returns></returns>
+        [PageAuthority(ModeId = Modular.分组信息, QuanId = Quanxian.修改, Leixing = false)]
+        public int UpdateFirstClassGrouping(string name, int id)
+        {
+            var re = new GetBiz().UpdateFirstClassGrouping(name, id);
+            return re ? 0 : 1;
+        }
+
+        /// <summary>
+        /// 商品一级分组删除
+        /// </summary>
+        /// <param name="id">分组ID</param>
+        /// <returns></returns>
+        [PageAuthority(ModeId = Modular.分组信息, QuanId = Quanxian.删除, Leixing = false)]
+        public int DeletFirstClassGrouping(int id)
+        {
+            var re = new GetBiz().DeletFirstClassGrouping(id);
+            return re ? 0 : 1;
+        }
+
+        /// <summary>
+        /// 二级分组添加
+        /// </summary>
+        /// <param name="yiji">一级ID</param>
+        /// <param name="name">二级名称</param>
+        /// <param name="tupian">二级分组图片地址</param>
+        /// <returns></returns>
+        [PageAuthority(ModeId = Modular.分组信息, QuanId = Quanxian.增加, Leixing = false)]
+        public int InsertTwoLevels(int yiji, string name, string tupian)
+        {
+            var re = new GetBiz().InsertTwoLevels(yiji, name, tupian);
+            return re ? 0 : 1;
+        }
+
+        /// <summary>
+        /// 二级分组删除
+        /// </summary>
+        /// <param name="id">二级ID</param>
+        /// <returns></returns>
+        [PageAuthority(ModeId = Modular.分组信息, QuanId = Quanxian.删除, Leixing = false)]
+        public int DeletTwoLevels(int id)
+        {
+            var re = new GetBiz().DeletTwoLevels(id);
+            return re ? 0 : 1;
+        }
+
+        /// <summary>
+        /// 二级分组修改
+        /// </summary>
+        /// <param name="id">二级ID</param>
+        /// <param name="name">修改名称</param>
+        /// <param name="tupian">修改图片</param>
+        /// <returns></returns>
+        [PageAuthority(ModeId = Modular.分组信息, QuanId = Quanxian.修改, Leixing = false)]
+        public int UpdateTwoLevels(int id, string name, string tupian)
+        {
+            var re = new GetBiz().UpdateTwoLevels(id, name, tupian);
+            return re ? 0 : 1;
+        }
+
+        #endregion
+        #region 商品信息管理
+        /// <summary>
+        /// 显示所有的商品信息
+        /// </summary>
+        /// <param name="id">页数</param>
+        /// <param name="kword">查询条件</param>
+        /// <returns></returns>
+        public ActionResult Information(int id = 1, string kword = null)
+        {
+            var re = new GetBiz().GetInformation(id, kword);
+            if (re.errcode == 0)
+            {
+                return View(re.MltxGoodsInfoShops);
+            }
+            else
+            {
+                return RedirectToAction("ErrorPage", "ToOtherPage", new { errmsg = "程序发生异常，请稍候重试！！" });
+            }
+
+        }
+        /// <summary>
+        /// 显示商品添加页面
+        /// </summary>
+        /// <returns></returns>
+        [PageAuthority(ModeId = Modular.商品管理, QuanId = Quanxian.增加)]
+        public ActionResult InsertCommodity()
+        {
+            var re = new GetBiz().GetFirstGrouping();
+            if (re.errcode == 0)
+            {
+                return View(re.DoubleBases);
+            }
+            else
+            {
+                return RedirectToAction("ErrorPage", "ToOtherPage", new { errmsg = "程序发生异常，请稍候重试！！" });
+            }
+
+        }
+        /// <summary>
+        /// 获取二级分组
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetTwoLevels(int id)
+        {
+            var re = new GetBiz().GetTwoLevels(id);
+            if (re.errcode == 0)
+            {
+                return PartialView("GetSelect", re.DoubleBases);
+            }
+            else
+            {
+                return RedirectToAction("ErrorPage", "ToOtherPage", new { errmsg = "程序发生异常，请稍候重试！！" });
+            }
+
+        }
+        /// <summary>
+        /// 添加商品信息
+        /// </summary>
+        /// <param name="name">商品名称</param>
+        /// <param name="guige">商品规格</param>
+        /// <param name="kuchun">商品库存</param>
+        /// <param name="tupian">商品图片</param>
+        /// <param name="liebiao">商品列表图片</param>
+        /// <param name="fenzu">商品分组ID</param>
+        /// <param name="mprice">市场价</param>
+        /// <param name="rprice">销售价</param>
+        /// <param name="xiangxi">详细信息</param>
+        /// <param name="fangs">库存计算方式</param>
+        /// <param name="jifen">积分计算方式</param>
+        /// <param name="zhuangtai">状态</param>
+        /// <returns></returns>
+        [ValidateInput(false)]
+        [PageAuthority(Leixing = false, ModeId = Modular.商品管理, QuanId = Quanxian.增加)]
+        public int InsertCommodityAdded(string name, string guige, int kuchun, string tupian, string liebiao, int fenzu, decimal rprice, decimal mprice, string xiangxi, int fangs, int jifen, int zhuangtai)
+        {
+            var r = int.Parse(Session["User"].ToString());
+            var re = new GetBiz().InsertCommodityAdded(name, guige, kuchun, tupian, liebiao, fenzu, rprice, mprice, xiangxi, fangs, jifen, zhuangtai, r);
+            return re;
+        }
+
+        /// <summary>
+        /// 商品下架
+        /// </summary>
+        /// <param name="i">商品ID</param>
+        /// <param name="r">判断类型</param>
+        /// <returns></returns>
+        [PageAuthority(Leixing = false, ModeId = Modular.商品管理, QuanId = Quanxian.删除)]
+        public int DeleteCommodity(int i, int r)
+        {
+            var re = new GetBiz().DeleteCommodity(i, r);
+            return re;
+        }
+        /// <summary>
+        /// 商品修改读取数据
+        /// </summary>
+        /// <param name="goodId">商品ID</param>
+        /// <returns></returns>
+        [PageAuthority(ModeId = Modular.商品管理, QuanId = Quanxian.修改)]
+        public ActionResult UpdateCommodityPage(int goodId)
+        {
+            var re = new GetBiz().UpdateCommodityPage(goodId);
+            if (re.errcode == 0)
+            {
+
+                if (!string.IsNullOrWhiteSpace(re.MltxGoodsInfoShop.GoodsPic))
+                {
+                    var r = re.MltxGoodsInfoShop.GoodsPic.Split('|');
+                    ViewBag.tupian = r;
+                }
+                else
+                {
+                    ViewBag.tupian = "";
+                }
+
+
+                ViewBag.yiji = re.DoubleBases;
+
+                return View(re.MltxGoodsInfoShop);
+            }
+            else
+            {
+                return RedirectToAction("ErrorPage", "ToOtherPage", new { errmsg = "程序发生异常，请稍候重试！！" });
+            }
+        }
+        /// <summary>
+        /// 商品修改
+        /// </summary>
+        /// <param name="name">商品名称</param>
+        /// <param name="guige">商品规格</param>
+        /// <param name="kuchun">商品库存</param>
+        /// <param name="tupian">商品图片</param>
+        /// <param name="liebiao">商品列表图片</param>
+        /// <param name="fenzu">商品分组ID</param>
+        /// <param name="xiangxi">详细信息</param>
+        /// <param name="mprice">市场价</param>
+        /// <param name="rprice">销售价</param>
+        /// <param name="fangs">库存计算方式</param>
+        /// <param name="jifen">积分计算方式</param>
+        /// <param name="zhuangtai">状态</param>
+        /// <param name="groupId">商品ID</param>
+        /// <returns></returns>
+        [ValidateInput(false)]
+        [PageAuthority(Leixing = false, ModeId = Modular.商品管理, QuanId = Quanxian.修改)]
+        public int UpdateCommodityModify(string name, string guige, int kuchun, string tupian, string liebiao, int fenzu, decimal rprice, decimal mprice, string xiangxi, int fangs, int jifen, int zhuangtai, int groupId)
+        {
+            var r = int.Parse(Session["User"].ToString());
+            var re = new GetBiz().UpdateCommodityModify(name, guige, kuchun, tupian, liebiao, fenzu, rprice, mprice, xiangxi, fangs, jifen, zhuangtai, r, groupId);
+            return re;
+
+        }
+        #endregion
+        #region 公共方法
+
+        /// <summary>
+        /// dropzone 图片上传
+        /// </summary>
+        /// <returns>返回所有图片路径中间由|分割</returns>
+        public ActionResult SaveUploadedFile()
+        {
+            var isSavedSuccessfully = true;
+            var count = 0;
+            var msg = "";
+            var lujing = "";
+
+            //这里是获取隐藏域中的数据
+            //int albumId = string.IsNullOrEmpty(Request.Params["hidAlbumId"]) ?
+            //	0 : int.Parse(Request.Params["hidAlbumId"]);
+            try
+            {
+                var directoryPath = Server.MapPath("~/Images/CommodityGrouping");
+                if (!Directory.Exists(directoryPath))
+                    Directory.CreateDirectory(directoryPath);
+
+                foreach (string f in Request.Files)
+                {
+                    var file = Request.Files[f];
+
+                    if (file == null || file.ContentLength <= 0) continue;
+                    var fileName = file.FileName;
+                    var fileNewName = DateTime.Now.ToString("yyyyMMddhhmmss") + fileName;
+                    var filePath = Path.Combine(directoryPath, fileNewName);
+                    file.SaveAs(filePath);
+                    const string lu = "/Images/CommodityGrouping/";
+                    lujing = Path.Combine(lu, fileNewName);
+                    count++;
+                }
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+                isSavedSuccessfully = false;
+            }
+
+            return Json(new
+            {
+                Result = isSavedSuccessfully,
+                Count = count,
+                Message = msg,
+                mingcheng = lujing
+            });
+        }
+        /// <summary>
+        /// dropzone 图片上传
+        /// </summary>
+        /// <returns>返回所有图片路径中间由|分割</returns>
+        public ActionResult FigureUploadedFile()
+        {
+            var isSavedSuccessfully = true;
+            var count = 0;
+            var msg = "";
+            var lujing = "";
+            var path = "";
+            //这里是获取隐藏域中的数据
+            var albumId = string.IsNullOrEmpty(Request.Params["shumu"]) ?
+                0 : int.Parse(Request.Params["shumu"]);
+
+            try
+            {
+                var directoryPath = Server.MapPath("~/Images/CommodityPicture");
+                if (!Directory.Exists(directoryPath))
+                    Directory.CreateDirectory(directoryPath);
+
+                foreach (string f in Request.Files)
+                {
+                    var file = Request.Files[f];
+
+                    if (file == null || file.ContentLength <= 0) continue;
+                    var fileName = file.FileName;
+                    //var fileExtension = Path.GetExtension(fileName);
+                    var fileNewName = DateTime.Now.ToString("yyyyMMddhhmmss") + fileName;
+                    var filePath = Path.Combine(directoryPath, fileNewName);
+                    file.SaveAs(filePath);
+                    const string lu = "/Images/CommodityPicture/";
+                    path = Path.Combine(lu, fileNewName);
+                    lujing = path + "|" + lujing;
+                    count++;
+                }
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+                isSavedSuccessfully = false;
+            }
+            if (albumId == 0)
+            {
+                return Json(new
+                {
+                    Result = isSavedSuccessfully,
+                    Count = count,
+                    Message = msg,
+                    mingcheng = lujing
+                });
+            }
+            else
+            {
+                return Json(new
+                {
+                    Result = isSavedSuccessfully,
+                    Count = count,
+                    Message = msg,
+                    mingcheng = path
+                });
+            }
+
+        }
+        #endregion
+    }
+}

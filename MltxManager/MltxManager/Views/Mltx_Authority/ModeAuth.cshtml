@@ -1,0 +1,24 @@
+﻿@model System.Collections.Generic.IList<MltxManager.Models.DBHelper.Mode.DoubleBase>
+
+@foreach (var item in Model)
+{
+    // 获取某个分组模块的权限
+    <div class="form-inline">
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon" style="width: 20px">
+                    @if (item.Zhuangtai == 1)
+                    {
+                        <input name="huoqu" type="checkbox" checked="checked"  value="@item.Id"/>
+                    }
+                    else
+                    {
+                        <input name="huoqu" type="checkbox" value="@item.Id"/>
+                    }
+
+                </div>
+                <div class="form-control" style="width: 130px; height: 36px;">@item.Name</div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,102 @@
+﻿body {
+    background-color:#fff;
+    font-family:'Microsoft YaHei' !important;
+}
+.div_basic {
+    padding: 10px 0 10px 0;
+    background-color:#ececec;
+}
+    .div_basic div {
+        text-align:center;
+    }
+.div_img {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+    .div_img img {
+        border-radius: 50%;
+    }
+.div_info {
+    margin-top:20px;
+    display: -webkit-box;
+}
+    .div_info div {
+        width: 32%;
+    }
+        .div_info div:nth-child(1) {
+            border-right: 1px solid #aaa;
+        }.div_info div:nth-child(2) {
+            border-right: 1px solid #aaa;
+        }
+        .div_info div span {
+            display: block;
+        }
+         .div_info div span:nth-child(2) {
+            color:#64a786;
+            font-size:1.2em;   
+        }
+#div_bottom {
+
+}
+.div_bootom_row {
+    display:-webkit-box;    
+    padding: 15px 0 15px 0;
+}
+    .div_bootom_row div {
+        width: 33%;
+    }
+        .div_bootom_row div span {
+            display:block;
+            text-align:center;
+        }
+    .div_bootom_row img {
+        border-radius: 50%;
+        padding: 10px;
+        height: 60px;
+        width: 60px;
+    }
+        
+
+
+.div_form {
+    height: 40px;
+    line-height: 40px;
+    position: relative;
+    padding-bottom:20px;
+}
+.i_form {
+    color: #999;
+    font-size: 1.3em;
+    position: absolute;
+}
+.input_form {
+    height: 35px;
+    outline: none;
+    line-height: 35px;
+    font-size:1em;
+    border: 0;
+    border-bottom: 1px solid #999;
+    width: 65%;
+    padding-left: 25px;
+}
+.divbtn_login {
+    width: 60%;
+    margin-left: 20%;
+    text-align: center;
+    background-color: #64a786;
+    color: #fff;
+    height: 35px;
+    line-height: 35px;
+    border-radius: 30px;
+    margin-bottom: 20px;
+}
+.divbtn_reg {
+    width: 60%;
+    margin-left: 20%;
+    text-align: center;
+    border: 1px solid #64a786;
+    color: #64a786;
+    height: 35px;
+    line-height: 35px;
+    border-radius: 30px;
+}

@@ -1,0 +1,61 @@
+﻿ @using MltxManager.Models.DBModel
+@model MltxManager.Models.DBHelper.ReturnMsg
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+@foreach (var item in Model.MltxGroupFirst)
+                {
+                    <ul>
+                        <li>
+                            <input type="hidden" id="@item.GroupId" class="@item.GroupId" value="@item.GroupName"/>
+                            <span class="sp"><i class="icon-folder-open"></i>@item.GroupName</span>
+                            <a class="yello" href="#" data-toggle="modal" data-target="#basic1" onclick="group1('@item.GroupId')">
+                                <i class="icon-plus smaller-75"></i>
+                            </a>
+                            <a class="blue" href="#" data-toggle="modal" onclick="updateYiji('@item.GroupId', '@item.GroupName')" data-target="#basic">
+                                <i class="icon-pencil bigger-130"></i>
+                            </a>
+                            <a class="red" id="bootbox-confirm" onclick="Delete(@item.GroupId)">
+                                <i class="icon-trash bigger-130"></i>
+                            </a>
+
+                            <ul>
+                                @foreach (var r in Model.MltxGroupSecond)
+                                {
+                                    if (r.OwnerId == item.GroupId)
+                                    {
+                                    <li>
+                                        <input type="hidden" id="@item.GroupId" class="@item.GroupId" value="@r.GroupName"/>
+                                        <span class="sp1"><i class="icon">
+                                            <img src="@r.GroupPic" style="height: 30px; width: 30px" alt="Alternate Text" /></i>@r.GroupName</span>
+                                        <a class="blue" href="#" data-toggle="modal" onclick="UpdateTwoLevels('@r.GroupId', '@r.GroupName', '@r.GroupPic')"data-target="#basic2">
+                                            <i class="icon-pencil bigger-130"></i>
+                                        </a>
+                                        <a class="red" href="#" onclick="DeleteTwoLevels(@r.GroupId)">
+                                            <i class="icon-trash bigger-130"></i>
+                                        </a>
+                                    </li>
+                                    }
+                                }
+
+
+                            </ul>
+                        </li>
+                    </ul>
+                }
+<!-- 使第一分组点击可以折叠 -->
+<script type="text/javascript">
+    $(function () {
+        $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+        $('.tree li.parent_li > span').on('click', function (e) {
+            var children = $(this).parent('li.parent_li').find(' > ul > li');
+            if (children.is(":visible")) {
+                children.hide('fast');
+                $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign').removeClass('icon-minus-sign');
+            } else {
+                children.show('fast');
+                $(this).attr('title', 'Collapse this branch').find(' > i').addClass('icon-minus-sign').removeClass('icon-plus-sign');
+            }
+            e.stopPropagation();
+        });
+    });
+</script>
+<!-- /.使第一分组点击可以折叠 -->

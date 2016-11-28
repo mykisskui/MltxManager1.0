@@ -1,0 +1,197 @@
+﻿@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>注册</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/css/Index.css" rel="stylesheet" type="text/css" @*media="screen and (max-width:539px )"*@ />
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/weixin/example.css" rel="stylesheet" />
+    <link href="~/css/mallmyhome.css" rel="stylesheet" />
+    <link href="~/css/weixin/weui.css" rel="stylesheet" />
+    <script src="~/assets/plugins/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/iScroll-4.2.5.js"></script>
+    <script src="~/Scripts/loading.js"></script>
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/cookiedata.js"></script>
+    <script src="~/Scripts/weixin/zepto.min.js"></script>
+    <script src="~/Scripts/weixin/example.js"></script>
+    
+    
+</head>
+<body>
+    <script>
+        var userid = '@Html.Raw(HttpUtility.HtmlDecode(ViewBag.userid))';
+    </script>
+
+    <div class="body">
+        
+        
+        <!-- 头部start  search-->
+        <div class="index_0_header">
+            <div class="index_0_header_top">
+                <ul>
+                    <li ontouchstart="history.go(-1)">
+                        <i class="icon-angle-left"></i>
+                    </li>
+                    <li>
+                        <div style="background-color: #fff; color: #64a786; font-size: 16px">
+                             注册
+                        </div>
+                    </li>
+                    <li>
+                        <i class="">
+                        </i>
+                    </li>
+                </ul>
+            </div>
+        </div> 
+        <!-- 头部end -->
+        
+        <!-- 内容start -->
+        <div  id="page_scroll_0">
+            <div style="overflow: hidden;    margin-top: 30%;  width: 100%; text-align: center;">
+                <div class="div_form">
+                    <label><i class="icon-tablet i_form"></i></label>
+                    <input class="input_form" id="tel" type="text" placeholder="手机号"/>
+                </div>
+                <div class="div_form" id="div_qrcode" style="display:none">
+                    <label><i class="icon-qrcode i_form"></i></label>
+                    <input class="input_form" id="yanzhengma" type="text" placeholder="验证码"/>
+                </div>
+                <div class="div_form" id="div_pwd" style="display:none">
+                    <label><i class="icon-lock i_form"></i></label>
+                    <input class="input_form" id="password" type="password" placeholder="密码"/>
+                </div>
+                <div class="divbtn_login" id="divbtn_login" style="display:none">注册</div>
+                <div class="divbtn_reg" id="divbtn_reg">获取验证码</div>
+            </div>
+        </div>
+        <!-- 内容end -->
+
+
+       
+</div>
+
+    <script src="~/Scripts/weixin/confirm_self.js"></script>
+    <script>
+        var _tag = true;
+        var _tag_reg = true;
+
+        //获取验证码
+        $("#divbtn_reg").click(function () {
+            if (_tag) {
+                _tag = false;
+                var _sec = 60;
+                $("#div_qrcode").show('slow');
+                $("#div_pwd").show('slow');
+                $("#divbtn_login").show('slow');
+                divbtn_reg.innerText = '60秒后重新获取';
+                var _s = setInterval(function () {
+                    _sec = parseInt(_sec) - 1;
+                    divbtn_reg.innerText = _sec + '秒后重新获取';
+                    if (_sec == 0) {
+                        divbtn_reg.innerText = '获取验证码';
+                        _tag = true;
+                        clearInterval(_s);
+                    }
+                }, 1000);
+
+                var tel = $('#tel').val();
+                if (tel == '')//没有值
+                {
+                    var _tel_fun = function () {
+                        _tag = true;
+                        $('#tel').focus();
+                        return false;
+                    }
+                    dialog.alert("请输入手机号", _tel_fun);
+                } else {
+                    $.ajax({
+                        type: 'post',
+                        async: true,
+                        url: "/Mltx_MallClass/_getCode", // 你请求的地址
+                        data: {
+                            'tel': tel
+                        },
+                        success: function (data) {
+                            if (data == '0') {
+                                _tag = true;
+                                divbtn_reg.innerText = '获取验证码';
+                                clearInterval(_s);
+                            } else {
+                                _tag = true;
+                                divbtn_reg.innerText = '获取验证码';
+                                clearInterval(_s);
+                                dialog.alert(data, "");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        //注册
+        $("#divbtn_login").click(function () {
+            if (_tag_reg) {
+                _tag_reg = false;
+                var tel = $('#tel').val();
+                var code = $('#yanzhengma').val();
+                var pwd = $('#password').val();
+                if (tel == '') {
+                    var _tel_fun = function () {
+                        _tag_reg = true;
+                        $('#tel').focus();
+                        return false;
+                    }
+                    dialog.alert("请输入手机号", _tel_fun);
+                }
+                else if (code == '') {
+                    var _code_fun = function () {
+                        _tag_reg = true;
+                        $('#yanzhengma').focus();
+                        return false;
+                    }
+                    dialog.alert("请输入验证码", _code_fun);
+                } else if (pwd == '') {
+                    var _pwd_fun = function () {
+                        _tag_reg = true;
+                        $('#password').focus();
+                        return false;
+                    }
+                    dialog.alert("请输入密码", _pwd_fun);
+                } else {
+                    $.ajax({
+                        type: 'post',
+                        async: true,
+                        url: "/Mltx_MallClass/_Reg", // 你请求的地址
+                        data: {
+                           tel: tel,pwd: pwd,code: code
+                        },
+                        success: function (data) {
+                            _tag_reg = true;
+                            if (data == '0') {
+                                setCookie("mltxuserid", tel, 20);//保存用户id（tel）到本地cookie 默认保存20天
+                                location.href = "/Mltx_MallClass/MallMyHome";
+                            } else {
+                                dialog.alert(data, "");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>
+

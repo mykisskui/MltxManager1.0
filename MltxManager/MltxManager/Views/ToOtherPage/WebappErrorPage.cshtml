@@ -1,0 +1,90 @@
+﻿@model MltxManager.Models.DBModel.Mltx_GoodsInfo_shop
+@{
+    Layout = string.Empty;
+}
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>出错啦！！</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/css/Index.css" rel="stylesheet" type="text/css" @*media="screen and (max-width:539px )"*@ />
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/assets/plugins/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/iScroll-4.2.5.js"></script>
+
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+
+
+    <script>
+        var myscroll_0, myscroll;
+        function load() {
+            var _height = window.innerHeight;
+            page_scroll_0.style.height = _height + 'px';
+      
+            myscroll_0 = new iScroll("page_scroll_0", {
+                vScroll: true,
+                vScrollbar: false,
+                hScrollbar: false,
+                hScroll: false,
+                snap: true,
+                bounce: false,
+                momentum: true,
+                onBeforeScrollStart: function () {
+                }
+            }),
+          
+            document.body.ontouchmove = function (event) {
+                event.preventDefault();
+            }
+        }
+        window.addEventListener('load', load, false);
+    </script>
+    <style>
+        .div_msg {
+            margin-top: 50%;
+            margin-left: 10%;
+            width: 80%;
+            text-align: center;
+            color: #666;
+        }
+        .div_btn {
+            width: 30%;
+            margin-top: 20%;
+            margin-left: 35%;
+            text-align: center;
+            border: 1px solid #999;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 3px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <script>
+    </script>
+
+    <div class="body">
+        
+<!-- 错误页start -->  
+        <div  id="page_scroll_0">
+            <div style="overflow: hidden">
+                <div class="div_msg">@ViewBag.msg</div>
+              <div class="div_btn" ontouchstart="history.go(-1)">返回</div>
+            </div>
+        </div>
+<!--错误页end -->
+
+
+    </div>
+
+</body>
+
+</html>
+

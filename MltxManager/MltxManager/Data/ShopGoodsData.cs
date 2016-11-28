@@ -1,0 +1,307 @@
+﻿using MltxManager.Models.DBHelper;
+using MltxManager.Models.DBModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace MltxManager.Data
+{
+    public class ShopGoodsData
+    {
+        /// <summary>
+        /// 根据tag查询商城商品列表 
+        /// </summary>
+        /// <param name="tag">1 时间顺序 2 销量 3价格</param>
+        /// <returns></returns>
+        public ReturnMsg GetShopGoodsDataListBytag(string groupid, string tag)
+        {
+             ReturnMsg rmsg = new ReturnMsg();
+
+             using (MltxDbContext db = new MltxDbContext())
+             {
+                 try
+                 {
+                     IQueryable<Mltx_GoodsInfo_shop> goodsinfo = null;
+                     if (string.IsNullOrEmpty(groupid))
+                     {
+                         goodsinfo = db.goodsinfo_shop.AsQueryable();
+                     }
+                     else
+                     {
+                         int group_id = int.Parse(groupid);
+                         goodsinfo = db.goodsinfo_shop.AsQueryable().Where(g => g.GroupId == group_id);
+                     }
+
+                     switch (tag)
+                     {
+                         case "1": goodsinfo = goodsinfo.OrderByDescending(t => t.CTime); break;
+                         case "2": goodsinfo = goodsinfo.OrderByDescending(t => t.GoodsSales); break;
+                         case "3": goodsinfo = goodsinfo.OrderBy(t => t.Rprice); break;
+                     }
+
+                     rmsg.errcode = 0;
+                     rmsg.errmsg = "SUCCESS";
+                     rmsg.goodslist = goodsinfo.ToList();
+
+                 }
+                 catch (Exception ex)
+                 {
+                     Data.MethodHepler.MHepler.writelog_err("获取商品列表异常:" + ex.Message);
+                     rmsg.errcode = -1;
+                     rmsg.errmsg = ex.Message;
+                 }
+
+                 return rmsg;
+             }
+        }
+
+        /// <summary>
+        /// 根据gid获取商城商品详细信息
+        /// </summary>
+        /// <param name="gid"></param>
+        /// <returns></returns>
+        public ReturnMsg GetShopGoodsInfoByGid(int gid)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    Mltx_GoodsInfo_shop goodinfo = db.goodsinfo_shop.Where(g => g.GoodsId == gid).SingleOrDefault();
+
+                    rmsg.errcode = 0;
+                    rmsg.errmsg = "SUCCESS";
+                    rmsg.MltxGoodsInfoShop = goodinfo;
+                }
+                catch (Exception ex)
+                {
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+
+        /// <summary>
+        /// 根据gid获取商品评价信息 含分页
+        /// </summary>
+        /// <param name="gid"></param>
+        /// <returns></returns>
+        public ReturnMsg GetShopCommentByGid(int gid,int page,int skip)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    List<Mltx_Comments> c_list = db.comments.Where(g => g.GoodsId == gid).OrderByDescending(g => g.CommentTime).Skip(skip * page).Take(page).ToList();
+                    rmsg.errcode = 0;
+                    rmsg.errmsg = "SUCCESS";
+                    rmsg.com_list = c_list;
+                }
+                catch (Exception ex)
+                {
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+
+
+        /// <summary>
+        /// 根据电话号码获取用户地址信息 地址
+        /// </summary>
+        /// <param name="login_id"></param>
+        /// <returns></returns>
+        public ReturnMsg GetUserAddressByTel(string login_id)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    Mltx_Address address = db.address.Where(a => a.Uid == login_id && a.IsDefault == 0).SingleOrDefault();
+                    rmsg.errcode = 0;
+                    rmsg.errmsg = "SUCCESS";
+                    rmsg.address = address;
+                }
+                catch (Exception ex)
+                {
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+
+        /// <summary>
+        /// 根据电话号码获取地址库列表
+        /// </summary>
+        /// <param name="tel"></param>
+        /// <returns></returns>
+        public ReturnMsg GetAddrListByTel(string login_id)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    List<Mltx_Address> addresslist = db.address.Where(a => a.Uid == login_id).ToList();
+                    rmsg.errcode = 0;
+                    rmsg.errmsg = "SUCCESS";
+                    rmsg.addressList = addresslist;
+                }
+                catch (Exception ex)
+                {
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+ 
+        }
+
+        /// <summary>
+        /// 根据id删除地址库信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ReturnMsg DeleteAddrById(int id)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    Mltx_Address addr = db.address.Find(id);
+                    db.address.Remove(addr);
+                    db.SaveChanges();
+
+                    rmsg.errcode = 0;
+                    rmsg.errmsg = "SUCCESS";
+                }
+                catch (Exception ex)
+                {
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+
+        /// <summary>
+        /// 修改 新增地址信息
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        public ReturnMsg CreateOrEditAddr(string id, string login_id, string username, string prov, string city, string dist, string area,string tel, string isdefault, string tag)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    bool flag = true;
+                    if (isdefault == "0")//如果这是默认地址
+                    {
+                        flag = _ChangeDefault(login_id);
+                    }
+
+                    if (flag)
+                    {
+                        if (tag == "edit")//编辑
+                        {
+                            int _id = int.Parse(id);
+                            Mltx_Address _addr = db.address.Find(_id);
+                            _addr.UserName = username;
+                            _addr.Province = prov;
+                            _addr.City = city;
+                            _addr.District = dist;
+                            _addr.Area = area;
+                            _addr.Tel = tel;
+                            _addr.IsDefault = int.Parse(isdefault);
+
+                            db.Entry(_addr).State = System.Data.Entity.EntityState.Modified;
+                            db.SaveChanges();
+
+                        }
+                        else
+                        {
+                            Mltx_Address c_addr = new Mltx_Address();
+                            c_addr.Uid = login_id;
+                            c_addr.UserName = username;
+                            c_addr.Province = prov;
+                            c_addr.City = city;
+                            c_addr.District = dist;
+                            c_addr.Area = area;
+                            c_addr.IsDefault = int.Parse(isdefault);
+                            c_addr.Tel = tel;
+                            c_addr.AddCls = "0";//默认
+
+                            db.address.Add(c_addr);
+                            db.SaveChanges();
+                        }
+
+                        rmsg.errcode = 0;
+                        rmsg.errmsg = "SUCCESS";
+                    }
+                    else
+                    {
+                        //修改默认地址库失败
+                        rmsg.errcode = -2;
+                        rmsg.errmsg = "Failed";
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+
+        /// <summary>
+        /// 修改此用户
+        /// </summary>
+        /// <param name="login_id"></param>
+        /// <returns></returns>
+        public bool _ChangeDefault(string login_id)
+        {
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    Mltx_Address addr = db.address.Where(a => a.Uid == login_id && a.IsDefault == 0).SingleOrDefault();
+                    if (addr != null){
+                        addr.IsDefault = 1;//改为非默认
+                        db.Entry(addr).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+        }
+       
+    }
+}

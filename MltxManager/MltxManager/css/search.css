@@ -1,0 +1,154 @@
+﻿body {
+
+    margin:0;
+    padding:0;
+    font:14px/1.5;
+    font-family:'Microsoft YaHei';
+    max-width:640px;
+    margin:auto;
+
+}
+.search_header {
+    height:40px;
+    background:#fff;
+    display:-webkit-box;
+    padding:0 10px;
+    border-bottom:1px solid #CECECE;
+}
+    .search_header > div {
+        -webkit-box-flex:1;
+        line-height:40px;
+        text-align:center;
+        font-size:16px;
+    }
+        .search_header > div:first-child {
+            width:85%;
+            position:relative;
+
+        }
+            .search_header > div:first-child > i {
+                position:absolute;
+                font-size:18px;
+                 color: #676767;
+                top: 10px;
+                left: 5px;
+            }
+            .search_header > div:first-child > input[type=text] {
+                background:#ECECEC;
+                padding:5px 0 5px 25px;
+                border-radius:5px;
+                border:1px solid #CECECE;
+                width:100%;
+                height:30px;
+                margin:5px 0;
+                cursor:none;
+                outline:none;
+                font-size:18px;
+
+            }
+        .search_header > div:last-child {
+            width:15%;
+            color:rgb(108, 169, 75);
+        }
+
+.search_ul {
+    list-style:none;
+    margin:10px 5px;
+    padding:0;
+}
+
+    .search_ul > li {
+        display:-webkit-box;
+        height:100px;
+          border-bottom:1px solid rgb(229,229,229);
+    }
+    @media screen and (max-width:320px) {
+    .search_ul > li div:first-child > img {
+        width:80px!important;
+        height:80px!important;
+    }
+        .search_ul > li {
+            height:80px!important;
+            margin-bottom:5px!important;
+            padding-bottom:5px!important;
+        }
+           
+}
+      .search_ul > li {
+            margin-bottom:10px;
+            padding-bottom:10px;
+        }
+        .search_ul > li > div {
+            -webkit-box-flex:1;
+        }
+        .search_ul > li div:first-child {
+            width:30%;
+        }
+.search_ul > li div:first-child > img {
+    width:100px;
+    height:100px;
+}
+            .search_ul > li div:first-child > img {
+                margin:auto;
+                display:block;
+            }
+
+        .search_ul > li div:last-child {
+            padding:0 0 0 5px;
+        }
+        .search_ul > li > div:nth-child(2) {
+            width:70%;
+            
+            position:relative;
+            height:100%;
+        }
+            .search_ul > li div:last-child > div {
+                width:100%;
+                text-overflow:ellipsis;
+                white-space:nowrap;
+                overflow:hidden;
+
+            }
+            .search_ul > li div:last-child > div:nth-child(1) {
+                color:rgb(102,102,102);
+                font-size:16px;
+            }
+                .search_ul > li div:last-child > div:nth-child(2) {
+                    color:rgb(169,169,169);
+                    font-size:14px;
+                    margin:5px 0 0 0;
+                }
+                .search_ul > li div:last-child > div:nth-child(3) {
+                           color:rgb(101,166,134);
+                    font-size:18px;
+                    font-weight:bold;
+                    position:absolute;
+                    left:0;
+                    bottom:0;
+                    margin:0 0 5px 0;
+                }
+                .search_ul > li div:last-child > div:nth-child(3)>span:nth-child(2) {
+                        font-size:18px!important;
+
+                }
+                    .search_ul > li div:last-child > div:nth-child(3) > span:nth-child(1) {
+                        font-size:16px!important;
+                    }
+                 
+                    .search_ul > li div:last-child > div:nth-child(3) > span:last-child > span {
+                                    height:24px;
+                                    width:24px;
+                                    float:right;
+                                    text-align:center;
+                                    line-height:24px;
+                                    font-size:17px;
+                          
+                    }
+                        .search_ul > li div:last-child > div:nth-child(3) > span:last-child > span:first-child, .search_ul > li div:last-child > div:nth-child(3) > span:last-child > span:last-child {
+                             border:2px solid rgb(101,166,134);
+                             border-radius:50%;
+                             margin:0 10px;
+                             height:20px;
+                             width:20px;
+                             line-height:18px;
+                             }

@@ -1,0 +1,250 @@
+﻿using MltxManager.Models.DBHelper;
+using MltxManager.Models.DBModel;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web;
+using Webdiyer.WebControls.Mvc;
+
+namespace MltxManager.Data
+{
+    public class OrderData
+    {
+        /// <summary>
+        /// 订单主表数据
+        /// </summary>
+        /// <param name="ordercls">订单类型 商城 0 or 鲜果单 1</param>
+        /// <param name="id">页数</param>
+        /// <param name="kword">搜索条件 电话</param>
+        /// <param name="tag">搜索类型</param>
+        /// <returns></returns>
+        public ReturnMsg GetOrderMain(int ordercls,string tag, int id = 1, string kword = null)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    OrderCls cls = (OrderCls)ordercls;
+                    var ordermain = db.order_m.AsQueryable().Where(o => o.OrderCls == cls && o.State != State.注销删除);
+                    
+
+                    if (tag == "100")//按电话搜索
+                    {
+                        if (!string.IsNullOrWhiteSpace(kword))
+                        {
+                            ordermain = ordermain.Where(o => o.CustomerTel.Contains(kword));
+                        }
+                    }
+                    else if(!string.IsNullOrWhiteSpace(tag)){
+                        State s = (State)(int.Parse(tag));
+                        if (!string.IsNullOrWhiteSpace(kword))
+                        {
+                            ordermain = ordermain.Where(o =>o.CustomerTel.Contains(kword) && o.State == s);
+                        }
+                        else
+                        {
+                            ordermain = ordermain.Where(o => o.State == s);
+                        }
+                    }
+
+                    PagedList<Mltx_Order_main> list = ordermain.OrderByDescending(c => c.OrderTime).ToPagedList(id, 10);
+                    rmsg.errcode = 0;
+                    rmsg.errmsg = "SUCCESS";
+                    rmsg.plist_order_m = list;
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("获取订单信息异常:" + ex.Message);
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+
+        /// <summary>
+        /// 获取订单详情列表
+        /// </summary>
+        /// <param name="oid"></param>
+        /// <returns></returns>
+        public ReturnMsg GetOrderDetails(string oid)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    var o_slist = db.order_s.Include("OrderId").Where(s => s.OrderId_id == oid).ToList();
+
+                    rmsg.errcode = 0;
+                    rmsg.mltx_order_sub = o_slist;
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("获取订单详情异常:" + ex.Message);
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+
+        /// <summary>
+        /// 修改订单价格
+        /// </summary>
+        /// <param name="oid">订单编号</param>
+        /// <param name="num">修改数值</param>
+        /// <returns></returns>
+        public string _ChangePrice(string oid,string num)
+        {
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    int Num = int.Parse(num);
+                    Mltx_Order_main o_m = db.order_m.Where(o => o.OrderId == oid).SingleOrDefault();
+                   // string orderid = Data.MethodHepler.MHepler.ConvertDateTimeInt(DateTime.Now).ToString() + new Random().Next(100, 999).ToString();//订单号 时间戳+三位随机数
+
+                    o_m.OtherAdjust = Num;
+                    o_m.OrderTotals = o_m.GoodsTotals + o_m.TransferFee + o_m.Favourable + Num;
+
+                    db.Entry(o_m).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return "0|" + Num.ToString() + "|" + o_m.OrderTotals.ToString();
+                }
+                catch (Exception e)
+                {
+                    MethodHepler.MHepler.writelog_err("修改价格异常：" + e.Message);
+                    return "error";
+                }
+            }
+        }
+
+        /// <summary>
+        /// 处理订单状态 发货
+        /// </summary>
+        /// <param name="oid">订单号</param>
+        /// <param name="state">订单状态</param>
+        /// <returns></returns>
+        public string _do_order(State state, string oid)
+        {
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    Mltx_Order_main o_m = db.order_m.Where(o => o.OrderId == oid).SingleOrDefault();
+                    o_m.State = state; 
+                    
+                    db.Entry(o_m).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return "0";
+                }
+                catch (Exception ex)
+                {
+                    MethodHepler.MHepler.writelog_err("发货异常：" + ex.Message);
+                    return "error";
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取评论信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="kword"></param>
+        /// <returns></returns>
+        public ReturnMsg GetComments(int id = 1, string kword = null)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    var model = db.comments.AsQueryable().Where(c=>c.ComType == 0);
+                    if (!string.IsNullOrWhiteSpace(kword))
+                    {
+                        model = model.Where(c => c.GoodsName.Contains(kword));
+                    }
+
+                    PagedList<Mltx_Comments> list = model.OrderByDescending(c => c.CommentTime).ToPagedList(id, 10);
+                    rmsg.errcode = 0;
+                    rmsg.errmsg = "SUCCESS";
+                    rmsg.commentlist = list;
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("获取评论信息异常:" + ex.Message);
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+
+        /// <summary>
+        /// 根据商品id 获取此商品所有评论信息
+        /// </summary>
+        /// <param name="gid"></param>
+        /// <returns></returns>
+        public ReturnMsg GetCommentsByGid(int gid,int id)
+        {
+            ReturnMsg rmsg = new ReturnMsg();
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    var model = db.comments.Where(c => c.GoodsId == gid && c.ComType == 0).OrderByDescending(c => c.CommentTime).ToPagedList(id, 10);
+
+                    rmsg.errcode = 0;
+                    rmsg.commnetlist_goods = model;
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("获取单个商品评论列表异常：" + ex.Message);
+                    rmsg.errcode = -1;
+                    rmsg.errmsg = ex.Message;
+                }
+
+                return rmsg;
+            }
+        }
+
+        /// <summary>
+        /// 删除评论信息 修改状态软删
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public string _delcomments(int id)
+        {
+            using (MltxDbContext db = new MltxDbContext())
+            {
+                try
+                {
+                    Mltx_Comments com = db.comments.Where(c => c.Id == id).SingleOrDefault();
+                    com.ComType = 1;//注销不可看
+
+                    db.Entry(com).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return "0";
+                }
+                catch (Exception ex)
+                {
+                    Data.MethodHepler.MHepler.writelog_err("删除评论时异常：" + ex.Message);
+
+                    return "error";
+                }
+            }
+        }
+    }
+}

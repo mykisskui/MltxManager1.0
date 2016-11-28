@@ -1,0 +1,143 @@
+﻿/*菜品顶部菜单栏*/
+ .Templateul {
+             list-style: none;
+             display: table;
+             width: 100%;
+             padding: 0;
+             border-bottom: 1px solid #d8d8d8;
+         }
+
+         .Templateli {
+             float: left;
+             cursor: pointer;
+         }
+
+         .TemplateliTitle {
+             font-size: 12px;
+             font-family: 'Microsoft YaHei';
+             padding: 10px;
+             font-style: inherit;
+             color: #666;
+             display: block;
+             text-decoration: none!important;
+         }
+         /*选中选项卡效果*/
+         .ath {
+             border: 1px solid #d8d8d8;
+             border-bottom: 0;
+             margin-bottom: -1px;
+             background: #fff;
+             cursor: default;
+             border-radius: 2px!important;
+         }
+
+             .ath a {
+                 color: #666;
+                 font-weight: 800;
+             }
+
+         .Templatelist {
+             list-style: none;
+             width: 100%;
+             padding: 0 15px;
+         }
+
+         .TemplateList_li {
+             display: inline-block;
+             width: 170px;
+             height: 380px;
+             margin: 30px 0 0 30px;
+             cursor: pointer;
+         }
+         /*默认样式*/
+         .TemplateList_li_background_image {
+             background: url(/Image/radio1.png) no-repeat center top;
+         }
+         /*选中样式*/
+         .TempalteList_li_background_image_true {
+             background: url(/Image/radio2.png) no-repeat center top;
+         }
+
+         .template_li_img {
+             width: 145px;
+             height: 225px;
+             margin: 70px auto 60px;
+             display: block;
+             border: 1px solid #C5C5CA;
+         }
+
+         .template_li_img_title {
+             display: block;
+             text-align: center;
+             color: #666;
+             font-size: 12px;
+         }
+
+         .error_null {
+             display: table;
+             margin: 100px auto;
+             font-size: 14px;
+             color: #808080;
+         }
+
+         .nav-tabs {
+             border-color: #c5d0dc;
+             margin-bottom: 0;
+             margin-left: 0;
+             position: relative;
+             top: 1px;
+         }
+
+         .li {
+             list-style-type:none;
+             color: #576373;
+             border-color: #c5d0dc;
+             border-top: 0px solid #4c8fbd;
+             border-bottom-color: transparent;
+             background-color: #fff;
+             z-index: 12;
+             line-height: 16px;
+             margin-top: -1px;
+             box-shadow: 0 -2px 3px 0 rgba(0,0,0,0.15);
+         }
+
+         .titleinputbut {
+             margin: 20px 0 0 0;
+             display: inline-block;
+             width: 100%;
+             text-align: center;
+         }
+
+             .titleinputbut a:nth-child(1) {
+                 display: inline-block;
+                 height: 32px;
+                 line-height: 32px;
+                 padding: 0 22px;
+                 margin-right: 20px;
+                 min-width: 100px;
+                 background: #44b549;
+                 border: 1px solid #44b549;
+                 color: #fff;
+                 border-radius: 3px!important;
+                 text-align: center;
+                 outline: none;
+                 cursor: pointer;
+                 text-decoration: none;
+             }
+
+             .titleinputbut a:nth-child(2)
+             {
+                 display: inline-block;
+                 height: 32px;
+                 line-height: 32px;
+                 padding: 0 22px;
+                 min-width: 100px;
+                 background: #fff;
+                 border: 1px solid #e7e7eb;
+                 color: #666;
+                 border-radius: 3px!important;
+                 text-align: center;
+                 outline: none;
+                 cursor: pointer;
+                 text-decoration: none;
+             }
