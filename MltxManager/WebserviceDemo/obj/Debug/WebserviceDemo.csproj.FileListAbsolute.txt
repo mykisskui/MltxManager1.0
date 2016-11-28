@@ -19,7 +19,6 @@ G:\MltxManager\MltxManager\WebserviceDemo\obj\Debug\WebserviceDemo.csprojResolve
 C:\Users\MSI\Desktop\MltxManager\MltxManager\WebserviceDemo\bin\Debug\WebserviceDemo.exe.config
 C:\Users\MSI\Desktop\MltxManager\MltxManager\WebserviceDemo\bin\Debug\WebserviceDemo.exe
 C:\Users\MSI\Desktop\MltxManager\MltxManager\WebserviceDemo\bin\Debug\WebserviceDemo.pdb
-C:\Users\MSI\Desktop\MltxManager\MltxManager\WebserviceDemo\obj\Debug\WebserviceDemo.csprojResolveAssemblyReference.cache
 C:\Users\MSI\Desktop\MltxManager\MltxManager\WebserviceDemo\obj\Debug\WebserviceDemo.WebserviceDemo.resources
 C:\Users\MSI\Desktop\MltxManager\MltxManager\WebserviceDemo\obj\Debug\WebserviceDemo.Properties.Resources.resources
 C:\Users\MSI\Desktop\MltxManager\MltxManager\WebserviceDemo\obj\Debug\WebserviceDemo.csproj.GenerateResource.Cache

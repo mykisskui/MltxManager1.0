@@ -48,7 +48,7 @@ namespace MltxManager.WebService.SmsInterface
                 }
                 else//正常
                 {
-                    string emsg = sd.AddOrUpdateMemberInfo(User_Phone, User_Code, Openid);
+                    string emsg = sd.AddOrUpdateMemberInfo(User_Phone, User_Code,"", Openid);
                     if (emsg == "error")
                     {
                         msg = "{\"errcode\":\"-1\",\"errmsg\":\"获取验证码时异常，请通知客服支持\",\"datajson\":\"\"}";

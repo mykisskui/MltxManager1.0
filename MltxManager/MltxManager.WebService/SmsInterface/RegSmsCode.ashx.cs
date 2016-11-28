@@ -37,7 +37,7 @@ namespace MltxManager.WebService.SmsInterface
                     }
                     else
                     {
-                        string emsg = sd.AddOrUpdateMemberInfo(User_Phone, User_Code, null);
+                        string emsg = sd.AddOrUpdateMemberInfo(User_Phone, User_Code, null,"");
                         if (emsg == "error")
                         {
                             msg = "{\"errcode\":\"-1\",\"errmsg\":\"验证失败，请重新获取验证码\",\"datajson\":\"\"}";

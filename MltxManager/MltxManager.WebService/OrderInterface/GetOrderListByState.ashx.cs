@@ -30,7 +30,7 @@ namespace MltxManager.WebService.OrderInterface
             else
             {
                 int s = int.Parse(state);
-                rmsg = idata._getOrderListByState(s);
+                rmsg = idata._getOrderListByState("",s);
                 if (rmsg.errcode == 0)
                 {
                     msg = jsonhelper.DataToJson(rmsg.orderbaseList);
