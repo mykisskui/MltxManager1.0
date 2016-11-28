@@ -18,7 +18,7 @@ namespace MltxManager.Controllers
         /// 人员分组（初始获取全部分组和模块）
         /// </summary>
         /// <returns></returns>
-        public ActionResult Admin()             
+        public ActionResult Admin()                 
         {
             var re = new GetBiz().GetAdmin();
             if (re.errcode == 0)
